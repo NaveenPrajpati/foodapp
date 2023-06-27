@@ -1,77 +1,61 @@
-import { View, Text, TextInput, Button, ToastAndroid, TouchableOpacity, Switch, ScrollView, Image } from 'react-native'
-import React, { useState } from 'react'
-import firestore from '@react-native-firebase/firestore';
-import * as RootNavigation from '../navigation/RootNavigation';
+import { View, Text, TextInput, Button, ToastAndroid, TouchableOpacity, Switch, ScrollView, Image, Modal, Pressable } from 'react-native'
 import Icon from 'react-native-vector-icons/Feather'
+import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
+
+import React, { useState } from 'react'
+
+export default function AddFood({navigation}) {
+const[showPickOption,setShowPickOption]=useState(false)
 
 
-export default function Signup({navigation}) {
-
-  const[username,setUserName]=useState('')
-  const[role,setRole]=useState('')
-  const[email,setEmail]=useState('')
-  const[phone,setPhone]=useState()
-  const[password,setPassword]=useState('')
-  const[address,setAddress]=useState([''])
-  const [isEnabled, setIsEnabled] = useState(false);
-  
-  
-  const toggleSwitch = () => {
-    setIsEnabled(previousState => !previousState);
-    if(isEnabled){
-      console.log('public')
-      setRole('public')
-    }
-    else
-    setRole('admin')
-    console.log('admin')
-    }
-
-    const handleSignup = () => {
-        firestore()
-  .collection('Users')
-  .add({
-    name: username,
-    email:email,
-    role:'admin',
-    phone:phone,
-    address:address,
-    password:password
-  })
-  .then(() => {
-    console.log('User added!');
-    ToastAndroid.show('user register sucessFully',ToastAndroid.BOTTOM)
-    RootNavigation.navigate('Login')
-  });
-      };
+// const pickfromcamera=async()=>{
+//     setShowPickOption(false)
+//     // You can also use as a promise without 'callback':
+//     const result = await launchCamera({mediaType:'photo'});
+//     console.log(result)
+// }
+// const pickfromgallery=async()=>{
+//     setShowPickOption(false)
+//     // You can also use as a promise without 'callback':
+//     const result = await launchImageLibrary({
+//         mediaType:'photo'
+//     });
+//     console.log(result)
+// }
 
   return (
-  <ScrollView className='flex-1 bg-white'>
+    <ScrollView className='flex-1 bg-white'>
+  
   <View className=' rounded-xl  p-10  flex-1 bg-white items-center '>
 
-<View>
-<Image source={''} alt='image'/>
-<Text className='text-lg font-bold mb-4'>
-      Register Here
-    </Text>
-<Text>
-Here you can login to your account </Text>
+    {/* <View>
 
-</View>
+    <Text className='text-lg font-bold mb-4'>
+      Add Food
+         </Text>
+    </View> */}
 
-   <View className='flex-row items-center p-2 rounded-2xl mb-5  bg-slate-100'>
-   <Text className='font-semibold'>
-    {isEnabled?'Public':'Admin'}</Text>
-   
-    <Switch
-      trackColor={{false: '#767577', true: '#81b0ff'}}
-      thumbColor={isEnabled ? '#f5dd4b' : '#f4f3f4'}
-      ios_backgroundColor="#3e3e3e"
-      onValueChange={toggleSwitch}
-      value={isEnabled}
-    /></View>
+{/* <TouchableOpacity onPress={()=>setShowPickOption(true)}>
+<Text>Pick image</Text>
+</TouchableOpacity> */}
 
-    <View className='flex-row items-center p-2 rounded-2xl mb-5  bg-slate-100'>
+{/* <Modal 
+visible={showPickOption}
+onRequestClose={()=>setShowPickOption(false)}
+>
+        <Pressable
+        onPress={() => setShowPickOption(false)}>
+              <Text >Hide Modal</Text>
+            </Pressable>
+<TouchableOpacity onPress={pickfromgallery}>
+    <Text>From Gallery</Text>
+</TouchableOpacity>
+<TouchableOpacity onPress={pickfromcamera}>
+    <Text>From Camera</Text>
+</TouchableOpacity>
+</Modal> */}
+
+    {/* <View className='flex-row items-center p-2 rounded-2xl mb-5  bg-slate-100'>
     <View className='rounded-full justify-center items-center bg-white h-8 w-8'>
     <Icon name='lock' size={20} color={'black'}/>
     </View>
@@ -80,44 +64,43 @@ Here you can login to your account </Text>
       placeholder="Name"
      onChangeText={(nativeEvent)=>setUserName(nativeEvent)}
     ></TextInput>
-    </View>
+    </View> */}
     
-    <View className='flex-row items-center p-2 rounded-2xl mb-5  bg-slate-100'>
+    {/* <View className='flex-row items-center p-2 rounded-2xl mb-5  bg-slate-100'>
     <View className='rounded-full justify-center items-center bg-white h-8 w-8'>
     <Icon name='lock' size={20} color={'black'}/>
     </View>
     <TextInput
       className='rounded-md  p-1  w-full text-lg'
-      keyboardType="email-address"
-      placeholder="Email"
+      placeholder="category"
       onChangeText={(nativeEvent)=>setEmail(nativeEvent)}
     ></TextInput>
-    </View>
-    <View className='flex-row items-center p-2 rounded-2xl mb-5  bg-slate-100'>
+    </View> */}
+    {/* <View className='flex-row items-center p-2 rounded-2xl mb-5  bg-slate-100'>
     <View className='rounded-full justify-center items-center bg-white h-8 w-8'>
     <Icon name='lock' size={20} color={'black'}/>
     </View>
     <TextInput
       className='rounded-md  p-1  w-full text-lg'
       inputMode='numeric'
-      placeholder="Phone"
+      placeholder="Price"
       onChangeText={(nativeEvent)=>setPhone(nativeEvent)}
     ></TextInput>
-    </View>
-    <View className='flex-row items-center p-2 rounded-2xl mb-5  bg-slate-100'>
+    </View> */}
+    {/* <View className='flex-row items-center p-2 rounded-2xl mb-5  bg-slate-100'>
     <View className='rounded-full justify-center items-center bg-white h-8 w-8'>
     <Icon name='lock' size={20} color={'black'}/>
     </View>
     <TextInput
       className='rounded-md  p-1  w-full text-lg'
       inputMode='text'
-      placeholder="Address"
+      placeholder="Description"
       multiline
       onChangeText={(nativeEvent)=>setAddress(nativeEvent)}
     ></TextInput>
-    </View>
+    </View> */}
 
-    <View className='flex-row items-center p-2 rounded-2xl mb-5  bg-slate-100'>
+    {/* <View className='flex-row items-center p-2 rounded-2xl mb-5  bg-slate-100'>
     <View className='rounded-full justify-center items-center bg-white h-8 w-8'>
     <Icon name='lock' size={20} color={'black'}/>
     </View>
@@ -138,18 +121,18 @@ Here you can login to your account </Text>
       placeholder="Confirm Password"
       secureTextEntry
     ></TextInput>
-    </View>
+    </View> */}
 
     
   
-    
+{/*     
     <TouchableOpacity onPress={handleSignup} className='bg-black mb-5 p-2 rounded-3xl w-[60%] '>
     <Text className='text-white text-lg font-semibold text-center'>Signup</Text>
     </TouchableOpacity>
 
     <TouchableOpacity onPress={()=>navigation.navigate('Login')} className=' w-full'>
     <Text className='text-blue-600'>have account? Login</Text>
-    </TouchableOpacity>
+    </TouchableOpacity> */}
    
     
 
@@ -157,6 +140,7 @@ Here you can login to your account </Text>
 
    
   </View>
+  
   </ScrollView>
   )
 }

@@ -30,6 +30,8 @@ import NavbarBottom from './components/NavbarBottom';
 import Signup from './pages/Signup';
 import AddressPage from './pages/AddressPage';
 import CheckoutPage from './pages/CheckoutPage';
+import AddFood from './pages/adminPages/AddFood';
+import FoodList from './pages/adminPages/FoodList';
 
 
 const Stack=createNativeStackNavigator()
@@ -47,6 +49,8 @@ const App= () =>  {
 <Stack.Screen name='Signup' component={Signup} options={{headerShown:false}}/>
 <Stack.Screen name='Cart' component={CartPage} options={{headerShown:false}}/>
 <Stack.Screen name='Address' component={AddressPage} options={{headerShown:false}}/>
+
+<Stack.Screen name='AddList' component={FoodList} options={{headerShown:false}}/>
 </Stack.Navigator>
     </NavigationContainer>
 <NavbarBottom/>
