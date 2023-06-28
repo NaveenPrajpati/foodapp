@@ -17,7 +17,7 @@ export const cartSlice=createSlice({
             state.cartItem.push(action.payload)
         },
         removeCartItem(state,action){
-            const newArr=state.cartItem.filter((item)=>item.item.id!=action.payload)
+            const newArr=state.cartItem.filter((item)=>item.product.id!=action.payload)
             state.cartItem=newArr
         },
         setWishItem(state,action){

@@ -27,7 +27,7 @@ export default function Login({navigation}) {
 
   const handleLogin = async() => {
    
-    const user = await firestore().collection('Users').where('email','==',email).get();
+    const user = await firestore().collection(isEnabled?'Admin':'Users').where('email','==',email).get();
     console.log(user.docs[0]._data)
   
     let data=user.docs[0]._data
@@ -62,7 +62,7 @@ export default function Login({navigation}) {
     
 
     ToastAndroid.show('login success',ToastAndroid.BOTTOM)
-    navigation.goBack()
+    // navigation.goBack()
     }
     ToastAndroid.show('login fail',ToastAndroid.BOTTOM)
 
@@ -84,7 +84,7 @@ export default function Login({navigation}) {
 
      <View className='flex-row items-center p-2 rounded-2xl mb-5  bg-slate-100'>
      <Text className='font-semibold'>
-      {isEnabled?'Public':'Admin'}</Text>
+      {isEnabled?'Admin':'Public'}</Text>
      
       <Switch
         trackColor={{false: '#767577', true: '#81b0ff'}}

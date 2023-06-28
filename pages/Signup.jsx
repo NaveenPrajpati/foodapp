@@ -12,7 +12,7 @@ export default function Signup({navigation}) {
   const[email,setEmail]=useState('')
   const[phone,setPhone]=useState()
   const[password,setPassword]=useState('')
-  const[address,setAddress]=useState([''])
+  const[addres,setAddres]=useState([''])
   const [isEnabled, setIsEnabled] = useState(false);
   
   
@@ -33,10 +33,11 @@ export default function Signup({navigation}) {
   .add({
     name: username,
     email:email,
-    role:'admin',
+    role:'public',
     phone:phone,
-    address:address,
-    password:password
+    address:addres,
+    password:password,
+    myOrders:[{status:'',order:{}}]
   })
   .then(() => {
     console.log('User added!');
@@ -113,7 +114,7 @@ Here you can login to your account </Text>
       inputMode='text'
       placeholder="Address"
       multiline
-      onChangeText={(nativeEvent)=>setAddress(nativeEvent)}
+      onChangeText={(nativeEvent)=>setAddres(nativeEvent)}
     ></TextInput>
     </View>
 

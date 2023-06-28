@@ -13,7 +13,9 @@ export default function AddressPage({navigation}) {
   const[text,setText]=useState('')
   const dispatch=useDispatch()
   const {isLogin,userData}=useSelector(state=>state.userReducer)
-    useEffect(()=>{
+    
+  
+  useEffect(()=>{
       const getData = async () => {
         try {
           const jsonValue = await AsyncStorage.getItem('userData')
