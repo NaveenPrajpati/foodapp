@@ -1,45 +1,48 @@
 import { View, Text, TextInput, Button, ToastAndroid, TouchableOpacity, Switch, ScrollView, Image, Modal, Pressable } from 'react-native'
 import Icon from 'react-native-vector-icons/Feather'
-import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
+import ImagePicker from 'react-native-image-crop-picker';
+
 
 import React, { useState } from 'react'
 
 export default function AddFood({navigation}) {
 const[showPickOption,setShowPickOption]=useState(false)
+const[pickedImage,setPickedImage]=useState('')
 
 
-// const pickfromcamera=async()=>{
-//     setShowPickOption(false)
-//     // You can also use as a promise without 'callback':
-//     const result = await launchCamera({mediaType:'photo'});
-//     console.log(result)
-// }
-// const pickfromgallery=async()=>{
-//     setShowPickOption(false)
-//     // You can also use as a promise without 'callback':
-//     const result = await launchImageLibrary({
-//         mediaType:'photo'
-//     });
-//     console.log(result)
-// }
+const pickfromcamera=async()=>{
+    setShowPickOption(false)
+
+}
+const pickfromgallery=async()=>{
+    setShowPickOption(false)
+   
+    ImagePicker.openPicker({
+     
+   
+    }).then(image => {
+      console.log(image);
+      setPickedImage(image.path)
+    });
+}
 
   return (
     <ScrollView className='flex-1 bg-white'>
   
   <View className=' rounded-xl  p-10  flex-1 bg-white items-center '>
 
-    {/* <View>
+    <View>
 
     <Text className='text-lg font-bold mb-4'>
       Add Food
          </Text>
-    </View> */}
+    </View>
 
-{/* <TouchableOpacity onPress={()=>setShowPickOption(true)}>
+<TouchableOpacity onPress={()=>setShowPickOption(true)}>
 <Text>Pick image</Text>
-</TouchableOpacity> */}
+</TouchableOpacity>
 
-{/* <Modal 
+<Modal 
 visible={showPickOption}
 onRequestClose={()=>setShowPickOption(false)}
 >
@@ -53,9 +56,9 @@ onRequestClose={()=>setShowPickOption(false)}
 <TouchableOpacity onPress={pickfromcamera}>
     <Text>From Camera</Text>
 </TouchableOpacity>
-</Modal> */}
-
-    {/* <View className='flex-row items-center p-2 rounded-2xl mb-5  bg-slate-100'>
+</Modal>
+<Image source={{uri:pickedImage}} className='h-20 w-20'/>
+    <View className='flex-row items-center p-2 rounded-2xl mb-5  bg-slate-100'>
     <View className='rounded-full justify-center items-center bg-white h-8 w-8'>
     <Icon name='lock' size={20} color={'black'}/>
     </View>
@@ -64,9 +67,9 @@ onRequestClose={()=>setShowPickOption(false)}
       placeholder="Name"
      onChangeText={(nativeEvent)=>setUserName(nativeEvent)}
     ></TextInput>
-    </View> */}
+    </View>
     
-    {/* <View className='flex-row items-center p-2 rounded-2xl mb-5  bg-slate-100'>
+    <View className='flex-row items-center p-2 rounded-2xl mb-5  bg-slate-100'>
     <View className='rounded-full justify-center items-center bg-white h-8 w-8'>
     <Icon name='lock' size={20} color={'black'}/>
     </View>
@@ -75,8 +78,8 @@ onRequestClose={()=>setShowPickOption(false)}
       placeholder="category"
       onChangeText={(nativeEvent)=>setEmail(nativeEvent)}
     ></TextInput>
-    </View> */}
-    {/* <View className='flex-row items-center p-2 rounded-2xl mb-5  bg-slate-100'>
+    </View>
+    <View className='flex-row items-center p-2 rounded-2xl mb-5  bg-slate-100'>
     <View className='rounded-full justify-center items-center bg-white h-8 w-8'>
     <Icon name='lock' size={20} color={'black'}/>
     </View>
@@ -86,8 +89,8 @@ onRequestClose={()=>setShowPickOption(false)}
       placeholder="Price"
       onChangeText={(nativeEvent)=>setPhone(nativeEvent)}
     ></TextInput>
-    </View> */}
-    {/* <View className='flex-row items-center p-2 rounded-2xl mb-5  bg-slate-100'>
+    </View>
+    <View className='flex-row items-center p-2 rounded-2xl mb-5  bg-slate-100'>
     <View className='rounded-full justify-center items-center bg-white h-8 w-8'>
     <Icon name='lock' size={20} color={'black'}/>
     </View>
@@ -98,9 +101,9 @@ onRequestClose={()=>setShowPickOption(false)}
       multiline
       onChangeText={(nativeEvent)=>setAddress(nativeEvent)}
     ></TextInput>
-    </View> */}
+    </View>
 
-    {/* <View className='flex-row items-center p-2 rounded-2xl mb-5  bg-slate-100'>
+    <View className='flex-row items-center p-2 rounded-2xl mb-5  bg-slate-100'>
     <View className='rounded-full justify-center items-center bg-white h-8 w-8'>
     <Icon name='lock' size={20} color={'black'}/>
     </View>
@@ -121,18 +124,15 @@ onRequestClose={()=>setShowPickOption(false)}
       placeholder="Confirm Password"
       secureTextEntry
     ></TextInput>
-    </View> */}
+    </View>
 
     
   
-{/*     
-    <TouchableOpacity onPress={handleSignup} className='bg-black mb-5 p-2 rounded-3xl w-[60%] '>
-    <Text className='text-white text-lg font-semibold text-center'>Signup</Text>
+    
+    <TouchableOpacity  className='bg-black mb-5 p-2 rounded-3xl w-[60%] '>
+    <Text className='text-white text-lg font-semibold text-center'>Add Food</Text>
     </TouchableOpacity>
 
-    <TouchableOpacity onPress={()=>navigation.navigate('Login')} className=' w-full'>
-    <Text className='text-blue-600'>have account? Login</Text>
-    </TouchableOpacity> */}
    
     
 

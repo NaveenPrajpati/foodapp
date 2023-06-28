@@ -83,10 +83,10 @@ setCount(count+1)
      </View>
      </View>}
     {true && <View className=''>
-     <View className='flex-row gap-2 mb-10' onPress={()=>navigation.navigate('AddFood')}>
+     <TouchableOpacity className='flex-row gap-2 mb-10' onPress={()=>navigation.navigate('AddFood')}>
      <Icon2 name='x' size={20} color={'gray'}/>
      <Text className='text-md text-gray-400 font-semibold'>Add Food</Text>
-     </View>
+     </TouchableOpacity>
      <View className='flex-row gap-2 mb-10' onPress={()=>navigation.navigate('FoodList')}>
      <Icon2 name='x' size={20} color={'gray'}/>
      <Text className='text-md text-gray-400 font-semibold'>All Foods</Text>

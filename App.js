@@ -49,7 +49,7 @@ const App= () =>  {
 <Stack.Screen name='Signup' component={Signup} options={{headerShown:false}}/>
 <Stack.Screen name='Cart' component={CartPage} options={{headerShown:false}}/>
 <Stack.Screen name='Address' component={AddressPage} options={{headerShown:false}}/>
-
+<Stack.Screen name='AddFood' component={AddFood} options={{headerShown:false}}/>
 <Stack.Screen name='AddList' component={FoodList} options={{headerShown:false}}/>
 </Stack.Navigator>
     </NavigationContainer>
