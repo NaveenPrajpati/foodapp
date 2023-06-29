@@ -36,7 +36,7 @@ export default function CartPage({ navigation }) {
       navigation.navigate('Address')
     } else {
       console.log('login warning')
-      navigation.navigate('Login')
+      // navigation.navigate('Login')
       setWarning(true)
     }
   }

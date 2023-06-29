@@ -6,7 +6,6 @@ import { setIsSearch, setSearchParam, setdrawer } from '../redux/slices/navbarSl
 import Icon3 from 'react-native-vector-icons/AntDesign';
 import Icon2 from 'react-native-vector-icons/Feather';
 import Icon from 'react-native-vector-icons/Entypo';
-import Swiper from 'react-native-swiper'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { fastFoodArray } from '../components/constants/sampleData'
 import firestore from '@react-native-firebase/firestore';

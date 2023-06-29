@@ -7,7 +7,6 @@ export default function WarningModal({message}) {
   return (
     <View>
       <Modal
-      transparent={true}
       visible={visible}
       animationType='non'
       >

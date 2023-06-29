@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity } from 'react-native'
+import { View, Text, TouchableOpacity, TouchableHighlight } from 'react-native'
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import RazorpayCheckout from 'react-native-razorpay';
@@ -9,30 +9,26 @@ export default function CheckoutPage() {
   const {isLogin,userData}=useSelector(state=>state.userReducer)
 
     const dispatch=useDispatch()
-  useEffect(() => {
-    
-  
-    
-  }, [])
+
   
   return (
     <View>
       <Text>CheckoutPage</Text>
-      {/* <TouchableOpacity className='p-2 bg-fuchsia-500 text-white font-semibold' onPress={() => {
-    var options = {
+
+<TouchableHighlight className='bg-black mb-5 p-2 rounded-3xl w-[60%] ' onPress={() => {
+  var options = {
     description: 'Credits towards consultation',
-    image:require(''),
+    image: 'https://i.imgur.com/3g7nmJC.png',
     currency: 'INR',
-    key: 'rzp_test_yn1EU6TpuP92CZ',
+    key: 'rzp_test_yn1EU6TpuP92CZ', // Your api key
     amount: (checkoutData.price*100).toString(),
-    name: 'Seller organisation',
-    order_id: '',//Replace this with an order_id created using Orders API.
+    name: 'foo',
     prefill: {
       email: userData.email,
-      contact: '9899988765',
+      contact: userData.phone,
       name: userData.name
     },
-    theme: {color: '#53a20e'}
+    theme: {color: '#F37254'}
   }
   RazorpayCheckout.open(options).then((data) => {
     // handle success
@@ -44,8 +40,9 @@ export default function CheckoutPage() {
     alert(`Error: ${error.code} | ${error.description}`);
   });
 }}>
-  <Text>pay now</Text>
-</TouchableOpacity> */}
+  <Text className='text-white text-lg font-semibold text-center'>pay</Text>
+</TouchableHighlight>
+
     </View>
   )
 }

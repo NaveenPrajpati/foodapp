@@ -43,6 +43,7 @@ export default function Login({navigation}) {
       id:id,
       email:data.email,
       role:data.role,
+      phone:data.phone,
       address:data.address
     }))
     
@@ -62,7 +63,7 @@ export default function Login({navigation}) {
     
 
     ToastAndroid.show('login success',ToastAndroid.BOTTOM)
-    // navigation.goBack()
+    navigation.goBack()
     }
     ToastAndroid.show('login fail',ToastAndroid.BOTTOM)
 

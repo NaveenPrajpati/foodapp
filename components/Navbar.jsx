@@ -3,14 +3,14 @@ import React from 'react'
 import Icon from 'react-native-vector-icons/Entypo';
 import Icon2 from 'react-native-vector-icons/Feather';
 import { useDispatch, useSelector } from 'react-redux';
-import { setIsSearch, setSearchParam } from '../redux/slices/navbarSlice';
+import { setIsSearch, setSearchParam, setdrawer } from '../redux/slices/navbarSlice';
 import * as RootNavigation from '../navigation/RootNavigation';
 
 export default function Navbar() {
   const {isSearch}=useSelector(state=>state.navbarReducer)
   const {cartItem}=useSelector(state=>state.cartReducer)
   const dispatch=useDispatch()
-  console.log(cartItem.length)
+
  
   return (
     <View className='flex-row justify-between p-1 items-center '>

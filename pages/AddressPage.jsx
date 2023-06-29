@@ -4,6 +4,7 @@ import firestore from '@react-native-firebase/firestore';
 import { useDispatch, useSelector } from 'react-redux';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import CheckoutPage from './CheckoutPage';
+import Navbar from '../components/Navbar';
 
 
 export default function AddressPage({navigation}) {
@@ -27,10 +28,8 @@ export default function AddressPage({navigation}) {
 
      
       setlocalUserData(getData)
-      console.log(userData)
-     async function addAddress(){
-     
-      }
+      console.log('data is=-',userData)
+    
 
      
     },[])
@@ -58,18 +57,35 @@ export default function AddressPage({navigation}) {
     }
 
   return (
-    <View>
-      <Text>Select Address</Text>
-      {localUserData?._j?.address?.length>1? 
+    <View className='p-5'>
+    <Navbar/>
+      <Text>Ship to</Text>
+      {userData.address.length>=1? 
       <View>
       <FlatList
-        data={localUserData?._j?.address}
+        data={userData.address}
         renderItem={({item,index})=>(
-          <TouchableOpacity key={index} onPress={()=>setAdd(item)} className='border rounded-md'>
-            <Text>{item}</Text>
-          </TouchableOpacity>
+          <TouchableOpacity className='flex-row gap-1 p-2 m-2 h-24 rounded-2xl bg-slate-50'>
+                      <Image source={require('../images/locationImg.png')} className='w-20 h-full rounded-xl'></Image>
+                      <View className=' justify-between  flex-1 h-full '>
+                        <View className='flex-row justify-between item-center'>
+                          <Text className='text-black font-semibold '>{item}</Text>
+                          <TouchableOpacity className=' ' >
+                            <Icon2 name='x' size={20} color={'black'} />
+                          </TouchableOpacity>
+                        </View>
+                        <View className='flex-row justify-between items-center p-1'>
+                          <Text className='text-black font-semibold text-lg'>₹{userData.name}</Text>
+                         <Text>delete</Text>
+                        </View>
+                      </View>
+                    </TouchableOpacity>
         )}
-      /></View>:<Text>Address not present</Text>}
+      /></View>:
+      <View>
+      <Text>Address not present</Text>
+      </View>
+      }
 
       {viewAdd && <View className='p-1'>
 
