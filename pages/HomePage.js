@@ -42,12 +42,16 @@ export default function HomePage({ navigation }) {
     try {
 
       const user = await firestore().collection('Foods').where('category', '==', 'Fast Food').get();
-      setProducts(user.docs)
-      let data = user.docs[0]._data
-      let id = user.docs[0].id
-      // console.log(data)
-      // console.log(id)
-    } catch (error) {
+      const productsData = user.docs.map((doc) => {
+        const data = doc.data();
+        const id = doc.id;
+        return { id, ...data };
+      });
+  
+      console.log(productsData)
+      setProducts(productsData);
+    }
+    catch (error) {
       console.log(error)
     }
 
@@ -197,7 +201,6 @@ export default function HomePage({ navigation }) {
                 <Text className='text-red-600 m-2'>rating</Text>
                 <Text className='text-red-600 m-2'>Slide1</Text>
               </View>
-
             </TouchableOpacity>
 
             <TouchableOpacity className=' items-center p-2  rounded-xl bg-slate-50 h-56 w-56 mx-4'>
@@ -218,12 +221,12 @@ export default function HomePage({ navigation }) {
               setShowProduct(item)
               setModalVisible(true)
             }} key={index} className='shadow-md flex-grow shadow-slate-400 rounded-xl p-2 bg-white w-[45%] m-1'>
-
-              <Image source={{ uri: item._data.image }} className='h-28 w-full rounded-xl' />
+            {console.log(item.image)}
+              <Image source={{uri: item.image}} className='h-28 w-full rounded-xl' />
               <View className='flex-row justify-between'>
 
-                <Text>{item._data.name}</Text>
-                <Text>₹{item._data.price}</Text>
+                <Text>{item.name}</Text>
+                <Text>₹{item.price}</Text>
               </View>
 
             </TouchableOpacity>
@@ -242,10 +245,10 @@ export default function HomePage({ navigation }) {
             <View className='rounded-b-3xl bg-white relative flex-1' >
 
 
-              <Image source={{ uri: showProduct?._data.image }} className='w-full h-[50%]' />
+              <Image source={{ uri: showProduct?.image }} className='w-full h-[50%]' />
 
               <View className='flex-row justify-between px-2 mt-4'>
-                <Text>{showProduct?._data.name} {showProduct?.rating}</Text>
+                <Text>{showProduct?.name} {showProduct?.rating}</Text>
                 <View className='flex-row rounded-lg'>
                   <TouchableOpacity onPress={handledecrease}>
                     <Text className='w-5 h-5 text-md bg-slate-200 text-center'>-</Text>
@@ -259,7 +262,7 @@ export default function HomePage({ navigation }) {
                 </View>
               </View>
 
-              <Text>{showProduct?._data.description}</Text>
+              <Text>{showProduct?.description}</Text>
 
               <Pressable
                 className='absolute left-2 top-2 bg-white'
@@ -269,7 +272,7 @@ export default function HomePage({ navigation }) {
             </View>
 
             <View className='flex-row justify-between items-center bg-black px-5 py-1  h-20'>
-              <Text className='text-lg font-semibold text-white'>₹{parseInt(showProduct?._data.price) * count}</Text>
+              <Text className='text-lg font-semibold text-white'>₹{parseInt(showProduct?.price) * count}</Text>
               <TouchableOpacity onPress={()=>{
                 dispatch(setCartItem({quantity:count,product:showProduct}))
                 ToastAndroid.show('food added to cart',ToastAndroid.BOTTOM)

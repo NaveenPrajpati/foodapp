@@ -1,10 +1,11 @@
-import { View, Text, FlatList, TouchableOpacity, TextInput } from 'react-native'
+import { View, Text, FlatList, TouchableOpacity, TextInput, Image } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import firestore from '@react-native-firebase/firestore';
 import { useDispatch, useSelector } from 'react-redux';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import CheckoutPage from './CheckoutPage';
 import Navbar from '../components/Navbar';
+import Icon2 from 'react-native-vector-icons/Feather';
 
 
 export default function AddressPage({navigation}) {
@@ -65,7 +66,7 @@ export default function AddressPage({navigation}) {
       <FlatList
         data={userData.address}
         renderItem={({item,index})=>(
-          <TouchableOpacity className='flex-row gap-1 p-2 m-2 h-24 rounded-2xl bg-slate-50'>
+          <TouchableOpacity onPress={()=>{setAdd(item)}} className='flex-row gap-1 p-2 m-2 h-24 rounded-2xl bg-slate-50' >
                       <Image source={require('../images/locationImg.png')} className='w-20 h-full rounded-xl'></Image>
                       <View className=' justify-between  flex-1 h-full '>
                         <View className='flex-row justify-between item-center'>
@@ -75,11 +76,11 @@ export default function AddressPage({navigation}) {
                           </TouchableOpacity>
                         </View>
                         <View className='flex-row justify-between items-center p-1'>
-                          <Text className='text-black font-semibold text-lg'>₹{userData.name}</Text>
+                          <Text className='text-black font-semibold text-lg'>{userData.name}</Text>
                          <Text>delete</Text>
                         </View>
                       </View>
-                    </TouchableOpacity>
+            </TouchableOpacity>
         )}
       /></View>:
       <View>

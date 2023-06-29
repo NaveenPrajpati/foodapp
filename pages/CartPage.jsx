@@ -22,7 +22,7 @@ export default function CartPage({ navigation }) {
     console.log(cartItem)
     for (let i = 0; i < cartItem.length; i++) {
       console.log(cartItem[i].product.price)
-      setTotalPrice(total => total + (cartItem[i].quantity * cartItem[i].product._data.price))
+      setTotalPrice(total => total + (cartItem[i].quantity * cartItem[i].product.price))
     }
   }, [cartItem])
 
@@ -58,16 +58,16 @@ export default function CartPage({ navigation }) {
                   return (
 
                     <View className='flex-row gap-1 p-2 m-2 h-24 rounded-2xl bg-slate-50'>
-                      <Image source={{ uri: item.product._data.image }} className='w-20 h-full rounded-xl'></Image>
+                      <Image source={{ uri: item.product.image }} className='w-20 h-full rounded-xl'></Image>
                       <View className=' justify-between  flex-1 h-full '>
                         <View className='flex-row justify-between item-center'>
-                          <Text className='text-black font-semibold '>{item.product._data.name}</Text>
+                          <Text className='text-black font-semibold '>{item.product.name}</Text>
                           <TouchableOpacity className=' ' onPress={() => dispatch(removeCartItem(item.product.id))}>
                             <Icon2 name='x' size={20} color={'black'} />
                           </TouchableOpacity>
                         </View>
                         <View className='flex-row justify-between items-center p-1'>
-                          <Text className='text-black font-semibold text-lg'>₹{item.product._data.price}</Text>
+                          <Text className='text-black font-semibold text-lg'>₹{item.product?.price}</Text>
                           <View className='flex-row rounded-lg'>
                             <TouchableOpacity>
                               <Text className='w-5 h-5 rounded-full text-white text-md bg-black text-center'>-</Text>

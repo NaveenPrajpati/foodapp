@@ -42,6 +42,7 @@ export default function Login({navigation}) {
     dispatch(setUserData({
       id:id,
       email:data.email,
+      name:data.name,
       role:data.role,
       phone:data.phone,
       address:data.address
