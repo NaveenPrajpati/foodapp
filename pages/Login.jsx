@@ -11,7 +11,7 @@ export default function Login({navigation}) {
   const[email,setEmail]=useState('')
   const[password,setPassword]=useState('')
   const {isLogin}=useSelector(state=>state.userReducer)
-  const [isEnabled, setIsEnabled] = useState(true);
+  const [isEnabled, setIsEnabled] = useState(false);
   
   
   const toggleSwitch = () => {

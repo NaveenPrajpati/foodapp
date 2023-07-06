@@ -6,6 +6,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import CheckoutPage from './CheckoutPage';
 import Navbar from '../components/Navbar';
 import Icon2 from 'react-native-vector-icons/Feather';
+import { setDeliveryAdd, setUserOrders } from '../redux/slices/userSlice';
 
 
 export default function AddressPage({navigation}) {
@@ -30,10 +31,14 @@ export default function AddressPage({navigation}) {
      
       setlocalUserData(getData)
       console.log('data is=-',userData)
-    
 
-     
     },[])
+
+    function readytoPlace(item){
+      setAdd(item)
+      dispatch(setDeliveryAdd(item))
+    
+    }
 
 
     function handleAddress(){
@@ -66,7 +71,7 @@ export default function AddressPage({navigation}) {
       <FlatList
         data={userData.address}
         renderItem={({item,index})=>(
-          <TouchableOpacity onPress={()=>{setAdd(item)}} className='flex-row gap-1 p-2 m-2 h-24 rounded-2xl bg-slate-50' >
+          <TouchableOpacity onPress={()=>{readytoPlace(item)}} className='flex-row gap-1 p-2 m-2 h-24 rounded-2xl bg-slate-50' >
                       <Image source={require('../images/locationImg.png')} className='w-20 h-full rounded-xl'></Image>
                       <View className=' justify-between  flex-1 h-full '>
                         <View className='flex-row justify-between item-center'>

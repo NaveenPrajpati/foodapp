@@ -5,7 +5,7 @@ export default function WarningModal({message}) {
     const[visible,setVisible]=useState(true)
     console.log('showing warnign')
   return (
-    <View>
+    <View className='justify-center items-center'>
       <Modal
       visible={visible}
       animationType='non'

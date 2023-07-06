@@ -5,7 +5,7 @@ const initialState={
     cartItem:[],
     cartiItemQuantity:[],
     wishItem:[],
-    checkoutData:{}
+    checkoutPrice:{}
 }
 
 
@@ -28,11 +28,11 @@ export const cartSlice=createSlice({
             const newArr=state.wishItem.filter((item)=>item.id!=action.payload)
             state.wishItem=newArr
         },
-        setCheckOutData(state,action){
-            state.checkoutData=action.payload
+        setCheckOutPrice(state,action){
+            state.checkoutPrice=action.payload
         }
     }
 })
 
-export const {setCartItem,removeCartItem,setWishItem,setCheckOutData,removeWishItem} =cartSlice.actions
+export const {setCartItem,removeCartItem,setWishItem,setCheckOutPrice,removeWishItem} =cartSlice.actions
 export default cartSlice.reducer

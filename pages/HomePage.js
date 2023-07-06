@@ -1,4 +1,4 @@
-import { View, Text, Image, Modal, Button, TouchableOpacity, DrawerLayoutAndroid, ScrollView, ToastAndroid, TextInput, StyleSheet, useWindowDimensions, FlatList, Dimensions, Pressable, Alert } from 'react-native'
+import { View, Text, Image, Modal, Button, TouchableOpacity, DrawerLayoutAndroid, ScrollView, ToastAndroid, TextInput, StyleSheet, useWindowDimensions, FlatList, Dimensions, Pressable, Alert, ImageBackground } from 'react-native'
 import React, { useEffect, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { setCartItem, setWishItem } from '../redux/slices/cartSlice'
@@ -48,7 +48,7 @@ export default function HomePage({ navigation }) {
         return { id, ...data };
       });
   
-      console.log(productsData)
+      // console.log(productsData)
       setProducts(productsData);
     }
     catch (error) {
@@ -71,13 +71,13 @@ export default function HomePage({ navigation }) {
 
   }, [openDrawer])
 
-  function navigationView() {
+  const navigationView = () =>
     (
       <View className='bg-black text-slate-400 p-1 flex-1 items-center justify-between'>
         <View className='flex-row  rounded-xl px-1 justify-between items-center'>
 
           <TouchableOpacity className='bg-gray-500  rounded-full' onPress={() => dispatch(setdrawer(false))}>
-            <Icon2 name='x' size={30} color={'white'} />
+            <Icon2 name='x' size={30} color={'red'} />
           </TouchableOpacity>
         </View>
 
@@ -132,9 +132,10 @@ export default function HomePage({ navigation }) {
         </TouchableOpacity>
 
       </View>
-    )
+    
+    );
 
-  }
+  
 
   return (
 
@@ -143,7 +144,8 @@ export default function HomePage({ navigation }) {
       drawerWidth={200}
       drawerPosition={'left'}
       renderNavigationView={navigationView}
-      className=' bg-black'>
+     
+      >
 
       <ScrollView className='flex:1 p-5 rounded-b-3xl bg-white flex-1'>
         {/* navbar */}
@@ -221,7 +223,7 @@ export default function HomePage({ navigation }) {
               setShowProduct(item)
               setModalVisible(true)
             }} key={index} className='shadow-md flex-grow shadow-slate-400 rounded-xl p-2 bg-white w-[45%] m-1'>
-            {console.log(item.image)}
+          
               <Image source={{uri: item.image}} className='h-28 w-full rounded-xl' />
               <View className='flex-row justify-between'>
 

@@ -12,7 +12,7 @@ export default function Signup({navigation}) {
   const[email,setEmail]=useState('')
   const[phone,setPhone]=useState()
   const[password,setPassword]=useState('')
-  const[addres,setAddres]=useState([''])
+  const[addres,setAddres]=useState([])
   const [isEnabled, setIsEnabled] = useState(false);
   
   
@@ -35,9 +35,9 @@ export default function Signup({navigation}) {
     email:email,
     role:'public',
     phone:phone,
-    address:addres,
+    address:[],
     password:password,
-    myOrders:[{status:'',order:{}}]
+    myOrders:[]
   })
   .then(() => {
     console.log('User added!');
@@ -109,13 +109,13 @@ Here you can login to your account </Text>
     <View className='rounded-full justify-center items-center bg-white h-8 w-8'>
     <Icon name='lock' size={20} color={'black'}/>
     </View>
-    <TextInput
+    {/* <TextInput
       className='rounded-md  p-1  w-full text-lg'
       inputMode='text'
       placeholder="Address"
       multiline
       onChangeText={(nativeEvent)=>setAddres(nativeEvent)}
-    ></TextInput>
+    ></TextInput> */}
     </View>
 
     <View className='flex-row items-center p-2 rounded-2xl mb-5  bg-slate-100'>

@@ -1,7 +1,7 @@
 import { View, Text, FlatList, Image, Button, TouchableOpacity, TextInput } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { removeCartItem, setCheckOutData } from '../redux/slices/cartSlice'
+import { removeCartItem, setCheckOutPrice } from '../redux/slices/cartSlice'
 import WarningModal from '../components/WarningModal'
 import * as RootNavigation from '../navigation/RootNavigation';
 import Icon2 from 'react-native-vector-icons/Feather';
@@ -30,9 +30,12 @@ export default function CartPage({ navigation }) {
   function checkLogin() {
     if (isLogin) {
       console.log('go for payment')
-      dispatch(setCheckOutData({
-        price: Math.round(totalPrice + shippingCharge)
+      dispatch(setCheckOutPrice({
+        cartPrice:totalPrice,
+        shippingPrice:shippingCharge,
+        totalPrice: Math.round(totalPrice + shippingCharge)
       }))
+      
       navigation.navigate('Address')
     } else {
       console.log('login warning')
