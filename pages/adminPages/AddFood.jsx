@@ -53,7 +53,7 @@ const addfooditem=()=>{
   .then(() => {
     console.log('User added!');
     ToastAndroid.show('Food added sucessFully',ToastAndroid.BOTTOM)
-  
+    navigation.navigate('Home')
   });
 }
 

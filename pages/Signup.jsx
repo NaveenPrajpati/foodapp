@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import firestore from '@react-native-firebase/firestore';
 import * as RootNavigation from '../navigation/RootNavigation';
 import Icon from 'react-native-vector-icons/Feather'
-
+import auth from '@react-native-firebase/auth';
 
 export default function Signup({navigation}) {
 
@@ -29,7 +29,7 @@ export default function Signup({navigation}) {
 
     const handleSignup = () => {
         firestore()
-  .collection('Users')
+  .collection(isEnabled?'Admin':'Users')
   .add({
     name: username,
     email:email,
@@ -105,18 +105,7 @@ Here you can login to your account </Text>
       onChangeText={(nativeEvent)=>setPhone(nativeEvent)}
     ></TextInput>
     </View>
-    <View className='flex-row items-center p-2 rounded-2xl mb-5  bg-slate-100'>
-    <View className='rounded-full justify-center items-center bg-white h-8 w-8'>
-    <Icon name='lock' size={20} color={'black'}/>
-    </View>
-    {/* <TextInput
-      className='rounded-md  p-1  w-full text-lg'
-      inputMode='text'
-      placeholder="Address"
-      multiline
-      onChangeText={(nativeEvent)=>setAddres(nativeEvent)}
-    ></TextInput> */}
-    </View>
+   
 
     <View className='flex-row items-center p-2 rounded-2xl mb-5  bg-slate-100'>
     <View className='rounded-full justify-center items-center bg-white h-8 w-8'>

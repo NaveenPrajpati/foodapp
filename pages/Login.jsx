@@ -47,8 +47,6 @@ export default function Login({navigation}) {
       phone:data.phone,
       address:data.address
     }))
-    
-
 
         const jsonValue = JSON.stringify({
          
@@ -58,11 +56,7 @@ export default function Login({navigation}) {
           role:data.role
         })
        AsyncStorage.setItem('userData', jsonValue)
-     
-    
       console.log('Done.')
-    
-
     ToastAndroid.show('login success',ToastAndroid.BOTTOM)
     navigation.goBack()
     }

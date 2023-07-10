@@ -23,8 +23,9 @@ export default function HomePage({ navigation }) {
   const [count, setCount] = useState(1)
 
   const { isSearch, searchParam, openDrawer } = useSelector(state => state.navbarReducer)
-  const dispatch = useDispatch()
   const { wishItem } = useSelector(state => state.cartReducer)
+  const { userData } = useSelector(state => state.userReducer)
+  const dispatch = useDispatch()
   const drawer = useRef()
 
 
@@ -54,8 +55,6 @@ export default function HomePage({ navigation }) {
     catch (error) {
       console.log(error)
     }
-
-
   }
 
   useEffect(() => {
@@ -81,7 +80,7 @@ export default function HomePage({ navigation }) {
           </TouchableOpacity>
         </View>
 
-        {false && <View className=''>
+        {userData?.role!='admin' && <View className=''>
           <View className='flex-row gap-2 mb-10'>
             <Icon2 name='x' size={20} color={'gray'} />
             <Text className='text-md text-gray-400 font-semibold'>My orders</Text>
@@ -103,7 +102,7 @@ export default function HomePage({ navigation }) {
             <Text className='text-md text-gray-400 font-semibold'>Setting</Text>
           </View>
         </View>}
-        {true && <View className=''>
+        {userData?.role=='admin' && <View className=''>
           <TouchableOpacity className='flex-row gap-2 mb-10' onPress={() => navigation.navigate('AddFood')}>
             <Icon2 name='x' size={20} color={'gray'} />
             <Text className='text-md text-gray-400 font-semibold'>Add Food</Text>
