@@ -9,6 +9,7 @@ import * as RootNavigation from '../navigation/RootNavigation';
 export default function Navbar() {
   const {isSearch}=useSelector(state=>state.navbarReducer)
   const {cartItem}=useSelector(state=>state.cartReducer)
+  const {userData}=useSelector(state=>state.userReducer)
   const dispatch=useDispatch()
 
  
@@ -18,7 +19,7 @@ export default function Navbar() {
           <TouchableOpacity className=' rounded-full bg-white h-8 w-8 items-center justify-center'>
             <Icon name="menu" size={30} color="black" className='rounded-lg' onPress={() => dispatch(setdrawer(true))}></Icon>
           </TouchableOpacity>
-          <Text className=' text-red-400'>username</Text>
+          <Text className=' text-red-400'>{userData?userData.name:'login'}</Text>
 
           {cartItem.length>0? 
             <TouchableOpacity onPress={()=>RootNavigation.navigate('Cart')} className='flex-row relative cursor-pointer'>

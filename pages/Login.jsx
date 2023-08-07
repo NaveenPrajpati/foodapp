@@ -38,7 +38,7 @@ export default function Login({navigation}) {
     if(password==data.password){
    
     
-    dispatch(setLogin(true))
+    
     dispatch(setUserData({
       id:id,
       email:data.email,
@@ -49,13 +49,15 @@ export default function Login({navigation}) {
     }))
 
         const jsonValue = JSON.stringify({
-         
-          email:data.email,
           id:id,
-          address:data.address,
-          role:data.role
+          email:data.email,
+          name:data.name,
+          role:data.role,
+          phone:data.phone,
+          address:data.address
         })
        AsyncStorage.setItem('userData', jsonValue)
+       dispatch(setLogin(true))
       console.log('Done.')
     ToastAndroid.show('login success',ToastAndroid.BOTTOM)
     navigation.goBack()

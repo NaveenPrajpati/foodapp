@@ -11,6 +11,7 @@ import { fastFoodArray } from '../components/constants/sampleData'
 import firestore from '@react-native-firebase/firestore';
 import ItemModal from '../components/ItemModal'
 import Navbar from '../components/Navbar'
+import { setLogin, setUserData } from '../redux/slices/userSlice'
 
 
 
@@ -24,7 +25,7 @@ export default function HomePage({ navigation }) {
 
   const { isSearch, searchParam, openDrawer } = useSelector(state => state.navbarReducer)
   const { wishItem } = useSelector(state => state.cartReducer)
-  const { userData } = useSelector(state => state.userReducer)
+  const { userData,isLogin } = useSelector(state => state.userReducer)
   const dispatch = useDispatch()
   const drawer = useRef()
 
@@ -57,7 +58,23 @@ export default function HomePage({ navigation }) {
     }
   }
 
+  const getData = async () => {
+    try {
+      const jsonValue = await AsyncStorage.getItem('userData');
+       jsonValue != null ? JSON.parse(jsonValue) : null;
+       console.log(jsonValue)
+       dispatch(setUserData(jsonValue))
+      setLogin(true)
+    } catch (e) {
+      // error reading value
+    }
+  };
+
   useEffect(() => {
+
+    if(!isLogin)
+    getData()
+
     getAllFoods()
 
   }, [])
@@ -125,7 +142,10 @@ export default function HomePage({ navigation }) {
           </View>
         </View>}
 
-        <TouchableOpacity className='flex-row mb-2'>
+        <TouchableOpacity className='flex-row mb-2' onPress={()=>{
+          AsyncStorage.clear()
+          setLogin(false)
+        }}>
           <Icon2 name='x' size={20} color={'gray'} />
           <Text className='text-md text-gray-400 font-semibold'>Logout</Text>
         </TouchableOpacity>
@@ -186,6 +206,7 @@ export default function HomePage({ navigation }) {
 
         </View>
 
+      {/* feature dish card  */}
         <View className='  mt-10'>
           <View className='flex-row justify-between items-center'>
             <Text>Feature Dish</Text>
