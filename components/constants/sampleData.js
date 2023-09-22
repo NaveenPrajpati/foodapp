@@ -18,6 +18,10 @@ export const fastFoodArray = [
       name: "Burger",
       image:<Image source={require('../../images/burger.jpg')} className='h-14 w-14 rounded-full' /> 
     },
+    {
+      name: "Burger",
+      image:<Image source={require('../../images/burger.jpg')} className='h-14 w-14 rounded-full' /> 
+    },
 
   
    

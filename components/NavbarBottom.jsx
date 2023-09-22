@@ -7,6 +7,9 @@ import { setIsSearch, setdrawer } from '../redux/slices/navbarSlice'
 import * as RootNavigation from '../navigation/RootNavigation';
 import { drawer } from '../pages/HomePage'
 import { useMyRef } from '../redux/slices/cartSlice'
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+
+const Tab = createBottomTabNavigator();
 
 
 export default function NavbarBottom() {
@@ -27,6 +30,11 @@ export default function NavbarBottom() {
       <TouchableOpacity onPress={()=>RootNavigation.navigate('Login')}>
       <Icon2 name='user'  size={30} color={'gray'} />
       </TouchableOpacity>
+      
+      {/* <Tab.Navigator>
+      <Tab.Screen  name="Home" component={HomeScreen} />
+      <Tab.Screen name="Settings" component={SettingsScreen} />
+    </Tab.Navigator> */}
     </View>
   )
 }

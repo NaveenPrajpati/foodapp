@@ -8,6 +8,7 @@
 
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React from 'react';
+import 'react-native-gesture-handler';
 
 import {
   SafeAreaView,
@@ -32,28 +33,32 @@ import AddressPage from './pages/AddressPage';
 import CheckoutPage from './pages/CheckoutPage';
 import AddFood from './pages/adminPages/AddFood';
 import FoodList from './pages/adminPages/FoodList';
+import Screen1 from './pages/openingScreens/Screen1';
+import Screen2 from './pages/openingScreens/Screen2';
 
 
-const Stack=createNativeStackNavigator()
-const App= () =>  {
- 
+const Stack = createNativeStackNavigator()
+const App = () => {
+
 
   return (
     <Provider store={store}>
- 
-    <NavigationContainer ref={navigationRef}>
-    
-    <Stack.Navigator>
-<Stack.Screen name='Home'  component={HomePage} options={{headerShown:false}}/>
-<Stack.Screen name='Login' component={Login} options={{headerShown:false}}/>
-<Stack.Screen name='Signup' component={Signup} options={{headerShown:false}}/>
-<Stack.Screen name='Cart' component={CartPage} options={{headerShown:false}}/>
-<Stack.Screen name='Address' component={AddressPage} options={{headerShown:false}}/>
-<Stack.Screen name='AddFood' component={AddFood} options={{headerShown:false}}/>
-<Stack.Screen name='AddList' component={FoodList} options={{headerShown:false}}/>
-</Stack.Navigator>
-    </NavigationContainer>
-<NavbarBottom/>
+
+      <NavigationContainer ref={navigationRef}>
+
+        <Stack.Navigator screenOptions={{ headerShown: false }}>
+          <Stack.Screen name='Screen1' component={Screen1} />
+          <Stack.Screen name='Screen2' component={Screen2} />
+          <Stack.Screen name='Home' component={HomePage} />
+          <Stack.Screen name='Login' component={Login} />
+          <Stack.Screen name='Signup' component={Signup} />
+          <Stack.Screen name='Cart' component={CartPage} />
+          <Stack.Screen name='Address' component={AddressPage} />
+          <Stack.Screen name='AddFood' component={AddFood} />
+          <Stack.Screen name='AddList' component={FoodList} />
+        </Stack.Navigator>
+      </NavigationContainer>
+      <NavbarBottom />
     </Provider>
   );
 };

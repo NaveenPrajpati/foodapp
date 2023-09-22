@@ -172,17 +172,22 @@ const addfooditem=()=>{
     <Modal 
 visible={showPickOption}
 onRequestClose={()=>setShowPickOption(false)}
+transparent={true}
 >
+<View className='  flex-1 justify-center items-center'>
+<View className=' bg-slate-300 p-10 rounded-lg justify-center items-center'>
         <Pressable
         onPress={() => setShowPickOption(false)}>
-              <Text >Hide Modal</Text>
+              <Text className='text-red-400  bg-white p-1  rounded-full'>X</Text>
             </Pressable>
-<TouchableOpacity onPress={pickfromgallery}>
-    <Text>From Gallery</Text>
+<TouchableOpacity onPress={pickfromgallery} className='my-5 bg-blue-300 p-2 rounded-md'>
+    <Text  className='text-white font-semibold'>From Gallery</Text>
 </TouchableOpacity>
 <TouchableOpacity onPress={pickfromcamera}>
     <Text>From Camera</Text>
 </TouchableOpacity>
+</View>
+</View>
 </Modal>
 
    
