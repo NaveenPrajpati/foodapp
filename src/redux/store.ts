@@ -1,6 +1,5 @@
 import {combineReducers, configureStore} from '@reduxjs/toolkit';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import dashboardSlice from './slices/dashboardSlice';
 import {
   FLUSH,
   PAUSE,
@@ -12,6 +11,8 @@ import {
 } from 'redux-persist';
 import persistStore from 'redux-persist/es/persistStore';
 import navbarSlice from './slices/navbarSlice';
+
+import dashboardSlice from './slices/dashboardSlice';
 import cartSlice from './slices/cartSlice';
 import userSlice from './slices/userSlice';
 

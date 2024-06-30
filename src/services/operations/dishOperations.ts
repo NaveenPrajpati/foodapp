@@ -4,9 +4,11 @@ import axios from 'axios';
 
 export const fetchDishes = createAsyncThunk(
   'dishes/getAllDishes',
-  async (_, {rejectWithValue}) => {
+  async ({}, {rejectWithValue}) => {
     try {
-      const response = await axios.get(BaseUrl + '/dishes/getDishes');
+      console.log('hitting ');
+      const response = await axios.get(BaseUrl + '/customer/getDishesCustomer');
+      console.log(response.data);
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response.data);
@@ -14,18 +16,18 @@ export const fetchDishes = createAsyncThunk(
   },
 );
 
-export const addDish = createAsyncThunk(
-  'dishes/addDish',
-  async (data, {rejectWithValue}) => {
-    try {
-      const response = await axios.post(BaseUrl + '/dishes/add', data, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      });
-      return response.data;
-    } catch (error) {
-      return rejectWithValue(error.response.data);
-    }
-  },
-);
+// export const addDish = createAsyncThunk(
+//   'dishes/addDish',
+//   async (data, {rejectWithValue}) => {
+//     try {
+//       const response = await axios.post(BaseUrl + '/dishes/add', data, {
+//         headers: {
+//           'Content-Type': 'multipart/form-data',
+//         },
+//       });
+//       return response.data;
+//     } catch (error) {
+//       return rejectWithValue(error.response.data);
+//     }
+//   },
+// );

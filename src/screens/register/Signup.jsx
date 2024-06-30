@@ -76,7 +76,6 @@ export default function Signup({navigation}) {
     <ScrollView className="flex-1 bg-white">
       <View className=" rounded-xl  p-10  flex-1 bg-white items-center ">
         <View>
-          <Image source={''} alt="image" />
           <Text className="text-lg font-bold mb-4 text-black">
             Register Here
           </Text>
