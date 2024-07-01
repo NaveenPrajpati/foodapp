@@ -72,7 +72,7 @@ export default function CheckoutPage({route}) {
             image: 'https://i.imgur.com/3g7nmJC.png',
             currency: 'INR',
             key: 'rzp_test_yn1EU6TpuP92CZ', // Your api key
-            amount: (checkoutPrice.totalPrice * 100).toString(),
+            amount: (price * 100).toString(),
             name: 'foo',
             prefill: {
               email: userData.email,

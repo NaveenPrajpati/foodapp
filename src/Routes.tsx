@@ -31,14 +31,10 @@ function TabNavigator() {
         headerShown: false,
         tabBarStyle: {
           backgroundColor: 'black',
-          height: 60,
-          position: 'absolute',
-          borderRadius: 30,
-          shadowColor: '#000',
-          shadowOffset: {width: 0, height: -2},
-          shadowOpacity: 0.2,
-          shadowRadius: 3,
-          elevation: 5,
+          height: 80,
+          borderTopStartRadius: 30,
+          borderTopEndRadius: 30,
+          borderColor: 'black',
         },
       }}>
       <Tab.Screen
@@ -46,11 +42,16 @@ function TabNavigator() {
         component={MyEarnings}
         options={{
           tabBarIcon: ({focused}) => (
-            <VectorIcon
-              iconName="money"
-              size={focused ? 20 : 16}
-              color={focused ? 'white' : 'gray'}
-            />
+            <View
+              className={`h-12 w-12 ${
+                focused ? 'bg-green-300' : ''
+              } justify-center items-center rounded-full`}>
+              <VectorIcon
+                iconName="money"
+                size={20}
+                color={focused ? 'white' : 'gray'}
+              />
+            </View>
           ),
         }}
       />
@@ -59,11 +60,16 @@ function TabNavigator() {
         component={Dashboard}
         options={{
           tabBarIcon: ({focused}) => (
-            <VectorIcon
-              iconName="list"
-              size={focused ? 20 : 18}
-              color={focused ? 'white' : 'gray'}
-            />
+            <View
+              className={`h-12 w-12 ${
+                focused ? 'bg-green-300' : ''
+              } justify-center items-center rounded-full`}>
+              <VectorIcon
+                iconName="list"
+                size={20}
+                color={focused ? 'white' : 'gray'}
+              />
+            </View>
           ),
         }}
       />
@@ -72,11 +78,16 @@ function TabNavigator() {
         component={Info}
         options={{
           tabBarIcon: ({focused}) => (
-            <VectorIcon
-              iconName="info"
-              size={focused ? 20 : 18}
-              color={focused ? 'white' : 'gray'}
-            />
+            <View
+              className={`h-12 w-12 ${
+                focused ? 'bg-green-300' : ''
+              } justify-center items-center rounded-full`}>
+              <VectorIcon
+                iconName="info"
+                size={20}
+                color={focused ? 'white' : 'gray'}
+              />
+            </View>
           ),
         }}
       />

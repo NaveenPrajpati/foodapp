@@ -68,7 +68,9 @@ export default function CartPage() {
                 data={dishes}
                 renderItem={({item, index}) => {
                   return (
-                    <View className="flex-row gap-1 p-2 m-2 h-24 rounded-2xl bg-slate-50">
+                    <View
+                      className="flex-row gap-1 p-2 m-2 h-24 rounded-2xl bg-slate-50"
+                      style={{elevation: 1}}>
                       <Image
                         source={{uri: item.product.imagePath[0]}}
                         className="w-20 h-full rounded-xl"></Image>
@@ -78,7 +80,7 @@ export default function CartPage() {
                             {item.product.name}
                           </Text>
                           <TouchableOpacity
-                            className=" "
+                            className=" font-normal"
                             onPress={() => {
                               dispatch(removeDish(index));
                             }}>

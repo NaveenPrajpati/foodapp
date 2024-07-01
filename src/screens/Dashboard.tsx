@@ -1,6 +1,7 @@
 import {
   FlatList,
   Image,
+  Platform,
   Pressable,
   ScrollView,
   StyleSheet,
@@ -23,7 +24,7 @@ import SelectDishModal from '../components/modals/SelectDishModal';
 import {RootState} from '../redux/store';
 import Icon3 from 'react-native-vector-icons/AntDesign';
 import Icon2 from 'react-native-vector-icons/Feather';
-import {fastFoodArray} from '../components/constants/sampleData';
+import {fastFoodArray, featureDish} from '../components/constants/sampleData';
 import Header from '../components/Header';
 
 const Dashboard = () => {
@@ -31,6 +32,8 @@ const Dashboard = () => {
   const [showDish, setShowDish] = useState(false);
   const [selectedItem, setSelectedItem] = useState({});
   const [isEnabled, setIsEnabled] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+  const [openingTime, setOpeningTime] = useState('');
   const toggleSwitch = () => setIsEnabled(previousState => !previousState);
 
   const dispatch = useDispatch();
@@ -41,7 +44,26 @@ const Dashboard = () => {
   const {dishes, totalPrice, customer} = useSelector(
     (state: RootState) => state.cartReducer,
   );
-  console.log(dishes);
+
+  useEffect(() => {
+    const fetchStoreStatus = async () => {
+      axios
+        .get(BaseUrl + '/admin/status')
+        .then(response => {
+          setIsOpen(response.data.isOpen);
+          setOpeningTime(response.data.openingTime);
+        })
+        .catch(error => {
+          console.error(error);
+        });
+    };
+
+    fetchStoreStatus();
+
+    const interval = setInterval(fetchStoreStatus, 300000); // 5 minutes
+
+    return () => clearInterval(interval); // Cleanup on unmount
+  }, []);
 
   useEffect(() => {
     if (status === 'idle') {
@@ -65,23 +87,30 @@ const Dashboard = () => {
           className={`${
             isEnabled ? ' text-green-500' : ' text-black'
           } text-lg font-bold`}>
-          Kitch Is Live
+          Kitch Is {isOpen ? 'Open' : 'Closed'}
         </Text>
+        {!isOpen && (
+          <Text className="text-black">Opening at: {openingTime}</Text>
+        )}
       </View>
 
       {/* search bar */}
       <View className="flex-row justify-between p-1 items-center bg-slate-50 rounded-xl m-1">
-        <View className=" rounded-full bg-white h-8 w-8 items-center justify-center">
-          <Icon2
-            name="search"
+        <View
+          className=" rounded-full bg-white  items-center justify-center p-1"
+          style={styles.imageContainer}>
+          <VectorIcon
+            iconName="search"
+            iconPack="Feather"
+            color="gray"
             size={20}
-            color="black"
-            className="rounded-lg"></Icon2>
+          />
         </View>
         <TextInput
           onChangeText={nativeEvent => {}}
           onFocus={() => {}}
           placeholder="What do you want to eat?"
+          placeholderTextColor={'gray'}
           className=" placeholder:text-sm placeholder:font-semibold w-[80%] rounded-lg p-1 "
         />
         <TouchableOpacity
@@ -97,52 +126,56 @@ const Dashboard = () => {
       {/* categorie card */}
       <View className="  mt-10">
         <View className="flex-row justify-between items-center">
-          <Text className="text-black">Categories</Text>
+          <Text className="text-black font-semibold text-lg">Categories</Text>
           <TouchableOpacity>
-            <Text className=" text-blue-400">See All</Text>
+            <Text className=" text-blue-400 font-semibold ">See All</Text>
           </TouchableOpacity>
         </View>
-        <View className="flex-row justify-between mt-5 p-2">
+        <View className="flex-row justify-between mt-5 p-2 gap-x-12">
           {fastFoodArray.map((item, index) => (
-            <View key={index}>
-              {item.image}
-              <Text>{item.name}</Text>
+            <View key={index} className=" items-center">
+              <View
+                className=" p-1 bg-white rounded-full"
+                style={styles.imageContainer}>
+                <Image source={item.image} className="h-12 w-12 rounded-full" />
+              </View>
+
+              <Text className="font-semibold mt-3 text-black">{item.name}</Text>
             </View>
           ))}
         </View>
       </View>
 
       {/* feature dish card  */}
-      <View className="  mt-10">
+      <View className="  mt-5">
         <View className="flex-row justify-between items-center">
-          <Text className="text-black">Feature Dish</Text>
+          <Text className="text-black font-semibold">Feature Dish</Text>
           <TouchableOpacity>
-            <Text className=" text-blue-400">See All</Text>
+            <Text className=" text-blue-400 font-semibold">See All</Text>
           </TouchableOpacity>
         </View>
 
-        <ScrollView horizontal className=" p-4">
-          <TouchableOpacity className="  items-center p-2  rounded-xl bg-slate-100 h-56 w-56 mx-4">
-            <Image
-              source={require('../assets/images/daal.jpg')}
-              className=" h-[80%] w-full rounded-lg"
-            />
-            <View className="flex-row justify-between p-1">
-              <Text className="text-red-600 m-2">rating</Text>
-              <Text className="text-red-600 m-2">Slide1</Text>
-            </View>
-          </TouchableOpacity>
-
-          <TouchableOpacity className=" items-center p-2  rounded-xl bg-slate-50 h-56 w-56 mx-4">
-            <Image
-              source={require('../assets/images/chole.jpg')}
-              className=" h-[80%] w-full rounded-lg"
-            />
-            <View className="flex-row justify-between p-1">
-              <Text className="text-slate-600 m-2">rating</Text>
-              <Text className="text-slate-600 m-2">Slide1</Text>
-            </View>
-          </TouchableOpacity>
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          className=" py-2">
+          {featureDish.map((item, index) => (
+            <TouchableOpacity
+              style={{elevation: 1}}
+              className="  items-center p-2  rounded-xl bg-white mx-2">
+              <Image source={item.image} className=" rounded-2xl h-32 w-52" />
+              <View className=" flex-row gap-x-20">
+                <Text className="text-slate-400 text-xs">{item.name}</Text>
+                <Text className="text-slate-400 text-xs">Veg</Text>
+              </View>
+              <View className="flex-row justify-between gap-x-3  border-t  border-t-slate-200">
+                <Text className="text-slate-600 text-xs">10:00 min</Text>
+                <Text className="text-yellow-500 text-xs">
+                  Rating: {item.rating}
+                </Text>
+              </View>
+            </TouchableOpacity>
+          ))}
         </ScrollView>
       </View>
 
@@ -204,4 +237,18 @@ const Dashboard = () => {
 
 export default Dashboard;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  imageContainer: {
+    ...Platform.select({
+      android: {
+        elevation: 6, // Adjust the elevation for Android
+      },
+      ios: {
+        shadowColor: '#000',
+        shadowOffset: {width: 0, height: 2},
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+      },
+    }),
+  },
+});

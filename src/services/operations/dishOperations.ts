@@ -6,9 +6,7 @@ export const fetchDishes = createAsyncThunk(
   'dishes/getAllDishes',
   async ({}, {rejectWithValue}) => {
     try {
-      console.log('hitting ');
       const response = await axios.get(BaseUrl + '/customer/getDishesCustomer');
-      console.log(response.data);
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response.data);
