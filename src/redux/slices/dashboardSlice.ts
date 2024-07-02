@@ -41,7 +41,7 @@ export const dashboardSlice = createSlice({
         state.allDishes = action.payload;
       })
       .addCase(fetchDishes.rejected, (state, action) => {
-        // state.status = 'failed';
+        state.status = 'failed';
         state.error = action.payload;
       });
   },

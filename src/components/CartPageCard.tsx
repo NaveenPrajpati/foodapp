@@ -2,6 +2,7 @@ import React from 'react';
 import {View, Text, Image, TouchableOpacity} from 'react-native';
 import {useDispatch} from 'react-redux';
 import VectorIcon from '../components/VectorIcon';
+import {removeDish, updateDish} from '../redux/slices/cartSlice';
 // import {removeDish, updateQuantity} from '../redux/slices/cartSlice';
 
 const CardPageCard = ({item, index}) => {
@@ -9,17 +10,27 @@ const CardPageCard = ({item, index}) => {
 
   const handleQuantityChange = increment => {
     const newQuantity = item.quantity + increment;
-    // if (newQuantity > 0) {
-    //   dispatch(updateQuantity(index, newQuantity));
-    // }
+    if (newQuantity > 0) {
+      dispatch(
+        updateDish({
+          index,
+          dish: {
+            product: item.product,
+            quantity: newQuantity,
+          },
+        }),
+      );
+    }
   };
+
+  // console.log(item?.product);
 
   return (
     <View
       className="flex-row gap-1 p-2 m-2 h-24 rounded-2xl bg-slate-50"
       style={{elevation: 1}}>
       <Image
-        source={{uri: item.product.imagePath[0]}}
+        source={{uri: item?.product?.imagePath[0]}}
         className="w-20 h-full rounded-xl"></Image>
       <View className=" justify-between  flex-1 h-full ">
         <View className="flex-row justify-between item-center">
@@ -29,7 +40,7 @@ const CardPageCard = ({item, index}) => {
           <TouchableOpacity
             className=" font-normal"
             onPress={() => {
-              //   dispatch(removeDish(index));
+              dispatch(removeDish(index));
             }}>
             <VectorIcon iconName="close" size={18} color={'black'} />
           </TouchableOpacity>

@@ -124,7 +124,7 @@ const Dashboard = () => {
       </View>
 
       {/* categorie card */}
-      <View className="  mt-10">
+      <View className="  mt-5">
         <View className="flex-row justify-between items-center">
           <Text className="text-black font-semibold text-lg">Categories</Text>
           <TouchableOpacity>
@@ -161,6 +161,7 @@ const Dashboard = () => {
           className=" py-2">
           {featureDish.map((item, index) => (
             <TouchableOpacity
+              key={index}
               style={{elevation: 1}}
               className="  items-center p-2  rounded-xl bg-white mx-2">
               <Image source={item.image} className=" rounded-2xl h-32 w-52" />
@@ -179,7 +180,9 @@ const Dashboard = () => {
         </ScrollView>
       </View>
 
-      <View className=" flex-row flex-wrap  my-5">
+      <Text className="text-black text-lg font-semibold mt-5">MyDishes</Text>
+
+      <View className=" flex-row flex-wrap">
         {allDishes?.map((item, index) => (
           <TouchableOpacity
             onPress={() => {
@@ -200,7 +203,6 @@ const Dashboard = () => {
         ))}
       </View>
 
-      <Text className="text-black text-xl ">MyDishes</Text>
       {/* <FlatList
         data={allDishes}
         numColumns={2}
@@ -228,7 +230,7 @@ const Dashboard = () => {
           cb={() => {
             setShowDish(false);
           }}
-          showProduct={selectedItem}
+          item={selectedItem}
         />
       )}
     </Container>

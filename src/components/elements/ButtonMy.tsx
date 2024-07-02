@@ -10,7 +10,7 @@ export default function ButtonMy({onPress, textButton}: buttonProp) {
   return (
     <TouchableOpacity
       onPress={onPress}
-      className="bg-yellow-600 mb-5 p-2 rounded-3xl w-full ">
+      className="bg-black  px-4 py-1 rounded-3xl my-2">
       <Text className="text-white text-lg font-semibold text-center">
         {textButton}
       </Text>

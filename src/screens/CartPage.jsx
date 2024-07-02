@@ -17,6 +17,7 @@ import PriceSummery from '../components/PriceSummery';
 import VectorIcon from '../components/VectorIcon';
 import {removeDish} from '../redux/slices/cartSlice';
 import {useNavigation} from '@react-navigation/native';
+import CardPageCard from '../components/CartPageCard';
 
 export default function CartPage() {
   const [warning, setWarning] = useState(false);
@@ -66,57 +67,9 @@ export default function CartPage() {
             <View className="flex-1">
               <FlatList
                 data={dishes}
-                renderItem={({item, index}) => {
-                  return (
-                    <View
-                      className="flex-row gap-1 p-2 m-2 h-24 rounded-2xl bg-slate-50"
-                      style={{elevation: 1}}>
-                      <Image
-                        source={{uri: item.product.imagePath[0]}}
-                        className="w-20 h-full rounded-xl"></Image>
-                      <View className=" justify-between  flex-1 h-full ">
-                        <View className="flex-row justify-between item-center">
-                          <Text className="text-black font-semibold text-lg">
-                            {item.product.name}
-                          </Text>
-                          <TouchableOpacity
-                            className=" font-normal"
-                            onPress={() => {
-                              dispatch(removeDish(index));
-                            }}>
-                            <VectorIcon
-                              iconName="close"
-                              size={18}
-                              color={'black'}
-                            />
-                          </TouchableOpacity>
-                        </View>
-                        <View className="flex-row justify-between items-center p-1">
-                          <Text className="text-black font-semibold text-lg">
-                            ₹ {item.product?.price}
-                          </Text>
-                          <View className="flex-row rounded-lg">
-                            <TouchableOpacity>
-                              <Text className="w-5 h-5 rounded-full text-white text-md bg-black text-center">
-                                -
-                              </Text>
-                            </TouchableOpacity>
-                            <View>
-                              <Text className="w-6 h-5 text-md font-bold text-center text-black">
-                                {item.quantity}
-                              </Text>
-                            </View>
-                            <TouchableOpacity>
-                              <Text className="w-5 h-5 rounded-full text-white text-md bg-black text-center">
-                                +
-                              </Text>
-                            </TouchableOpacity>
-                          </View>
-                        </View>
-                      </View>
-                    </View>
-                  );
-                }}
+                renderItem={({item, index}) => (
+                  <CardPageCard item={item} index={index} />
+                )}
               />
             </View>
 

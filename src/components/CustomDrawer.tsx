@@ -6,6 +6,7 @@ import {
 } from '@react-navigation/drawer';
 import {useDispatch} from 'react-redux';
 import {logout} from '../redux/slices/userSlice';
+import {persistor} from '../redux/store';
 
 export default function CustomDrawer(props: any) {
   const dispatch = useDispatch();
@@ -17,7 +18,7 @@ export default function CustomDrawer(props: any) {
         title="Logout"
         onPress={() => {
           dispatch(logout());
-          // Navigate to the login screen if needed
+          persistor.purge();
           props.navigation.navigate('Login');
         }}
       />

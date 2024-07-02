@@ -7,35 +7,59 @@ import {
   TouchableOpacity,
   ToastAndroid,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Image} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import {RootState} from '../../redux/store';
-import {addDish, setTotalPrice} from '../../redux/slices/cartSlice';
+import {addDish, setTotalPrice, updateDish} from '../../redux/slices/cartSlice';
 import VectorIcon from '../VectorIcon';
 
 type modalProp = {
   onPress: () => void;
   showDish: boolean;
   cb: () => void;
-  showProduct: any;
+  item: any;
 };
 
 export default function SelectDishModal({
-  showProduct,
+  item,
   onPress,
   showDish,
   cb,
 }: modalProp) {
   const [quantity, setQuantity] = useState(1);
+  const [editIndex, setEditIndex] = useState(0);
+  const [isEdit, setIsEdit] = useState(false);
   const {dishes, totalPrice, customer} = useSelector(
     (state: RootState) => state.cartReducer,
   );
 
   const dispatch = useDispatch();
 
+  useEffect(() => {
+    dishes.map((it, index) => {
+      if (item._id == it.product._id) {
+        setIsEdit(true);
+        setQuantity(it.quantity);
+        setEditIndex(index);
+      }
+    });
+  }, []);
+
   function handleAdd() {
-    dispatch(addDish({product: showProduct, quantity}));
+    if (isEdit) {
+      dispatch(
+        updateDish({
+          index: editIndex,
+          dish: {
+            product: item,
+            quantity,
+          },
+        }),
+      );
+    } else {
+      dispatch(addDish({product: item, quantity}));
+    }
     ToastAndroid.show('dist added', ToastAndroid.SHORT);
     setQuantity(1);
     cb();
@@ -49,13 +73,10 @@ export default function SelectDishModal({
       onRequestClose={cb}>
       <View className="bg-black px-1 pt-1 justify-between flex-1 ">
         <View className="rounded-b-3xl bg-white relative flex-1">
-          <Image
-            source={{uri: showProduct?.imagePath[0]}}
-            className="w-full h-1/2"
-          />
+          <Image source={{uri: item?.imagePath[0]}} className="w-full h-1/2" />
 
           <View className="flex-row justify-between px-2 mt-4">
-            <Text className="text-black">{showProduct?.name}</Text>
+            <Text className="text-black">{item?.name}</Text>
             <View className="flex flex-row items-center rounded-lg mr-5">
               <TouchableOpacity
                 onPress={() => {
@@ -80,10 +101,10 @@ export default function SelectDishModal({
               </TouchableOpacity>
             </View>
           </View>
-          <Text className="text-black">Price: ₹{showProduct?.price}</Text>
+          <Text className="text-black">Price: ₹{item?.price}</Text>
 
           <Text className="text-black text-lg font-semibold">
-            {showProduct?.description}
+            {item?.description}
           </Text>
 
           <Pressable className="absolute right-2 top-2 " onPress={cb}>
@@ -98,7 +119,7 @@ export default function SelectDishModal({
 
         <View className="flex-row justify-between items-center bg-black px-5 py-1  h-20">
           <Text className="text-lg font-semibold text-white">
-            ₹{showProduct?.price * quantity}
+            ₹{item?.price * quantity}
           </Text>
           <TouchableOpacity
             onPress={handleAdd}

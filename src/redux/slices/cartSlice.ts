@@ -55,16 +55,11 @@ const cartSlice = createSlice({
       }
       state.dishes.push(action.payload);
     },
-    removeDish(state, action: PayloadAction<string>) {
+    removeDish(state, action: PayloadAction<number>) {
       state.dishes = state.dishes.filter((_, ind) => ind != action.payload);
     },
-    updateDish(state, action: PayloadAction<Dish>) {
-      const index = state.dishes.findIndex(
-        dish => dish.dishId === action.payload.dishId,
-      );
-      if (index !== -1) {
-        state.dishes[index] = action.payload;
-      }
+    updateDish(state, action: PayloadAction<{index: number; dish: Dish}>) {
+      state.dishes[action.payload.index] = action.payload.dish;
     },
     setShippingAddress(state, action: PayloadAction<ShippingAddress>) {
       state.shippingAddress = action.payload;

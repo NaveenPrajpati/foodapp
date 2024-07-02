@@ -4,34 +4,26 @@ import {
   TouchableOpacity,
   TouchableHighlight,
   ToastAndroid,
+  TextInput,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import RazorpayCheckout from 'react-native-razorpay';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import ButtonMy from '../components/elements/ButtonMy';
+import {launchImageLibrary} from 'react-native-image-picker';
+import axios from 'axios';
+import {BaseUrl} from '../services/endPoints';
 
 export default function CheckoutPage({route}) {
   const {price} = route.params;
-  const {cartItem, checkoutPrice} = useSelector(state => state.cartReducer);
+  const {dishes} = useSelector(state => state.cartReducer);
   const {isLogin, userData, deliveryAddress} = useSelector(
     state => state.userReducer,
   );
-  const [localUserData, setlocalUserData] = useState({});
+  const [orederNote, setOrderNote] = useState('');
 
   const dispatch = useDispatch();
-
-  useEffect(() => {
-    const getData = async () => {
-      try {
-        const jsonValue = await AsyncStorage.getItem('userData');
-        return jsonValue != null ? JSON.parse(jsonValue) : null;
-      } catch (e) {
-        // error reading value
-      }
-    };
-
-    setlocalUserData(getData);
-  }, []);
 
   function updateUserOrder(id) {
     // firestore()
@@ -51,6 +43,37 @@ export default function CheckoutPage({route}) {
     // });
   }
 
+  function placeOrder() {
+    const data = {
+      totalPrice: price,
+      customer: userData._id,
+      dishes: dishes.map(item => {
+        return {
+          dishId: item.product._id,
+          quantity: item.quantity,
+        };
+      }),
+      status: 'pending',
+      shippingAddress: userData.address,
+      paymentMethod: 'cod',
+      orderNotes: orederNote,
+    };
+    // console.log(JSON.stringify(data, null, 2));
+    axios
+      .post(BaseUrl + '/customer/placeOrder', data, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+      .then(res => console.log(res.data))
+      .catch(err => console.log(err));
+  }
+
+  async function addPayment() {
+    const result = await launchImageLibrary({mediaType: 'photo'});
+    console.log(result.assets[0]);
+  }
+
   return (
     <View className=" flex-1 p-2">
       <Text className="text-black text-lg">CheckoutPage</Text>
@@ -59,10 +82,21 @@ export default function CheckoutPage({route}) {
         <Text className="text-black">Select Address</Text>
         <Text className="text-black">{userData.address}</Text>
       </View>
-
       <TouchableOpacity className="">
         <Text className="text-black font-semibold">Add Address</Text>
       </TouchableOpacity>
+
+      <TextInput
+        placeholder="Any Note For Kitchen"
+        placeholderTextColor={'gray'}
+        className=" bg-gray-200 p-2 my-2 text-black"
+        onChangeText={e => setOrderNote(e)}
+      />
+      <View className=" flex-row justify-around items-center">
+        <ButtonMy textButton="Payment Proof" onPress={addPayment} />
+        <Text className="text-black font-semibold">Or</Text>
+        <ButtonMy textButton="COD" onPress={placeOrder} />
+      </View>
 
       <TouchableHighlight
         className="bg-black mb-5 p-2 rounded-3xl w-[60%] "

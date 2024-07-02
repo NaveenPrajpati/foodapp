@@ -6,7 +6,6 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import MyEarnings from './screens/MyEarnings';
 import VectorIcon from './components/VectorIcon';
-import Info from './screens/Info';
 import CustomersList from './screens/CustomersList';
 import OrdersList from './screens/OrdersList';
 import Signup from './screens/register/Signup';
@@ -17,6 +16,7 @@ import CheckoutPage from './screens/CheckoutPage';
 import {useSelector} from 'react-redux';
 import {RootState} from './redux/store';
 import CustomDrawer from './components/CustomDrawer';
+import MyOrders from './screens/MyOrders';
 
 const Tab = createBottomTabNavigator();
 const Drawer = createDrawerNavigator();
@@ -74,8 +74,8 @@ function TabNavigator() {
         }}
       />
       <Tab.Screen
-        name="Info"
-        component={Info}
+        name="MyOrders"
+        component={MyOrders}
         options={{
           tabBarIcon: ({focused}) => (
             <View
