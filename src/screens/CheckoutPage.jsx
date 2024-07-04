@@ -14,6 +14,9 @@ import ButtonMy from '../components/elements/ButtonMy';
 import {launchImageLibrary} from 'react-native-image-picker';
 import axios from 'axios';
 import {BaseUrl} from '../services/endPoints';
+import {showToast} from '../utils/utilityFunctions';
+import {emptyCart} from '../redux/slices/cartSlice';
+import {useNavigation} from '@react-navigation/native';
 
 export default function CheckoutPage({route}) {
   const {price} = route.params;
@@ -24,24 +27,7 @@ export default function CheckoutPage({route}) {
   const [orederNote, setOrderNote] = useState('');
 
   const dispatch = useDispatch();
-
-  function updateUserOrder(id) {
-    // firestore()
-    // .collection('Users')
-    // .doc(localUserData._j.id)
-    // .update({
-    //   myOrders:[{
-    //     status:'order placed',
-    //     order:cartItem,
-    //     address:deliveryAddress,
-    //     pacedAt:Date.now(),
-    //   paymentId:id}]
-    // })
-    // .then(() => {
-    //   RootNavigation.navigate('Home')
-    //   ToastAndroid.show('User updated!',ToastAndroid.BOTTOM);
-    // });
-  }
+  const navigation = useNavigation();
 
   function placeOrder() {
     const data = {
@@ -65,7 +51,12 @@ export default function CheckoutPage({route}) {
           'Content-Type': 'application/json',
         },
       })
-      .then(res => console.log(res.data))
+      .then(res => {
+        console.log(res.data);
+        showToast('success', 'Success', 'your order placed');
+        dispatch(emptyCart());
+        navigation.navigate('MyOrders', {replace: true});
+      })
       .catch(err => console.log(err));
   }
 

@@ -19,22 +19,16 @@ export interface OrderState {
   totalPrice: number;
   customer: string;
   dishes: Dish[];
-  shippingAddress: ShippingAddress;
+  shippingAddress: string;
   paymentMethod: string;
   orderNotes?: string;
 }
 
 const initialState: OrderState = {
   totalPrice: 1,
-  customer: 'naveen',
+  customer: '',
   dishes: [],
-  shippingAddress: {
-    street: '',
-    city: '',
-    state: '',
-    postalCode: '',
-    country: '',
-  },
+  shippingAddress: '',
   paymentMethod: '',
   orderNotes: '',
 };
@@ -58,10 +52,13 @@ const cartSlice = createSlice({
     removeDish(state, action: PayloadAction<number>) {
       state.dishes = state.dishes.filter((_, ind) => ind != action.payload);
     },
+    emptyCart(state, action: PayloadAction<number>) {
+      state.dishes = [];
+    },
     updateDish(state, action: PayloadAction<{index: number; dish: Dish}>) {
       state.dishes[action.payload.index] = action.payload.dish;
     },
-    setShippingAddress(state, action: PayloadAction<ShippingAddress>) {
+    setShippingAddress(state, action: PayloadAction<string>) {
       state.shippingAddress = action.payload;
     },
     setPaymentMethod(state, action: PayloadAction<string>) {
@@ -82,6 +79,7 @@ export const {
   setShippingAddress,
   setPaymentMethod,
   setOrderNotes,
+  emptyCart,
 } = cartSlice.actions;
 
 export default cartSlice.reducer;

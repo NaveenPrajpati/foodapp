@@ -1,4 +1,5 @@
 import {PermissionsAndroid, ToastAndroid} from 'react-native';
+import Toast from 'react-native-toast-message';
 
 export const requestCameraPermission = async () => {
   try {
@@ -25,9 +26,9 @@ export const requestCameraPermission = async () => {
   }
 };
 
-export const showToast = (message: string) => {
-  ToastAndroid.show(message, ToastAndroid.SHORT);
-};
+// export const showToast = (message: string) => {
+//   ToastAndroid.show(message, ToastAndroid.SHORT);
+// };
 
 export const showToastWithGravity = (message: string) => {
   ToastAndroid.showWithGravity(
@@ -45,4 +46,16 @@ export const showToastWithGravityAndOffset = (message: string) => {
     25,
     50,
   );
+};
+
+export const showToast = (
+  type: string = 'success',
+  text1: string,
+  text2: string,
+) => {
+  Toast.show({
+    type: type,
+    text1: text1,
+    text2: text2,
+  });
 };

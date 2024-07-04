@@ -17,7 +17,7 @@ import VectorIcon from '../components/VectorIcon';
 import InputTag from '../components/elements/InputTag';
 import {useNavigation} from '@react-navigation/native';
 import axios from 'axios';
-import {BaseUrl} from '../services/endPoints';
+import { BaseUrl, socket } from "../services/endPoints";
 import {useDispatch, useSelector} from 'react-redux';
 import {fetchDishes} from '../services/operations/dishOperations';
 import SelectDishModal from '../components/modals/SelectDishModal';
@@ -46,30 +46,28 @@ const Dashboard = () => {
   );
 
   useEffect(() => {
-    const fetchStoreStatus = async () => {
-      axios
-        .get(BaseUrl + '/admin/status')
-        .then(response => {
-          setIsOpen(response.data.isOpen);
-          setOpeningTime(response.data.openingTime);
-        })
-        .catch(error => {
-          console.error(error);
-        });
-    };
+    socket.on('connect', () => {
+      console.log('Connected to WebSocket server');
+    });
 
-    fetchStoreStatus();
+    socket.on('storeStatus', (status) => {
+      console.log(status)
+      setIsOpen(status);
+    });
 
-    const interval = setInterval(fetchStoreStatus, 300000); // 5 minutes
+    // Optional: fetch initial store status from your backend if needed
 
-    return () => clearInterval(interval); // Cleanup on unmount
+    return () => {
+      socket.off('connect');
+      socket.off('storeStatusUpdated');
+    }; // Cleanup on unmount
   }, []);
 
   useEffect(() => {
-    if (status === 'idle') {
+
       dispatch(fetchDishes({}));
-    }
-  }, [dispatch, status]);
+
+  }, []);
 
   if (status === 'loading') {
     return <Text>Loading...</Text>;

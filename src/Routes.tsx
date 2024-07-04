@@ -77,6 +77,7 @@ function TabNavigator() {
         name="MyOrders"
         component={MyOrders}
         options={{
+          headerShown: true,
           tabBarIcon: ({focused}) => (
             <View
               className={`h-12 w-12 ${
