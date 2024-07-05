@@ -42,7 +42,6 @@ export default function Signup({navigation}) {
       address: address,
     };
 
-    console.log(customerData);
     try {
       const response = await axios.post(
         BaseUrl + '/customer/registerCustomer',
@@ -76,12 +75,10 @@ export default function Signup({navigation}) {
     <ScrollView className="flex-1 bg-white">
       <View className=" rounded-xl  p-10  flex-1 bg-white items-center ">
         <View>
-          <Text className="text-lg font-bold mb-4 text-black">
+          <Text className="text-lg font-bold mb-2 text-black">
             Register Here
           </Text>
-          <Text className="text-black">
-            Here you can login to your account{' '}
-          </Text>
+          <Text className="text-black">Here you can create account</Text>
         </View>
 
         <InputTag
@@ -93,25 +90,28 @@ export default function Signup({navigation}) {
           onChangeText={nativeEvent => setEmail(nativeEvent)}
         />
         <InputTag
+          iconName="phone"
           inputMode="numeric"
           placeholder="Phone"
           onChangeText={nativeEvent => setPhone(nativeEvent)}
         />
 
         <InputTag
+          iconName="lock"
           placeholder="Password"
           secureTextEntry
           onChangeText={nativeEvent => setPassword(nativeEvent)}
         />
 
         <InputTag
+          iconName="address-book"
           placeholder="Address"
           onChangeText={nativeEvent => setAddres(nativeEvent)}
         />
 
         <TouchableOpacity
           onPress={handleSignup}
-          className="bg-black mb-5 p-2 rounded-3xl w-[60%] ">
+          className="bg-black mt-5 p-2 rounded-3xl w-[60%] ">
           <Text className="text-white text-lg font-semibold text-center">
             Signup
           </Text>
@@ -120,7 +120,7 @@ export default function Signup({navigation}) {
         <TouchableOpacity
           onPress={() => navigation.navigate('Login')}
           className=" w-full">
-          <Text className="text-blue-600">have account? Login</Text>
+          <Text className="text-blue-600 ">have account? Login</Text>
         </TouchableOpacity>
       </View>
     </ScrollView>

@@ -1,6 +1,6 @@
 // cartSlice.ts
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
-import {dishType} from '../../../utils/types';
+import {dishType} from '../../utils/types';
 
 export interface Dish {
   product: dishType;
@@ -52,7 +52,7 @@ const cartSlice = createSlice({
     removeDish(state, action: PayloadAction<number>) {
       state.dishes = state.dishes.filter((_, ind) => ind != action.payload);
     },
-    emptyCart(state, action: PayloadAction<number>) {
+    emptyCart(state, action: PayloadAction<any>) {
       state.dishes = [];
     },
     updateDish(state, action: PayloadAction<{index: number; dish: Dish}>) {

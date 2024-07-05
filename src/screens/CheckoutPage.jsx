@@ -17,6 +17,7 @@ import {BaseUrl} from '../services/endPoints';
 import {showToast} from '../utils/utilityFunctions';
 import {emptyCart} from '../redux/slices/cartSlice';
 import {useNavigation} from '@react-navigation/native';
+import Toast from 'react-native-toast-message';
 
 export default function CheckoutPage({route}) {
   const {price} = route.params;
@@ -65,6 +66,14 @@ export default function CheckoutPage({route}) {
     console.log(result.assets[0]);
   }
 
+  const showToast = () => {
+    Toast.show({
+      type: 'success',
+      text1: 'Hello',
+      text2: 'This is some something 👋',
+    });
+  };
+
   return (
     <View className=" flex-1 p-2">
       <Text className="text-black text-lg">CheckoutPage</Text>
@@ -84,7 +93,7 @@ export default function CheckoutPage({route}) {
         onChangeText={e => setOrderNote(e)}
       />
       <View className=" flex-row justify-around items-center">
-        <ButtonMy textButton="Payment Proof" onPress={addPayment} />
+        <ButtonMy textButton="Payment Proof" onPress={showToast} />
         <Text className="text-black font-semibold">Or</Text>
         <ButtonMy textButton="COD" onPress={placeOrder} />
       </View>

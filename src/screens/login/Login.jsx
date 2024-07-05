@@ -22,6 +22,7 @@ import {BaseUrl} from '../../services/endPoints';
 import InputTag from '../../components/elements/InputTag';
 import {loginUser} from '../../services/operations/authOperations';
 import {useNavigation} from '@react-navigation/native';
+import Toast from 'react-native-toast-message';
 
 export default function Login() {
   const [phone, setPhone] = useState('');
@@ -30,18 +31,16 @@ export default function Login() {
   const [isEnabled, setIsEnabled] = useState(false);
   const navigation = useNavigation();
 
-  const toggleSwitch = () => {
-    setIsEnabled(previousState => !previousState);
-    if (isEnabled) console.log('public');
-    else console.log('admin');
-  };
-
   const dispatch = useDispatch();
 
   useEffect(() => {
     if (status === 'succeeded' && isLogin) {
       navigation.navigate('RootStack');
-      ToastAndroid.show('Login successful!', ToastAndroid.SHORT);
+      Toast.show({
+        type: 'success',
+        text1: 'Welcome',
+        text2: 'Login Successful👋',
+      });
     }
   }, [status, isLogin, navigation]);
 
@@ -73,6 +72,7 @@ export default function Login() {
 
         <InputTag
           placeholder="Password"
+          iconName="lock"
           secureTextEntry
           onChangeText={nativeEvent => setPassword(nativeEvent)}
         />

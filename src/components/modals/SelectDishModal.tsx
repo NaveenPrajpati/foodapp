@@ -81,23 +81,21 @@ export default function SelectDishModal({
               <TouchableOpacity
                 onPress={() => {
                   setQuantity(prev => (prev > 1 ? prev - 1 : prev));
-                }}>
-                <Text className="w-6 h-6 text-md bg-slate-200 text-center text-black">
-                  -
-                </Text>
+                }}
+                className=" bg-gray-200 h-8 w-8 justify-center items-center rounded-l-md">
+                <VectorIcon iconName="minus" color="black" size={10} />
               </TouchableOpacity>
-              <View className="w-10 h-10 justify-center items-center bg-pink-200 ">
-                <Text className=" text-lg font-semibold  text-black">
+              <View className="w-12 h-12 justify-center items-center bg-pink-200 rounded-md">
+                <Text className=" text-xl font-semibold  text-black">
                   {quantity}
                 </Text>
               </View>
               <TouchableOpacity
                 onPress={() => {
                   setQuantity(pre => pre + 1);
-                }}>
-                <Text className="w-6 h-6 text-md bg-slate-200 text-center text-black">
-                  +
-                </Text>
+                }}
+                className=" bg-gray-200 h-8 w-8 justify-center items-center rounded-r-md">
+                <VectorIcon iconName="plus" color="black" size={10} />
               </TouchableOpacity>
             </View>
           </View>

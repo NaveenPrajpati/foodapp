@@ -8,6 +8,7 @@ type propType = {
   onChangeText: (e: string) => void;
   label?: string;
   inputMode?: string;
+  iconName?: string;
 };
 
 export default function InputTag({
@@ -16,24 +17,16 @@ export default function InputTag({
   onChangeText,
   label,
   inputMode,
+  iconName,
   ...atrs
 }: propType) {
   return (
-    <View className="my-1 mb-5">
+    <View className="mt-5">
       {label && <Text className="font-semibold text-gray-500">{label}</Text>}
-      {/* <TextInput
-        value={value}
-        onChangeText={onChangeText}
-        placeholder={placeholder}
-        placeholderTextColor={'gray'}
-        className="p-2 w-full rounded-lg  text-black text-lg bg-orange-200 "
-      /> */}
-
       <View className="flex-row items-center p-2 rounded-2xl   bg-slate-100">
         <View className="rounded-full justify-center items-center bg-white h-8 w-8">
           <VectorIcon
-            iconPack="Feather"
-            iconName="file"
+            iconName={iconName ? iconName : 'user'}
             size={20}
             color="black"
           />

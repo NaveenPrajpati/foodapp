@@ -49,21 +49,19 @@ const CardPageCard = ({item, index}) => {
           <Text className="text-black font-semibold text-lg">
             ₹ {item.product?.price}
           </Text>
-          <View className="flex-row rounded-lg">
-            <TouchableOpacity onPress={() => handleQuantityChange(-1)}>
-              <Text className="w-5 h-5 rounded-full text-white text-md bg-black text-center">
-                -
-              </Text>
+          <View className="flex-row rounded-lg items-center">
+            <TouchableOpacity
+              className="bg-black h-5 w-5 rounded-full justify-center items-center"
+              onPress={() => handleQuantityChange(-1)}>
+              <VectorIcon iconName="minus" color="white" size={10} />
             </TouchableOpacity>
-            <View>
-              <Text className="w-6 h-5 text-md font-bold text-center text-black">
-                {item.quantity}
-              </Text>
-            </View>
-            <TouchableOpacity onPress={() => handleQuantityChange(1)}>
-              <Text className="w-5 h-5 rounded-full text-white text-md bg-black text-center">
-                +
-              </Text>
+            <Text className=" text-xl font-bold text-center text-black mx-2">
+              {item.quantity}
+            </Text>
+            <TouchableOpacity
+              className="bg-black h-5 w-5 rounded-full justify-center items-center"
+              onPress={() => handleQuantityChange(1)}>
+              <VectorIcon iconName="plus" color="white" size={10} />
             </TouchableOpacity>
           </View>
         </View>

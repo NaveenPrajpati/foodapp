@@ -17,6 +17,7 @@ import {useSelector} from 'react-redux';
 import {RootState} from './redux/store';
 import CustomDrawer from './components/CustomDrawer';
 import MyOrders from './screens/MyOrders';
+import Toast from 'react-native-toast-message';
 
 const Tab = createBottomTabNavigator();
 const Drawer = createDrawerNavigator();
@@ -118,8 +119,7 @@ function Routes() {
   const {isLogin} = useSelector((state: RootState) => state.userReducer);
   return (
     <NavigationContainer>
-      <StatusBar backgroundColor={'gray'} barStyle={'light-content'} />
-
+      <StatusBar backgroundColor={'black'} barStyle={'light-content'} />
       <Stack.Navigator
         screenOptions={{headerShown: false}}
         initialRouteName={isLogin ? 'RootStack' : 'Login'}>

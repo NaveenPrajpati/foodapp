@@ -11,13 +11,13 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import Container from '../components/Container';
 import VectorIcon from '../components/VectorIcon';
 import InputTag from '../components/elements/InputTag';
-import {useNavigation} from '@react-navigation/native';
+import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import axios from 'axios';
-import { BaseUrl, socket } from "../services/endPoints";
+import {BaseUrl, socket} from '../services/endPoints';
 import {useDispatch, useSelector} from 'react-redux';
 import {fetchDishes} from '../services/operations/dishOperations';
 import SelectDishModal from '../components/modals/SelectDishModal';
@@ -38,7 +38,7 @@ const Dashboard = () => {
 
   const dispatch = useDispatch();
   const {allDishes, status, error, loading, addDishStatus} = useSelector(
-    state => state.dashboard,
+    (state: RootState) => state.dashboard,
   );
 
   const {dishes, totalPrice, customer} = useSelector(
@@ -50,8 +50,8 @@ const Dashboard = () => {
       console.log('Connected to WebSocket server');
     });
 
-    socket.on('storeStatus', (status) => {
-      console.log(status)
+    socket.on('storeStatus', status => {
+      console.log(status);
       setIsOpen(status);
     });
 
@@ -63,11 +63,14 @@ const Dashboard = () => {
     }; // Cleanup on unmount
   }, []);
 
-  useEffect(() => {
-
+  useFocusEffect(
+    useCallback(() => {
       dispatch(fetchDishes({}));
-
-  }, []);
+      return () => {
+        navigation.closeDrawer();
+      };
+    }, []),
+  );
 
   if (status === 'loading') {
     return <Text>Loading...</Text>;
