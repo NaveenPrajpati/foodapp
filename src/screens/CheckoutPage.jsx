@@ -13,7 +13,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import ButtonMy from '../components/elements/ButtonMy';
 import {launchImageLibrary} from 'react-native-image-picker';
 import axios from 'axios';
-import {BaseUrl} from '../services/endPoints';
+import {BaseUrl, socket} from '../services/endPoints';
 import {showToast} from '../utils/utilityFunctions';
 import {emptyCart} from '../redux/slices/cartSlice';
 import {useNavigation} from '@react-navigation/native';
@@ -56,6 +56,7 @@ export default function CheckoutPage({route}) {
         console.log(res.data);
         showToast('success', 'Success', 'your order placed');
         dispatch(emptyCart());
+        socket.emit('orderPlaced', 'order placed successfully');
         navigation.navigate('MyOrders', {replace: true});
       })
       .catch(err => console.log(err));

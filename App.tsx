@@ -5,7 +5,11 @@ import Routes from './src/Routes';
 import {persistor, store} from './src/redux/store';
 import {PersistGate} from 'redux-persist/integration/react';
 import {Provider} from 'react-redux';
-import Toast, {BaseToast, ErrorToast} from 'react-native-toast-message';
+import Toast, {
+  BaseToast,
+  BaseToastProps,
+  ErrorToast,
+} from 'react-native-toast-message';
 import VectorIcon from './src/components/VectorIcon';
 
 export default function App() {
@@ -28,7 +32,7 @@ export default function App() {
         // renderTrailingIcon={() => <VectorIcon iconName='user' size={20} color='black'/>}
       />
     ),
-    error: props => (
+    error: (props: any) => (
       <ErrorToast
         {...props}
         text1Style={{

@@ -9,18 +9,21 @@ import {
 } from 'react-native';
 import React, {useCallback, useEffect, useState} from 'react';
 import axios from 'axios';
-import {BaseUrl} from '../services/endPoints';
+import {BaseUrl, socket} from '../services/endPoints';
 import {useSelector} from 'react-redux';
 import VectorIcon from '../components/VectorIcon';
+import {useFocusEffect, useIsFocused} from '@react-navigation/native';
+import {formatDate} from '../utils/utilityFunctions';
+import {RootState} from '../redux/store';
 
 const MyOrders = () => {
   const [orders, setOrders] = useState([]);
   const [expandDetails, setExpandDetails] = useState('');
   const {isLogin, userData, deliveryAddress} = useSelector(
-    state => state.userReducer,
+    (state: RootState) => state.userReducer,
   );
-  useEffect(() => {
-    console.log('url-', BaseUrl + `/customer/getAllOrders/${userData._id}`);
+
+  function getOrders() {
     axios
       .get(BaseUrl + `/customer/getAllOrders/${userData._id}`)
       .then(res => {
@@ -28,15 +31,23 @@ const MyOrders = () => {
         setOrders(res.data.orders);
       })
       .catch(err => console.log(err));
-  }, []);
+  }
 
-  // const handleExpand = useCallback(
-  //   (index: any) => {
-  //     LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut); // Add animation
-  //     setExpandedIndex(index === expandedIndex ? null : index);
-  //   },
-  //   [expandedIndex],
-  // );
+  useFocusEffect(
+    useCallback(() => {
+      getOrders();
+      socket.emit('join', 'customer', {customerId: userData._id});
+      const handleOrderStatusUpdate = () => {
+        getOrders();
+      };
+
+      socket.on('updatedOrderStatus', handleOrderStatusUpdate);
+
+      return () => {
+        socket.off('updatedOrderStatus', handleOrderStatusUpdate);
+      };
+    }, [socket]),
+  );
 
   return (
     <View>
@@ -52,7 +63,7 @@ const MyOrders = () => {
                   Price: ₹{item.totalPrice}
                 </Text>
                 <Text className="text-black font-semibold">
-                  {item.orderDate}
+                  {formatDate(item.orderDate)}
                 </Text>
               </View>
 

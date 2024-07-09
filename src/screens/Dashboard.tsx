@@ -15,7 +15,11 @@ import React, {useCallback, useEffect, useState} from 'react';
 import Container from '../components/Container';
 import VectorIcon from '../components/VectorIcon';
 import InputTag from '../components/elements/InputTag';
-import {useFocusEffect, useNavigation} from '@react-navigation/native';
+import {
+  useFocusEffect,
+  useIsFocused,
+  useNavigation,
+} from '@react-navigation/native';
 import axios from 'axios';
 import {BaseUrl, socket} from '../services/endPoints';
 import {useDispatch, useSelector} from 'react-redux';
@@ -44,24 +48,35 @@ const Dashboard = () => {
   const {dishes, totalPrice, customer} = useSelector(
     (state: RootState) => state.cartReducer,
   );
+  const {isLogin, userData, deliveryAddress} = useSelector(
+    (state: RootState) => state.userReducer,
+  );
+
+  const isFocused = useIsFocused();
 
   useEffect(() => {
-    socket.on('connect', () => {
-      console.log('Connected to WebSocket server');
-    });
+    if (isFocused) {
+      socket.on('connect', () => {
+        console.log('Connected to WebSocket server');
+      });
 
-    socket.on('storeStatus', status => {
-      console.log(status);
-      setIsOpen(status);
-    });
+      socket.on('storeStatus', status => {
+        console.log(status);
+        setIsOpen(status);
+      });
+
+      // Join the room for this customer
+    }
 
     // Optional: fetch initial store status from your backend if needed
 
     return () => {
-      socket.off('connect');
-      socket.off('storeStatusUpdated');
+      if (isFocused) {
+        socket.off('connect');
+        socket.off('storeStatusUpdated');
+      }
     }; // Cleanup on unmount
-  }, []);
+  }, [isFocused, socket]);
 
   useFocusEffect(
     useCallback(() => {
