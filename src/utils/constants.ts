@@ -10,3 +10,10 @@ export const categories = [
   'chinese',
   'starters',
 ];
+
+export const paymentOption = [
+  {id: 0, label: 'Cash On Delivery', value: 'COD'},
+  {id: 1, label: 'Cash On Pickup', value: 'COP'},
+  {id: 2, label: 'Payment now', value: 'PAY'},
+  {id: 3, label: 'Payment Proof', value: 'PP'},
+];

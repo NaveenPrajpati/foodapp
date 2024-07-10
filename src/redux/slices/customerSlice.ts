@@ -9,8 +9,8 @@ const initialState = {
   error: null,
 };
 
-const userSlice = createSlice({
-  name: 'userSlice',
+const customerSlice = createSlice({
+  name: 'customerSlice',
   initialState,
   reducers: {
     setLogin(state, action) {
@@ -50,5 +50,5 @@ const userSlice = createSlice({
 });
 
 export const {setLogin, setUserData, setDeliveryAdd, logout} =
-  userSlice.actions;
-export default userSlice.reducer;
+  customerSlice.actions;
+export default customerSlice.reducer;

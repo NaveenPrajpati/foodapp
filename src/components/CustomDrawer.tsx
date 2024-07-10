@@ -5,7 +5,7 @@ import {
   DrawerItemList,
 } from '@react-navigation/drawer';
 import {useDispatch} from 'react-redux';
-import {logout} from '../redux/slices/userSlice';
+import {logout} from '../redux/slices/customerSlice';
 import {persistor} from '../redux/store';
 import {emptyCart} from '../redux/slices/cartSlice';
 

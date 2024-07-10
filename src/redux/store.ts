@@ -14,7 +14,7 @@ import navbarSlice from './slices/navbarSlice';
 
 import dashboardSlice from './slices/dashboardSlice';
 import cartSlice from './slices/cartSlice';
-import userSlice from './slices/userSlice';
+import customerSlice from './slices/customerSlice';
 
 const persistConfig = {
   key: 'root',
@@ -25,7 +25,7 @@ const rootReducer = combineReducers({
   dashboard: dashboardSlice,
   navbarReducer: navbarSlice,
   cartReducer: cartSlice,
-  userReducer: userSlice,
+  userReducer: customerSlice,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

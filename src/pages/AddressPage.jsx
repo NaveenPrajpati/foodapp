@@ -13,7 +13,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import CheckoutPage from '../screens/CheckoutPage';
 import Navbar from '../components/Header';
 import Icon2 from 'react-native-vector-icons/Feather';
-import {setDeliveryAdd, setUserOrders} from '../redux/slices/userSlice';
+import {setDeliveryAdd, setUserOrders} from '../redux/slices/customerSlice';
 
 export default function AddressPage({navigation}) {
   const [localUserData, setlocalUserData] = useState({});

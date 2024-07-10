@@ -13,6 +13,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {RootState} from '../../redux/store';
 import {addDish, setTotalPrice, updateDish} from '../../redux/slices/cartSlice';
 import VectorIcon from '../VectorIcon';
+import Toast from 'react-native-toast-message';
 
 type modalProp = {
   onPress: () => void;
@@ -60,7 +61,7 @@ export default function SelectDishModal({
     } else {
       dispatch(addDish({product: item, quantity}));
     }
-    ToastAndroid.show('dist added', ToastAndroid.SHORT);
+    Toast.show({type: 'success', text1: 'Item added to cart'});
     setQuantity(1);
     cb();
   }

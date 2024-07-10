@@ -33,7 +33,7 @@ import {fastFoodArray} from '../components/constants/sampleData';
 import firestore from '@react-native-firebase/firestore';
 import ItemModal from '../components/ItemModal';
 import Navbar from '../components/Header';
-import {setLogin, setUserData} from '../redux/slices/userSlice';
+import {setLogin, setUserData} from '../redux/slices/customerSlice';
 
 export default function HomePage({navigation}) {
   const [products, setProducts] = useState([]);
