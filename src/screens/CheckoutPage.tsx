@@ -104,7 +104,7 @@ export default function CheckoutPage({route}) {
       console.log(res.data);
       showToast('success', 'Success', 'Your order placed');
       dispatch(emptyCart());
-      socket.emit('orderPlaced', 'Order placed successfully');
+      socket.emit('orderPlaced', {user: userData.name, price: price});
       navigation.navigate('MyOrders', {replace: true});
     } catch (err) {
       console.error('Error placing order:', err); // More descriptive error handling
@@ -117,11 +117,11 @@ export default function CheckoutPage({route}) {
       <Text className="text-black text-lg">CheckoutPage</Text>
 
       <View>
-        <Text className="text-black">Select Address</Text>
+        <Text className="text-black text-lg font-semibold">Select Address</Text>
         <Text className="text-black">{userData.address}</Text>
       </View>
-      <TouchableOpacity className="">
-        <Text className="text-black font-semibold">Add Address</Text>
+      <TouchableOpacity className=" bg-black p-1 rounded-lg">
+        <Text className="text-white font-semibold w-fit">Add Address</Text>
       </TouchableOpacity>
 
       <TextInput
@@ -132,12 +132,15 @@ export default function CheckoutPage({route}) {
       />
 
       <View>
+        <Text className="text-black text-lg font-semibold">
+          Select Payment Mode
+        </Text>
         {paymentOption.map((item, index) => (
           <View key={index} className="flex-row items-center gap-x-2 mt-1">
             <CheckBox
               className=" text-red-400"
               tintColor="black"
-              style={{backgroundColor: 'black'}}
+              style={{backgroundColor: 'black', borderRadius: 2}}
               disabled={false}
               value={checkBox == index}
               onValueChange={newValue => {

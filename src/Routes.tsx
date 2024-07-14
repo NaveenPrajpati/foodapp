@@ -6,7 +6,7 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import MyEarnings from './screens/MyEarnings';
 import VectorIcon from './components/VectorIcon';
-import CustomersList from './screens/CustomersList';
+
 import OrdersList from './screens/OrdersList';
 import Signup from './screens/register/Signup';
 import Login from './screens/login/Login';
@@ -18,6 +18,7 @@ import {RootState} from './redux/store';
 import CustomDrawer from './components/CustomDrawer';
 import MyOrders from './screens/MyOrders';
 import Toast from 'react-native-toast-message';
+import AddressList from './screens/AddressList';
 
 const Tab = createBottomTabNavigator();
 const Drawer = createDrawerNavigator();
@@ -109,7 +110,7 @@ function RootStack() {
       drawerContent={props => <CustomDrawer {...props} />}
       initialRouteName="Home">
       <Drawer.Screen name="Home" component={TabNavigator} />
-      <Drawer.Screen name="CustomersList" component={CustomersList} />
+      <Drawer.Screen name="AddressList" component={AddressList} />
       <Drawer.Screen name="OrdersList" component={OrdersList} />
     </Drawer.Navigator>
   );

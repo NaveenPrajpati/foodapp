@@ -30,6 +30,7 @@ import Icon3 from 'react-native-vector-icons/AntDesign';
 import Icon2 from 'react-native-vector-icons/Feather';
 import {fastFoodArray, featureDish} from '../components/constants/sampleData';
 import Header from '../components/Header';
+import {formatDate, onDisplayNotification} from '../utils/utilityFunctions';
 
 const Dashboard = () => {
   const navigation = useNavigation();
@@ -60,9 +61,10 @@ const Dashboard = () => {
         console.log('Connected to WebSocket server');
       });
 
-      socket.on('storeStatus', status => {
-        console.log(status);
-        setIsOpen(status);
+      socket.on('storeStatus', data => {
+        console.log(data);
+        setIsOpen(data.status);
+        setOpeningTime(data.time);
       });
 
       // Join the room for this customer
@@ -106,7 +108,7 @@ const Dashboard = () => {
           Kitch Is {isOpen ? 'Open' : 'Closed'}
         </Text>
         {!isOpen && (
-          <Text className="text-black">Opening at: {openingTime}</Text>
+          <Text className="text-black">Open at: {formatDate(openingTime)}</Text>
         )}
       </View>
 

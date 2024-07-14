@@ -13,11 +13,13 @@ import {BaseUrl, socket} from '../services/endPoints';
 import {useSelector} from 'react-redux';
 import VectorIcon from '../components/VectorIcon';
 import {useFocusEffect, useIsFocused} from '@react-navigation/native';
-import {formatDate} from '../utils/utilityFunctions';
+import {formatDate, onDisplayNotification} from '../utils/utilityFunctions';
 import {RootState} from '../redux/store';
+import StarRating from 'react-native-star-rating-widget';
 
 const MyOrders = () => {
   const [orders, setOrders] = useState([]);
+  const [rating, setRating] = useState(0);
   const [expandDetails, setExpandDetails] = useState('');
   const {isLogin, userData, deliveryAddress} = useSelector(
     (state: RootState) => state.userReducer,
@@ -37,7 +39,9 @@ const MyOrders = () => {
     useCallback(() => {
       getOrders();
       socket.emit('join', 'customer', {customerId: userData._id});
-      const handleOrderStatusUpdate = () => {
+      const handleOrderStatusUpdate = (data: {status: any}) => {
+        onDisplayNotification(data);
+
         getOrders();
       };
 
@@ -72,7 +76,16 @@ const MyOrders = () => {
                   <Text className="text-black">
                     Total items: {item.dishes.length}
                   </Text>
-                  <Text className="text-black font-semibold">
+                  <Text
+                    className={`${
+                      item.status == 'delivered'
+                        ? 'text-green-400'
+                        : item.status == 'pending'
+                        ? 'text-red-400'
+                        : item.status == 'preparing'
+                        ? 'text-yellow-400'
+                        : 'text-black'
+                    } font-semibold `}>
                     {item.status}
                   </Text>
                 </View>
@@ -93,6 +106,19 @@ const MyOrders = () => {
                   }
                 />
               </View>
+
+              {item.status == 'delivered' && (
+                <View className="flex-row justify-end">
+                  <StarRating
+                    rating={rating}
+                    onChange={setRating}
+                    maxStars={5}
+                    starSize={20}
+                    starStyle={{backgroundColor: '', marginHorizontal: 2}}
+                    style={{backgroundColor: ''}}
+                  />
+                </View>
+              )}
             </View>
 
             {expandDetails == index.toString() && (

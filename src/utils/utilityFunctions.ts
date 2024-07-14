@@ -1,5 +1,11 @@
 import {PermissionsAndroid, ToastAndroid} from 'react-native';
 import Toast from 'react-native-toast-message';
+import notifee, {
+  AndroidImportance,
+  AuthorizationStatus,
+  EventType,
+} from '@notifee/react-native';
+import NotificationSounds from 'react-native-notification-sounds';
 
 export const requestCameraPermission = async () => {
   try {
@@ -48,37 +54,88 @@ export const showToastWithGravityAndOffset = (message: string) => {
   );
 };
 
-export const showToast = (
-  type: string = 'success',
-  text1: string,
-  text2: string,
-) => {
+type ToastType = 'success' | 'error' | 'info'; // Define allowed types
+
+export const showToast = (type: ToastType, text1: string, text2?: string) => {
   Toast.show({
-    type: type,
-    text1: text1,
-    text2: text2,
+    type,
+    text1,
+    text2, // Pass optional text2 if provided
+    position: 'top',
+    visibilityTime: 2000,
+    autoHide: true,
+    // Additional props for customization (e.g., icon, style, etc.)
   });
 };
+export async function onDisplayNotification(payload: {status: any}) {
+  // Request permissions (required for iOS)
+  const settings = await notifee.requestPermission();
+
+  if (settings.authorizationStatus >= AuthorizationStatus.AUTHORIZED) {
+    console.log('Permission settings:', settings);
+  } else {
+    console.log('User declined permissions');
+  }
+
+  // Retrieve a list of system notification sounds
+  const soundsList = await NotificationSounds.getNotifications('notification');
+  const soundFile = soundsList[0]?.url || 'ring1'; // Fallback to 'default' if no sound found
+
+  // Create a channel (required for Android)
+  const channelId = await notifee.createChannel({
+    id: 'sound',
+    name: 'Default Channel',
+    sound: soundFile, // Ensure this matches your sound file name
+    importance: AndroidImportance.HIGH,
+    vibration: true,
+  });
+
+  await notifee.displayNotification({
+    id: '123',
+    title: 'your order Status',
+    body: payload.status || 'order place successfully',
+    android: {
+      channelId,
+      color: '#6495ed',
+      sound: 'default',
+      pressAction: {
+        id: 'default',
+      },
+    },
+    ios: {
+      sound: 'default',
+    },
+  });
+}
 
 export const formatDate = (dateStr: string) => {
-  // Create a new Date object from the date string
   const date = new Date(dateStr);
+  const now = new Date(); // Get current time
 
-  // Extract date components
-  const day = String(date.getUTCDate()).padStart(2, '0');
-  const month = String(date.getUTCMonth() + 1).padStart(2, '0'); // Months are zero-indexed
-  const year = String(date.getUTCFullYear()).slice(-2);
+  const isToday =
+    date.getDate() === now.getDate() &&
+    date.getMonth() === now.getMonth() &&
+    date.getFullYear() === now.getFullYear();
 
-  // Extract time components
-  let hours = date.getUTCHours();
-  const minutes = String(date.getUTCMinutes()).padStart(2, '0');
+  const isTomorrow =
+    date.getDate() === now.getDate() + 1 &&
+    date.getMonth() === now.getMonth() &&
+    date.getFullYear() === now.getFullYear();
+
+  let hours = date.getHours();
+  const minutes = String(date.getMinutes()).padStart(2, '0');
   const ampm = hours >= 12 ? 'PM' : 'AM';
-  hours = hours % 12;
-  hours = hours ? hours : 12; // The hour '0' should be '12'
+  hours = hours % 12 || 12;
   const strHours = String(hours).padStart(2, '0');
 
-  // Format the date and time
-  const formattedDate = `${day}/${month}/${year} ${strHours}:${minutes} ${ampm}`;
-
-  return formattedDate; // Output: 050724 07:51 AM
+  if (isToday) {
+    return `${strHours}:${minutes} ${ampm}`; // Only time for today
+  } else if (isTomorrow) {
+    return `Tom ${strHours}:${minutes} ${ampm}`; // "Tom" for tomorrow
+  } else {
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const year = String(date.getFullYear()).slice(-2);
+    return `${day}/${month}/${year} ${strHours}:${minutes} ${ampm}`; // Full date for other days
+  }
 };
