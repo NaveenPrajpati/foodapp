@@ -38,7 +38,7 @@ const Dashboard = () => {
   const [selectedItem, setSelectedItem] = useState({});
   const [isEnabled, setIsEnabled] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
-  const [openingTime, setOpeningTime] = useState('');
+  const [openingTime, setOpeningTime] = useState(new Date());
   const toggleSwitch = () => setIsEnabled(previousState => !previousState);
 
   const dispatch = useDispatch();
@@ -142,14 +142,17 @@ const Dashboard = () => {
       </View>
 
       {/* categorie card */}
-      <View className="  mt-5">
+      <View className="  mt-4">
         <View className="flex-row justify-between items-center">
           <Text className="text-black font-semibold text-lg">Categories</Text>
           <TouchableOpacity>
             <Text className=" text-blue-400 font-semibold ">See All</Text>
           </TouchableOpacity>
         </View>
-        <View className="flex-row justify-between mt-5 p-2 gap-x-12">
+        <ScrollView
+          horizontal={true}
+          showsHorizontalScrollIndicator={false}
+          className="mt-1 p-2 gap-x-12">
           {fastFoodArray.map((item, index) => (
             <View key={index} className=" items-center">
               <View
@@ -157,17 +160,16 @@ const Dashboard = () => {
                 style={styles.imageContainer}>
                 <Image source={item.image} className="h-12 w-12 rounded-full" />
               </View>
-
               <Text className="font-semibold mt-3 text-black">{item.name}</Text>
             </View>
           ))}
-        </View>
+        </ScrollView>
       </View>
 
       {/* feature dish card  */}
       <View className="  mt-5">
         <View className="flex-row justify-between items-center">
-          <Text className="text-black font-semibold">Feature Dish</Text>
+          <Text className="text-black text-lg font-semibold">Feature Dish</Text>
           <TouchableOpacity>
             <Text className=" text-blue-400 font-semibold">See All</Text>
           </TouchableOpacity>

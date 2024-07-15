@@ -25,6 +25,7 @@ import {RootState} from '../redux/store';
 import {AdvancedImage} from 'cloudinary-react-native';
 import {Cloudinary} from '@cloudinary/url-gen';
 import {paymentOption} from '../utils/constants';
+import InputTag from '../components/elements/InputTag';
 
 export default function CheckoutPage({route}) {
   const {price} = route.params;
@@ -34,6 +35,7 @@ export default function CheckoutPage({route}) {
   );
   const [orderNote, setOrderNote] = useState('');
   const [selectedImg, setSelectedImg] = useState('');
+  const [addressIndex, setAddressIndex] = useState(0);
   const [checkBox, setCheckBox] = useState(2);
   const dispatch = useDispatch();
   const navigation = useNavigation();
@@ -61,7 +63,7 @@ export default function CheckoutPage({route}) {
         dishId: item.product._id,
         quantity: item.quantity,
       })),
-      shippingAddress: userData.address,
+      shippingAddress: userData.address[addressIndex],
       orderNotes: orderNote, // Fixed typo: "orederNote" -> "orderNote"
     };
 
@@ -114,21 +116,32 @@ export default function CheckoutPage({route}) {
 
   return (
     <View className=" flex-1 p-2">
-      <Text className="text-black text-lg">CheckoutPage</Text>
+      {/* <Text className="text-black text-lg">CheckoutPage</Text> */}
 
       <View>
-        <Text className="text-black text-lg font-semibold">Select Address</Text>
-        <Text className="text-black">{userData.address}</Text>
+        <Text className="text-black text-lg font-semibold">Select address</Text>
+        {userData?.address?.map((item, index) => (
+          <View key={index} className="flex-row items-center gap-x-2 mt-1">
+            <CheckBox
+              className=" text-red-400"
+              tintColor="black"
+              style={{backgroundColor: 'black', borderRadius: 2}}
+              disabled={false}
+              value={addressIndex == index}
+              onValueChange={newValue => {
+                setAddressIndex(index);
+              }}
+            />
+            <Text className="text-gray-600 font-semibold">{item}</Text>
+          </View>
+        ))}
       </View>
-      <TouchableOpacity className=" bg-black p-1 rounded-lg">
-        <Text className="text-white font-semibold w-fit">Add Address</Text>
-      </TouchableOpacity>
 
-      <TextInput
-        placeholder="Any Note For Kitchen"
-        placeholderTextColor={'gray'}
-        className=" bg-gray-200 p-2 my-2 text-black"
-        onChangeText={e => setOrderNote(e)}
+      <ButtonMy
+        textButton="Add Address"
+        onPress={() => {
+          navigation.navigate('AddressList');
+        }}
       />
 
       <View>
@@ -161,6 +174,14 @@ export default function CheckoutPage({route}) {
           />
         </View>
       )}
+
+      <TextInput
+        placeholder="Any Note For Kitchen"
+        placeholderTextColor={'gray'}
+        className=" bg-gray-200 p-2 my-2 text-black"
+        onChangeText={e => setOrderNote(e)}
+      />
+
       <ButtonMy
         textButton={`${paymentOption[checkBox].label}  ₹${price}`}
         onPress={placeOrder}

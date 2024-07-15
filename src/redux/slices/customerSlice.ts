@@ -1,5 +1,7 @@
 import {createSlice} from '@reduxjs/toolkit';
 import {loginUser} from '../../services/operations/authOperations';
+import {editUser} from '../../services/operations/userOperation';
+import {showToast} from '../../utils/utilityFunctions';
 const initialState = {
   isLogin: false,
   userData: {},
@@ -45,6 +47,19 @@ const customerSlice = createSlice({
       .addCase(loginUser.rejected, (state, action) => {
         // state.status = 'failed';
         state.error = action.payload;
+      })
+      .addCase(editUser.pending, state => {
+        state.status = 'loading';
+      })
+      .addCase(editUser.fulfilled, (state, action) => {
+        state.status = 'succeeded';
+        state.userData = action.payload.data;
+        showToast('success', action.payload.message);
+      })
+      .addCase(editUser.rejected, (state, action) => {
+        state.status = 'failed';
+        state.error = action.payload;
+        showToast('success', action.payload.error);
       });
   },
 });

@@ -51,7 +51,7 @@ export default function Login(): FC<{}> {
         text2: 'Login Successful👋',
       });
     }
-  }, [status, isLogin, navigation]);
+  }, [isLogin, navigation]);
 
   const handleLogin = async () => {
     Keyboard.dismiss();

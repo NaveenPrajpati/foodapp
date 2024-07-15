@@ -46,7 +46,7 @@ function TabNavigator() {
           tabBarIcon: ({focused}) => (
             <View
               className={`h-12 w-12 ${
-                focused ? 'bg-green-300' : ''
+                focused ? 'bg-green-400' : ''
               } justify-center items-center rounded-full`}>
               <VectorIcon
                 iconName="money"
@@ -64,10 +64,11 @@ function TabNavigator() {
           tabBarIcon: ({focused}) => (
             <View
               className={`h-12 w-12 ${
-                focused ? 'bg-green-300' : ''
+                focused ? 'bg-green-400' : ''
               } justify-center items-center rounded-full`}>
               <VectorIcon
-                iconName="list"
+                iconName="food-bank"
+                iconPack="MaterialIcons"
                 size={20}
                 color={focused ? 'white' : 'gray'}
               />
@@ -86,7 +87,7 @@ function TabNavigator() {
                 focused ? 'bg-green-300' : ''
               } justify-center items-center rounded-full`}>
               <VectorIcon
-                iconName="info"
+                iconName="list"
                 size={20}
                 color={focused ? 'white' : 'gray'}
               />
@@ -101,15 +102,27 @@ function TabNavigator() {
 function RootStack() {
   return (
     <Drawer.Navigator
-      screenOptions={{
-        headerShown: false,
+      screenOptions={({navigation}) => ({
+        headerLeft: () => (
+          <View className="px-2">
+            <VectorIcon
+              iconName="arrow-left"
+              size={20}
+              onPress={() => navigation.goBack()}
+            />
+          </View>
+        ),
         drawerStyle: {
           width: 200,
         },
-      }}
+      })}
       drawerContent={props => <CustomDrawer {...props} />}
       initialRouteName="Home">
-      <Drawer.Screen name="Home" component={TabNavigator} />
+      <Drawer.Screen
+        name="Home"
+        options={{headerShown: false}}
+        component={TabNavigator}
+      />
       <Drawer.Screen name="AddressList" component={AddressList} />
       <Drawer.Screen name="OrdersList" component={OrdersList} />
     </Drawer.Navigator>

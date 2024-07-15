@@ -1,15 +1,21 @@
 import {View, Text, TextInput} from 'react-native';
-import React from 'react';
+import React, {ForwardedRef} from 'react';
 import VectorIcon from '../VectorIcon';
 
-type propType = {
+//Interface to expose the input focus method.
+interface InputTagRef {
+  focus(): void;
+}
+
+interface propType {
   placeholder: string;
   value?: string;
   onChangeText: (e: string) => void;
   label?: string;
   inputMode?: string;
   iconName?: string;
-};
+  ref?: ForwardedRef<InputTagRef>;
+}
 
 export default function InputTag({
   placeholder,
@@ -18,6 +24,7 @@ export default function InputTag({
   label,
   inputMode,
   iconName,
+  ref,
   ...atrs
 }: propType) {
   return (
@@ -33,6 +40,7 @@ export default function InputTag({
         </View>
         <TextInput
           {...atrs}
+          ref={ref}
           value={value}
           inputMode={inputMode}
           className="rounded-md  p-1  w-full text-lg text-black"

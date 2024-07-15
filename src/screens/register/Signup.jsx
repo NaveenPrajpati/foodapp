@@ -44,7 +44,7 @@ export default function Signup({navigation}) {
 
     try {
       const response = await axios.post(
-        BaseUrl + '/customer/registerCustomer',
+        BaseUrl + '/auth/registerCustomer',
         customerData,
         {
           headers: {
