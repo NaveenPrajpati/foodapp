@@ -1,4 +1,4 @@
-import {PermissionsAndroid, ToastAndroid} from 'react-native';
+import {Image, PermissionsAndroid, ToastAndroid} from 'react-native';
 import Toast from 'react-native-toast-message';
 import notifee, {
   AndroidImportance,
@@ -6,6 +6,7 @@ import notifee, {
   EventType,
 } from '@notifee/react-native';
 import NotificationSounds from 'react-native-notification-sounds';
+import RNFS from 'react-native-fs';
 
 export const requestCameraPermission = async () => {
   try {
@@ -139,3 +140,22 @@ export const formatDate = (dateStr: string) => {
     return `${day}/${month}/${year} ${strHours}:${minutes} ${ampm}`; // Full date for other days
   }
 };
+
+export async function downloadButton() {
+  const imageSource = require('../assets/images/qr.png');
+  const resolvedAssetSource = Image.resolveAssetSource(imageSource);
+  const imageUrl = resolvedAssetSource.uri;
+  const destPath = `${RNFS.DownloadDirectoryPath}/qr.png`;
+
+  try {
+    const downloadOptions = {
+      fromUrl: imageUrl,
+      toFile: destPath,
+    };
+    await RNFS.downloadFile(downloadOptions).promise;
+    showToast('success', 'Qr image download');
+  } catch (error) {
+    showToast('error', 'Failed to download image');
+    console.log(error);
+  }
+}

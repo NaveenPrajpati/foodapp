@@ -7,6 +7,7 @@ import {
   TextInput,
   Alert,
   Image,
+  ScrollView,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
@@ -16,7 +17,7 @@ import ButtonMy from '../components/elements/ButtonMy';
 import {launchImageLibrary} from 'react-native-image-picker';
 import axios from 'axios';
 import {BaseUrl, socket} from '../services/endPoints';
-import {showToast} from '../utils/utilityFunctions';
+import {downloadButton, showToast} from '../utils/utilityFunctions';
 import {emptyCart} from '../redux/slices/cartSlice';
 import {useNavigation} from '@react-navigation/native';
 import Toast from 'react-native-toast-message';
@@ -26,6 +27,8 @@ import {AdvancedImage} from 'cloudinary-react-native';
 import {Cloudinary} from '@cloudinary/url-gen';
 import {paymentOption} from '../utils/constants';
 import InputTag from '../components/elements/InputTag';
+import VectorIcon from '../components/VectorIcon';
+import RNFS from 'react-native-fs';
 
 export default function CheckoutPage({route}) {
   const {price} = route.params;
@@ -37,6 +40,7 @@ export default function CheckoutPage({route}) {
   const [selectedImg, setSelectedImg] = useState('');
   const [addressIndex, setAddressIndex] = useState(0);
   const [checkBox, setCheckBox] = useState(2);
+  const [ppImg, setPpImg] = useState('');
   const dispatch = useDispatch();
   const navigation = useNavigation();
 
@@ -55,6 +59,12 @@ export default function CheckoutPage({route}) {
     theme: {color: '#ffff00'},
   };
 
+  async function pickImage() {
+    const result = await launchImageLibrary({mediaType: 'photo'});
+    const imageFile = result.assets[0];
+    setSelectedImg(imageFile);
+  }
+
   async function placeOrder() {
     const data = {
       totalPrice: price,
@@ -70,15 +80,12 @@ export default function CheckoutPage({route}) {
     const formData = new FormData();
 
     if (paymentOption[checkBox].value === 'PP') {
-      const result = await launchImageLibrary({mediaType: 'photo'});
-      const imageFile = result.assets[0];
-      setSelectedImg(imageFile.uri);
       formData.append('imageData', {
-        uri: imageFile.uri,
+        uri: selectedImg.uri,
         type: 'image/jpeg',
-        name: imageFile.fileName,
+        name: selectedImg.fileName,
       });
-      data.paymentMethod = 'paid'; // Set payment method
+      data.paymentMethod = 'paid';
     } else if (paymentOption[checkBox].value === 'PAY') {
       try {
         const dat = await RazorpayCheckout.open(options); // Corrected "data" assignment
@@ -115,7 +122,7 @@ export default function CheckoutPage({route}) {
   }
 
   return (
-    <View className=" flex-1 p-2">
+    <ScrollView className=" flex-1 p-2">
       {/* <Text className="text-black text-lg">CheckoutPage</Text> */}
 
       <View>
@@ -164,13 +171,30 @@ export default function CheckoutPage({route}) {
           </View>
         ))}
       </View>
-      {selectedImg && (
-        <View className="my-2">
+      {checkBox == 3 && (
+        <View className="my-5 px-5 relative">
           <Image
-            source={{uri: selectedImg}}
-            width={200}
-            height={200}
-            className=""
+            source={
+              selectedImg?.uri
+                ? {uri: selectedImg.uri}
+                : require('../assets/images/qr.png')
+            }
+            resizeMode="contain"
+            className=" w-[200px] h-[200px] mx-auto"
+          />
+          <Text className=" mx-auto">Pay On This QR</Text>
+          <VectorIcon
+            iconName={selectedImg.uri ? 'close' : 'download'}
+            color="black"
+            size={20}
+            style={{position: 'absolute', right: 10}}
+            onPress={() => {
+              if (selectedImg.uri) {
+                setSelectedImg({});
+              } else {
+                downloadButton();
+              }
+            }}
           />
         </View>
       )}
@@ -181,11 +205,13 @@ export default function CheckoutPage({route}) {
         className=" bg-gray-200 p-2 my-2 text-black"
         onChangeText={e => setOrderNote(e)}
       />
-
+      {checkBox == 3 && (
+        <ButtonMy textButton={`upload payment image`} onPress={pickImage} />
+      )}
       <ButtonMy
         textButton={`${paymentOption[checkBox].label}  ₹${price}`}
         onPress={placeOrder}
       />
-    </View>
+    </ScrollView>
   );
 }
