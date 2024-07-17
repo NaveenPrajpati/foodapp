@@ -94,7 +94,7 @@ export default function CheckoutPage({route}) {
         data.paymentId = dat.razorpay_payment_id;
       } catch (error) {
         console.error(error);
-        Alert(`Error: ${error.code} | ${error.description}`);
+        showToast('error', error.description);
         return; // Exit the function if Razorpay fails
       }
     } else {
@@ -110,7 +110,7 @@ export default function CheckoutPage({route}) {
         headers: {'Content-Type': 'multipart/form-data'}, // Set correct content type
       });
 
-      console.log(res.data);
+      // console.log(res.data);
       showToast('success', 'Success', 'Your order placed');
       dispatch(emptyCart());
       socket.emit('orderPlaced', {user: userData.name, price: price});

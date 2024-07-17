@@ -1,6 +1,10 @@
 import * as React from 'react';
-import {View, Text, StatusBar} from 'react-native';
-import {NavigationContainer} from '@react-navigation/native';
+import {View, Text, StatusBar, useColorScheme} from 'react-native';
+import {
+  DarkTheme,
+  DefaultTheme,
+  NavigationContainer,
+} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {createDrawerNavigator} from '@react-navigation/drawer';
@@ -19,6 +23,7 @@ import CustomDrawer from './components/CustomDrawer';
 import MyOrders from './screens/MyOrders';
 import Toast from 'react-native-toast-message';
 import AddressList from './screens/AddressList';
+import ForgetPassword from './screens/login/ForgetPassword';
 
 const Tab = createBottomTabNavigator();
 const Drawer = createDrawerNavigator();
@@ -39,7 +44,7 @@ function TabNavigator() {
           borderColor: 'black',
         },
       }}>
-      <Tab.Screen
+      {/* <Tab.Screen
         name="MyEarnings"
         component={MyEarnings}
         options={{
@@ -56,7 +61,7 @@ function TabNavigator() {
             </View>
           ),
         }}
-      />
+      /> */}
       <Tab.Screen
         name="Dashboard"
         component={Dashboard}
@@ -130,15 +135,22 @@ function RootStack() {
 }
 
 function Routes() {
-  const {isLogin} = useSelector((state: RootState) => state.userReducer);
+  const {isLogin, isDarkMode} = useSelector(
+    (state: RootState) => state.userReducer,
+  );
+  const scheme = useColorScheme();
+  const MyTheme = isDarkMode ? DarkTheme : DefaultTheme;
   return (
-    <NavigationContainer>
+    <NavigationContainer theme={MyTheme}>
       <StatusBar backgroundColor={'black'} barStyle={'light-content'} />
-      <Stack.Navigator
-        screenOptions={{headerShown: false}}
-        initialRouteName={isLogin ? 'RootStack' : 'Login'}>
+      <Stack.Navigator initialRouteName={isLogin ? 'RootStack' : 'Login'}>
         <Stack.Screen name="Login" component={Login} />
-        <Stack.Screen name="RootStack" component={RootStack} />
+        <Stack.Screen name="ForgetPassword" component={ForgetPassword} />
+        <Stack.Screen
+          name="RootStack"
+          component={RootStack}
+          options={{headerShown: false}}
+        />
         <Stack.Screen name="Signup" component={Signup} />
         <Stack.Screen
           options={{headerShown: true, headerTitle: 'Your Cart'}}

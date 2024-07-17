@@ -24,7 +24,8 @@ export default function Header() {
         />
       </TouchableOpacity>
       <Text className=" text-gray-500 text-lg font-semibold">
-        {userData?.name + `(${userData?.address[0]})`}
+        {userData?.name}
+        {`(${userData?.address && userData?.address[0]})`}
       </Text>
 
       {dishes.length > 0 ? (

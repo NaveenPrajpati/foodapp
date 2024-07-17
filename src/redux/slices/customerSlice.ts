@@ -9,6 +9,7 @@ const initialState = {
   deliveryAddress: '',
   status: '',
   error: null,
+  isDarkMode: false,
 };
 
 const customerSlice = createSlice({
@@ -24,13 +25,11 @@ const customerSlice = createSlice({
     setDeliveryAdd(state, action) {
       state.deliveryAddress = action.payload;
     },
+    setIsDarkMode(state) {
+      state.isDarkMode = !state.isDarkMode;
+    },
     logout(state) {
-      state.isLogin = false;
-      state.userData = {};
-      state.token = '';
-      state.deliveryAddress = '';
-      state.status = '';
-      state.error = null;
+      return {...initialState};
     },
   },
   extraReducers(builder) {
@@ -64,6 +63,6 @@ const customerSlice = createSlice({
   },
 });
 
-export const {setLogin, setUserData, setDeliveryAdd, logout} =
+export const {setLogin, setUserData, setDeliveryAdd, logout, setIsDarkMode} =
   customerSlice.actions;
 export default customerSlice.reducer;
