@@ -17,13 +17,12 @@ const CardPageCard = ({item, index}) => {
           dish: {
             product: item.product,
             quantity: newQuantity,
+            option: item.option,
           },
         }),
       );
     }
   };
-
-  // console.log(item?.product);
 
   return (
     <View
@@ -47,7 +46,8 @@ const CardPageCard = ({item, index}) => {
         </View>
         <View className="flex-row justify-between items-center p-1">
           <Text className="text-black font-semibold text-lg">
-            ₹ {item.product?.price}
+            {item.product.availableOptions[item.option].name} ₹
+            {item.product.availableOptions[item.option].price}
           </Text>
           <View className="flex-row rounded-lg items-center">
             <TouchableOpacity

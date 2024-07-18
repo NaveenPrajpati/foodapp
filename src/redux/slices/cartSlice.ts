@@ -5,6 +5,7 @@ import {dishType} from '../../utils/types';
 export interface Dish {
   product: dishType;
   quantity: number;
+  option: number;
 }
 
 export interface ShippingAddress {

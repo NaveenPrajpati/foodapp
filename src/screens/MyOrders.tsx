@@ -53,6 +53,8 @@ const MyOrders = () => {
     }, [socket]),
   );
 
+  console.log(JSON.stringify(orders, null, 2));
+
   return (
     <View>
       <FlatList
@@ -134,7 +136,9 @@ const MyOrders = () => {
                         {it.dishId.name}
                       </Text>
                       <Text className="text-black  font-semibold">
-                        ₹{it.dishId.price} x {it.quantity}
+                        {it.dishId.availableOptions[it.option]?.name} ₹
+                        {it.dishId.availableOptions[it.option]?.price} x{' '}
+                        {it.quantity}
                       </Text>
                     </View>
                   </View>

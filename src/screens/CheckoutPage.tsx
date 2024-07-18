@@ -72,6 +72,7 @@ export default function CheckoutPage({route}) {
       dishes: dishes.map(item => ({
         dishId: item.product._id,
         quantity: item.quantity,
+        option: item.option,
       })),
       shippingAddress: userData.address[addressIndex],
       orderNotes: orderNote, // Fixed typo: "orederNote" -> "orderNote"
@@ -100,7 +101,7 @@ export default function CheckoutPage({route}) {
     } else {
       data.paymentMethod = 'cod'; // Set payment method
       data.status = 'pending';
-      data.homeDelivery = false;
+      data.homeDelivery = true;
     }
 
     formData.append('orderData', JSON.stringify(data));

@@ -8,6 +8,7 @@ import {
   Switch,
   ScrollView,
   Image,
+  Keyboard,
 } from 'react-native';
 import React, {useState} from 'react';
 
@@ -17,31 +18,18 @@ import {BaseUrl} from '../../services/endPoints';
 import axios from 'axios';
 import {Formik} from 'formik';
 import {SignupSchema} from './signupValidation';
+import {showToast} from '../../utils/utilityFunctions';
 
 export default function Signup({navigation}) {
-  const [username, setUserName] = useState('');
-  const [role, setRole] = useState('');
-  const [email, setEmail] = useState('');
-  const [phone, setPhone] = useState();
-  const [password, setPassword] = useState('');
-  const [address, setAddres] = useState('');
-  const [isEnabled, setIsEnabled] = useState(false);
-
   const handleSignup = async values => {
-    if (!username || !phone || !password || !address) {
-      ToastAndroid.show(
-        'Please fill in all required fields',
-        ToastAndroid.SHORT,
-      );
-      return;
-    }
+    Keyboard.dismiss();
 
     const customerData = {
-      name: username,
-      phone: phone,
-      email: email,
-      password: password,
-      address: address,
+      name: values.username,
+      phone: values.phone,
+      email: values.email,
+      password: values.password,
+      address: values.address,
     };
 
     try {
@@ -56,20 +44,22 @@ export default function Signup({navigation}) {
       );
 
       if (response.status === 201) {
-        ToastAndroid.show('Registration successful!', ToastAndroid.SHORT);
+        showToast(
+          'success',
+          'Registration successful!',
+          'You have been registered successfully',
+        );
         navigation.navigate('Login');
       } else {
-        ToastAndroid.show(
+        showToast(
+          'error',
+          'Registration failed',
           `Error: ${response.data.errors[0].msg}`,
-          ToastAndroid.SHORT,
         );
       }
     } catch (error) {
       console.error(error);
-      ToastAndroid.show(
-        'An error occurred. Please try again.',
-        ToastAndroid.SHORT,
-      );
+      showToast('error', 'An error occurred', 'Please try again.');
     }
   };
 
@@ -103,14 +93,18 @@ export default function Signup({navigation}) {
 
             <InputTag
               placeholder="Name"
-              onChangeText={nativeEvent => setUserName(nativeEvent)}
+              onChangeText={handleChange('username')}
+              onBlur={handleBlur('username')}
+              value={values.username}
             />
             {touched.username && errors.username && (
               <Text style={{color: 'red'}}>{errors.username}</Text>
             )}
             <InputTag
               placeholder="Email"
-              onChangeText={nativeEvent => setEmail(nativeEvent)}
+              onChangeText={handleChange('email')}
+              onBlur={handleBlur('email')}
+              value={values.email}
             />
             {touched.email && errors.email && (
               <Text style={{color: 'red'}}>{errors.email}</Text>
@@ -119,7 +113,9 @@ export default function Signup({navigation}) {
               iconName="phone"
               inputMode="numeric"
               placeholder="Phone"
-              onChangeText={nativeEvent => setPhone(nativeEvent)}
+              onChangeText={handleChange('phone')}
+              onBlur={handleBlur('phone')}
+              value={values.phone}
             />
             {touched.phone && errors.phone && (
               <Text style={{color: 'red'}}>{errors.phone}</Text>
@@ -129,7 +125,9 @@ export default function Signup({navigation}) {
               iconName="lock"
               placeholder="Password"
               secureTextEntry
-              onChangeText={nativeEvent => setPassword(nativeEvent)}
+              onChangeText={handleChange('password')}
+              onBlur={handleBlur('password')}
+              value={values.password}
             />
             {touched.password && errors.password && (
               <Text style={{color: 'red'}}>{errors.password}</Text>
@@ -138,7 +136,9 @@ export default function Signup({navigation}) {
             <InputTag
               iconName="address-book"
               placeholder="Address"
-              onChangeText={nativeEvent => setAddres(nativeEvent)}
+              onChangeText={handleChange('address')}
+              onBlur={handleBlur('address')}
+              value={values.address}
             />
             {touched.address && errors.address && (
               <Text style={{color: 'red'}}>{errors.address}</Text>

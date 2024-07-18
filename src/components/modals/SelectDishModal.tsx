@@ -15,6 +15,7 @@ import {addDish, setTotalPrice, updateDish} from '../../redux/slices/cartSlice';
 import VectorIcon from '../VectorIcon';
 import Toast from 'react-native-toast-message';
 import {showToast} from '../../utils/utilityFunctions';
+import CheckBox from '@react-native-community/checkbox';
 
 type modalProp = {
   onPress: () => void;
@@ -32,6 +33,8 @@ export default function SelectDishModal({
   const [quantity, setQuantity] = useState(1);
   const [editIndex, setEditIndex] = useState(0);
   const [isEdit, setIsEdit] = useState(false);
+  const [checkBox, setCheckBox] = useState(0);
+
   const {dishes, totalPrice, customer} = useSelector(
     (state: RootState) => state.cartReducer,
   );
@@ -43,6 +46,7 @@ export default function SelectDishModal({
       if (item._id == it.product._id) {
         setIsEdit(true);
         setQuantity(it.quantity);
+        setCheckBox(it.option);
         setEditIndex(index);
       }
     });
@@ -56,17 +60,18 @@ export default function SelectDishModal({
           dish: {
             product: item,
             quantity,
+            option: checkBox,
           },
         }),
       );
     } else {
-      dispatch(addDish({product: item, quantity}));
+      dispatch(addDish({product: item, quantity, option: checkBox}));
     }
     showToast('info', 'Item added to cart');
     setQuantity(1);
     cb();
   }
-
+  // console.log(JSON.stringify(item, null, 2));
   return (
     <Modal
       animationType="slide"
@@ -76,37 +81,64 @@ export default function SelectDishModal({
       <View className="bg-black px-1 pt-1 justify-between flex-1 ">
         <View className="rounded-b-3xl bg-white relative flex-1">
           <Image source={{uri: item?.imagePath[0]}} className="w-full h-1/2" />
-
-          <View className="flex-row justify-between px-2 mt-4">
-            <Text className="text-black">{item?.name}</Text>
-            <View className="flex flex-row items-center rounded-lg mr-5">
-              <TouchableOpacity
-                onPress={() => {
-                  setQuantity(prev => (prev > 1 ? prev - 1 : prev));
-                }}
-                className=" bg-gray-200 h-8 w-8 justify-center items-center rounded-l-md">
-                <VectorIcon iconName="minus" color="black" size={10} />
-              </TouchableOpacity>
-              <View className="w-12 h-12 justify-center items-center bg-pink-200 rounded-md">
-                <Text className=" text-xl font-semibold  text-black">
-                  {quantity}
-                </Text>
+          <View className="p-2">
+            <View className="flex-row justify-between  mt-4 items-center">
+              <Text className="text-black text-lg font-medium capitalize">
+                {item?.name}
+              </Text>
+              <View className="flex flex-row items-center rounded-lg mr-5">
+                <TouchableOpacity
+                  onPress={() => {
+                    setQuantity(prev => (prev > 1 ? prev - 1 : prev));
+                  }}
+                  className=" bg-gray-200 h-8 w-8 justify-center items-center rounded-l-md">
+                  <VectorIcon iconName="minus" color="black" size={10} />
+                </TouchableOpacity>
+                <View className="w-12 h-12 justify-center items-center bg-pink-200 rounded-md">
+                  <Text className=" text-xl font-semibold  text-black">
+                    {quantity}
+                  </Text>
+                </View>
+                <TouchableOpacity
+                  onPress={() => {
+                    setQuantity(pre => pre + 1);
+                  }}
+                  className=" bg-gray-200 h-8 w-8 justify-center items-center rounded-r-md">
+                  <VectorIcon iconName="plus" color="black" size={10} />
+                </TouchableOpacity>
               </View>
-              <TouchableOpacity
-                onPress={() => {
-                  setQuantity(pre => pre + 1);
-                }}
-                className=" bg-gray-200 h-8 w-8 justify-center items-center rounded-r-md">
-                <VectorIcon iconName="plus" color="black" size={10} />
-              </TouchableOpacity>
             </View>
+            {/* <Text className="text-black">Price: ₹{item?.price}</Text> */}
+
+            <Text className="text-black text-sm  ">{item?.description}</Text>
+
+            {item.haveMultipleOptions && (
+              <View>
+                <Text className="text-black text-lg font-medium">
+                  Available options
+                </Text>
+                {item.availableOptions.map((it, index) => (
+                  <View
+                    key={index}
+                    className="flex-row items-center gap-x-2 mt-1">
+                    <CheckBox
+                      className=" text-red-400"
+                      tintColor="black"
+                      style={{backgroundColor: 'black', borderRadius: 2}}
+                      disabled={false}
+                      value={checkBox == index}
+                      onValueChange={newValue => {
+                        setCheckBox(index);
+                      }}
+                    />
+                    <Text className="text-gray-600 font-semibold">
+                      {it.name} For ₹{it.price}
+                    </Text>
+                  </View>
+                ))}
+              </View>
+            )}
           </View>
-          <Text className="text-black">Price: ₹{item?.price}</Text>
-
-          <Text className="text-black text-lg font-semibold">
-            {item?.description}
-          </Text>
-
           <Pressable className="absolute right-2 top-2 " onPress={cb}>
             <VectorIcon
               iconName="close"
@@ -119,7 +151,7 @@ export default function SelectDishModal({
 
         <View className="flex-row justify-between items-center bg-black px-5 py-1  h-20">
           <Text className="text-lg font-semibold text-white">
-            ₹{item?.price * quantity}
+            ₹{item?.availableOptions[checkBox]?.price * quantity}
           </Text>
           <TouchableOpacity
             onPress={handleAdd}

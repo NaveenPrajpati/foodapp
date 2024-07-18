@@ -179,24 +179,31 @@ const Dashboard = () => {
           horizontal
           showsHorizontalScrollIndicator={false}
           className=" py-2">
-          {featureDish.map((item, index) => (
-            <TouchableOpacity
-              key={index}
-              style={{elevation: 1}}
-              className="  items-center p-2  rounded-xl bg-white mx-2">
-              <Image source={item.image} className=" rounded-2xl h-32 w-52" />
-              <View className=" flex-row gap-x-20">
-                <Text className="text-slate-400 text-xs">{item.name}</Text>
-                <Text className="text-slate-400 text-xs">Veg</Text>
-              </View>
-              <View className="flex-row justify-between gap-x-3  border-t  border-t-slate-200">
-                <Text className="text-slate-600 text-xs">10:00 min</Text>
-                <Text className="text-yellow-500 text-xs">
-                  Rating: {item.rating}
-                </Text>
-              </View>
-            </TouchableOpacity>
-          ))}
+          {allDishes
+            .filter(it => it.tags.includes('feature'))
+            .map((item, index) => (
+              <TouchableOpacity
+                key={index}
+                style={{elevation: 1}}
+                className="  items-center p-2  rounded-xl bg-white mx-2">
+                <Image
+                  source={{uri: item.imagePath[0]}}
+                  className=" rounded-2xl h-32 w-52"
+                />
+                <View className=" flex-row gap-x-20">
+                  <Text className="text-slate-400 text-xs">{item.name}</Text>
+                  <Text className="text-slate-400 text-xs">Veg</Text>
+                </View>
+                <View className="flex-row justify-between gap-x-3  border-t  border-t-slate-200">
+                  <Text className="text-slate-600 text-xs">
+                    {item.makingTime} min
+                  </Text>
+                  <Text className="text-yellow-500 text-xs">
+                    Rating: {item.rating}
+                  </Text>
+                </View>
+              </TouchableOpacity>
+            ))}
         </ScrollView>
       </View>
 
@@ -217,7 +224,9 @@ const Dashboard = () => {
             />
             <View className="flex-row justify-between">
               <Text className="text-black">{item.name}</Text>
-              <Text className="text-black">₹{item.price}</Text>
+              <Text className="text-black">
+                ₹{item?.availableOptions[0]?.price}
+              </Text>
             </View>
           </TouchableOpacity>
         ))}

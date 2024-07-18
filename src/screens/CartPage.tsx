@@ -29,10 +29,15 @@ export default function CartPage() {
   const [totalPrice, setTotalPrice] = useState(0);
   const navigation = useNavigation();
 
+  console.log(JSON.stringify(dishes, null, 2));
+
   useEffect(() => {
     let total = 0;
     for (let i = 0; i < dishes.length; i++) {
-      total = total + dishes[i].quantity * dishes[i].product.price;
+      total =
+        total +
+        dishes[i].quantity *
+          dishes[i].product.availableOptions[dishes[i]?.option]?.price;
     }
     setTotalPrice(total);
   }, [dishes]);
