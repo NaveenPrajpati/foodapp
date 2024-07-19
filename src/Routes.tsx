@@ -17,13 +17,16 @@ import Login from './screens/login/Login';
 import Dashboard from './screens/Dashboard';
 import CartPage from './screens/CartPage';
 import CheckoutPage from './screens/CheckoutPage';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {RootState} from './redux/store';
 import CustomDrawer from './components/CustomDrawer';
 import MyOrders from './screens/MyOrders';
 import Toast from 'react-native-toast-message';
 import AddressList from './screens/AddressList';
 import ForgetPassword from './screens/login/ForgetPassword';
+import MyPager from './screens/onBoarding/MyPager';
+import {setOnBoardingStatus} from './redux/slices/customerSlice';
+import SplashScreen from 'react-native-splash-screen';
 
 const Tab = createBottomTabNavigator();
 const Drawer = createDrawerNavigator();
@@ -135,16 +138,35 @@ function RootStack() {
 }
 
 function Routes() {
-  const {isLogin, isDarkMode} = useSelector(
+  const {isLogin, isDarkMode, hasSeenOnboarding} = useSelector(
     (state: RootState) => state.userReducer,
   );
   const scheme = useColorScheme();
+  React.useEffect(() => {
+    SplashScreen.hide();
+  }, []);
+
   const MyTheme = isDarkMode ? DarkTheme : DefaultTheme;
+
   return (
     <NavigationContainer theme={MyTheme}>
       <StatusBar backgroundColor={'black'} barStyle={'light-content'} />
-      <Stack.Navigator initialRouteName={isLogin ? 'RootStack' : 'Login'}>
-        <Stack.Screen name="Login" component={Login} />
+      <Stack.Navigator
+        initialRouteName={
+          isLogin && hasSeenOnboarding ? 'RootStack' : 'Onboarding'
+        }>
+        {!isLogin && !hasSeenOnboarding ? (
+          <Stack.Screen
+            name="Onboarding"
+            component={MyPager}
+            options={{headerShown: false}}
+          />
+        ) : null}
+        <Stack.Screen
+          name="Login"
+          component={Login}
+          options={{headerShown: false}}
+        />
         <Stack.Screen name="ForgetPassword" component={ForgetPassword} />
         <Stack.Screen
           name="RootStack"

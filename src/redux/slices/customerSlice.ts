@@ -10,6 +10,7 @@ const initialState = {
   status: '',
   error: null,
   isDarkMode: false,
+  hasSeenOnboarding: false,
 };
 
 const customerSlice = createSlice({
@@ -30,6 +31,9 @@ const customerSlice = createSlice({
     },
     logout(state) {
       return {...initialState};
+    },
+    setOnBoardingStatus(state, action) {
+      state.hasSeenOnboarding = action.payload;
     },
   },
   extraReducers(builder) {
@@ -63,6 +67,12 @@ const customerSlice = createSlice({
   },
 });
 
-export const {setLogin, setUserData, setDeliveryAdd, logout, setIsDarkMode} =
-  customerSlice.actions;
+export const {
+  setLogin,
+  setUserData,
+  setDeliveryAdd,
+  logout,
+  setIsDarkMode,
+  setOnBoardingStatus,
+} = customerSlice.actions;
 export default customerSlice.reducer;

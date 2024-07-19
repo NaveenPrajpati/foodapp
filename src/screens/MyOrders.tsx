@@ -53,8 +53,6 @@ const MyOrders = () => {
     }, [socket]),
   );
 
-  console.log(JSON.stringify(orders, null, 2));
-
   return (
     <View>
       <FlatList
