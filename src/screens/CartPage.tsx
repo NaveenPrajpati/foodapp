@@ -29,7 +29,7 @@ export default function CartPage() {
   const [totalPrice, setTotalPrice] = useState(0);
   const navigation = useNavigation();
 
-  console.log(JSON.stringify(dishes, null, 2));
+  // console.log(JSON.stringify(dishes, null, 2));
 
   useEffect(() => {
     let total = 0;
@@ -41,24 +41,6 @@ export default function CartPage() {
     }
     setTotalPrice(total);
   }, [dishes]);
-
-  function checkLogin() {
-    // if (isLogin) {
-    //   console.log('go for payment');
-    //   dispatch(
-    //     setCheckOutPrice({
-    //       cartPrice: totalPrice,
-    //       shippingPrice: shippingCharge,
-    //       totalPrice: Math.round(totalPrice + shippingCharge),
-    //     }),
-    //   );
-    //   navigation.navigate('Address');
-    // } else {
-    //   console.log('login warning');
-    //   // navigation.navigate('Login')
-    //   setWarning(true);
-    // }
-  }
 
   return (
     <View className="flex-1 bg-white">

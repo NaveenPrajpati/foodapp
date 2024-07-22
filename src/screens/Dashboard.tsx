@@ -23,7 +23,7 @@ import {
 import axios from 'axios';
 import {BaseUrl, socket} from '../services/endPoints';
 import {useDispatch, useSelector} from 'react-redux';
-import {fetchDishes} from '../services/operations/dishOperations';
+
 import SelectDishModal from '../components/modals/SelectDishModal';
 import {RootState} from '../redux/store';
 import Icon3 from 'react-native-vector-icons/AntDesign';
@@ -31,20 +31,21 @@ import Icon2 from 'react-native-vector-icons/Feather';
 import {fastFoodArray, featureDish} from '../components/constants/sampleData';
 import Header from '../components/Header';
 import {formatDate, onDisplayNotification} from '../utils/utilityFunctions';
+import {fetchKitchens} from '../services/operations/dishOperations';
 
 const Dashboard = () => {
   const navigation = useNavigation();
   const [showDish, setShowDish] = useState(false);
   const [selectedItem, setSelectedItem] = useState({});
   const [isEnabled, setIsEnabled] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
   const [isOpen, setIsOpen] = useState(false);
   const [openingTime, setOpeningTime] = useState(new Date());
   const toggleSwitch = () => setIsEnabled(previousState => !previousState);
 
   const dispatch = useDispatch();
-  const {allDishes, status, error, loading, addDishStatus} = useSelector(
-    (state: RootState) => state.dashboard,
-  );
+  const {allDishes, status, error, loading, addDishStatus, allKitchens} =
+    useSelector((state: RootState) => state.dashboard);
 
   const {dishes, totalPrice, customer} = useSelector(
     (state: RootState) => state.cartReducer,
@@ -82,7 +83,7 @@ const Dashboard = () => {
 
   useFocusEffect(
     useCallback(() => {
-      dispatch(fetchDishes({}));
+      dispatch(fetchKitchens({}));
       return () => {
         navigation.closeDrawer();
       };
@@ -96,6 +97,8 @@ const Dashboard = () => {
   if (status === 'failed') {
     return <Text>Error: {error}</Text>;
   }
+
+  // console.log(JSON.stringify(allKitchens, null, 2));
 
   return (
     <Container>
@@ -125,11 +128,13 @@ const Dashboard = () => {
           />
         </View>
         <TextInput
-          onChangeText={nativeEvent => {}}
+          onChangeText={nativeEvent => {
+            setSearchQuery(nativeEvent);
+          }}
           onFocus={() => {}}
           placeholder="What do you want to eat?"
           placeholderTextColor={'gray'}
-          className=" placeholder:text-sm placeholder:font-semibold w-[80%] rounded-lg p-1 "
+          className="text-black placeholder:text-sm placeholder:font-semibold w-[80%] rounded-lg p-1 "
         />
         <TouchableOpacity
           onPress={() => {
@@ -144,7 +149,7 @@ const Dashboard = () => {
       {/* categorie card */}
       <View className="  mt-4">
         <View className="flex-row justify-between items-center">
-          <Text className="text-black font-semibold text-lg">Categories</Text>
+          <Text className="text-black font-semibold text-lg">Kitchens</Text>
           <TouchableOpacity>
             <Text className=" text-blue-400 font-semibold ">See All</Text>
           </TouchableOpacity>
@@ -153,14 +158,19 @@ const Dashboard = () => {
           horizontal={true}
           showsHorizontalScrollIndicator={false}
           className="mt-1 p-2 gap-x-12">
-          {fastFoodArray.map((item, index) => (
+          {allKitchens?.map((item, index) => (
             <View key={index} className=" items-center">
               <View
                 className=" p-1 bg-white rounded-full"
                 style={styles.imageContainer}>
-                <Image source={item.image} className="h-12 w-12 rounded-full" />
+                <Image
+                  source={{uri: item?.kitchenImg}}
+                  className="h-12 w-12 rounded-full"
+                />
               </View>
-              <Text className="font-semibold mt-3 text-black">{item.name}</Text>
+              <Text className="font-semibold mt-3 text-black">
+                {item?.kitchenname}
+              </Text>
             </View>
           ))}
         </ScrollView>
@@ -179,9 +189,9 @@ const Dashboard = () => {
           horizontal
           showsHorizontalScrollIndicator={false}
           className=" py-2">
-          {allDishes
-            .filter(it => it.tags.includes('feature'))
-            .map((item, index) => (
+          {allKitchens[0]?.menuItems
+            ?.filter(it => it.tags.includes('featured'))
+            ?.map((item, index) => (
               <TouchableOpacity
                 key={index}
                 style={{elevation: 1}}
@@ -210,26 +220,28 @@ const Dashboard = () => {
       <Text className="text-black text-lg font-semibold mt-5">MyDishes</Text>
 
       <View className=" flex-row flex-wrap">
-        {allDishes?.map((item, index) => (
-          <TouchableOpacity
-            onPress={() => {
-              setSelectedItem(item);
-              setShowDish(true);
-            }}
-            key={index}
-            className="shadow-md flex-grow shadow-slate-400 rounded-xl p-2 bg-white w-[45%] m-1">
-            <Image
-              source={{uri: item.imagePath[0]}}
-              className="h-28 w-full rounded-xl"
-            />
-            <View className="flex-row justify-between">
-              <Text className="text-black">{item.name}</Text>
-              <Text className="text-black">
-                ₹{item?.availableOptions[0]?.price}
-              </Text>
-            </View>
-          </TouchableOpacity>
-        ))}
+        {allKitchens[0]?.menuItems
+          ?.filter(it => it.name.startsWith(searchQuery))
+          .map((item, index) => (
+            <TouchableOpacity
+              onPress={() => {
+                setSelectedItem(item);
+                setShowDish(true);
+              }}
+              key={index}
+              className="shadow-md flex-grow shadow-slate-400 rounded-xl p-2 bg-white w-[45%] m-1">
+              <Image
+                source={{uri: item.imagePath[0]}}
+                className="h-28 w-full rounded-xl"
+              />
+              <View className="flex-row justify-between">
+                <Text className="text-black">{item.name}</Text>
+                <Text className="text-black">
+                  ₹{item?.availableOptions[0]?.price}
+                </Text>
+              </View>
+            </TouchableOpacity>
+          ))}
       </View>
 
       {/* <FlatList

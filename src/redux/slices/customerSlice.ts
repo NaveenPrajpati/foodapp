@@ -2,6 +2,7 @@ import {createSlice} from '@reduxjs/toolkit';
 import {loginUser} from '../../services/operations/authOperations';
 import {editUser} from '../../services/operations/userOperation';
 import {showToast} from '../../utils/utilityFunctions';
+import {fetchOrders} from '../../services/operations/dishOperations';
 const initialState = {
   isLogin: false,
   userData: {},
@@ -11,6 +12,7 @@ const initialState = {
   error: null,
   isDarkMode: false,
   hasSeenOnboarding: false,
+  allOrders: [],
 };
 
 const customerSlice = createSlice({
@@ -60,6 +62,20 @@ const customerSlice = createSlice({
         showToast('success', action.payload.message);
       })
       .addCase(editUser.rejected, (state, action) => {
+        state.status = 'failed';
+        state.error = action.payload;
+        showToast('success', action.payload.error);
+      })
+      .addCase(fetchOrders.pending, state => {
+        state.status = 'loading';
+      })
+      .addCase(fetchOrders.fulfilled, (state, action) => {
+        state.status = 'succeeded';
+        console.log(action.payload);
+        showToast('info', action.payload.message);
+        state.allOrders = action.payload.orders;
+      })
+      .addCase(fetchOrders.rejected, (state, action) => {
         state.status = 'failed';
         state.error = action.payload;
         showToast('success', action.payload.error);

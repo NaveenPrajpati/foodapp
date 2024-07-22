@@ -43,7 +43,7 @@ export default function InputTag({
           ref={ref}
           value={value}
           inputMode={inputMode}
-          className="rounded-md  p-1  w-full text-lg text-black"
+          className="rounded-md p-1 w-full text-lg text-black"
           placeholder={placeholder}
           placeholderTextColor={'gray'}
           onChangeText={onChangeText}

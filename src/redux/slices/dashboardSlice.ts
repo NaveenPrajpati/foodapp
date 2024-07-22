@@ -1,10 +1,11 @@
 import {PayloadAction, createSlice} from '@reduxjs/toolkit';
-import {fetchDishes} from '../../services/operations/dishOperations';
+import {fetchKitchens} from '../../services/operations/dishOperations';
 
 export interface CounterState {
   value: number;
   areWeLive: boolean;
   allDishes: [];
+  allKitchens: [];
   status: string;
   error: string | null;
   addDishStatus: string;
@@ -21,6 +22,7 @@ const initialState: CounterState = {
   addDishStatus: 'idle',
   addDishError: null,
   loading: 'false',
+  allKitchens: [],
 };
 
 export const dashboardSlice = createSlice({
@@ -33,14 +35,15 @@ export const dashboardSlice = createSlice({
   },
   extraReducers(builder) {
     builder
-      .addCase(fetchDishes.pending, state => {
+      .addCase(fetchKitchens.pending, state => {
         state.status = 'loading';
       })
-      .addCase(fetchDishes.fulfilled, (state, action) => {
+      .addCase(fetchKitchens.fulfilled, (state, action) => {
         state.status = 'succeeded';
-        state.allDishes = action.payload;
+        // console.log(JSON.stringify(action.payload));
+        state.allKitchens = action.payload;
       })
-      .addCase(fetchDishes.rejected, (state, action) => {
+      .addCase(fetchKitchens.rejected, (state, action) => {
         state.status = 'failed';
         state.error = action.payload;
       });

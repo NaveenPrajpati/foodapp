@@ -36,17 +36,22 @@ function TabNavigator() {
   return (
     <Tab.Navigator
       initialRouteName="Dashboard"
-      screenOptions={{
+      sceneContainerStyle={
+        {
+          // backgroundColor: 'white',
+        }
+      }
+      screenOptions={({route}) => ({
         tabBarShowLabel: false,
         headerShown: false,
         tabBarStyle: {
           backgroundColor: 'black',
-          height: 80,
+          height: 70,
           borderTopStartRadius: 30,
           borderTopEndRadius: 30,
           borderColor: 'black',
         },
-      }}>
+      })}>
       {/* <Tab.Screen
         name="MyEarnings"
         component={MyEarnings}
@@ -89,6 +94,7 @@ function TabNavigator() {
         component={MyOrders}
         options={{
           headerShown: true,
+          tabBarBadge: 1,
           tabBarIcon: ({focused}) => (
             <View
               className={`h-12 w-12 ${

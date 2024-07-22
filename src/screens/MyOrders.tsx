@@ -8,31 +8,26 @@ import {
   View,
 } from 'react-native';
 import React, {useCallback, useEffect, useState} from 'react';
-import axios from 'axios';
+import axios, {all} from 'axios';
 import {BaseUrl, socket} from '../services/endPoints';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import VectorIcon from '../components/VectorIcon';
 import {useFocusEffect, useIsFocused} from '@react-navigation/native';
 import {formatDate, onDisplayNotification} from '../utils/utilityFunctions';
 import {RootState} from '../redux/store';
 import StarRating from 'react-native-star-rating-widget';
+import {fetchOrders} from '../services/operations/dishOperations';
 
 const MyOrders = () => {
-  const [orders, setOrders] = useState([]);
   const [rating, setRating] = useState(0);
   const [expandDetails, setExpandDetails] = useState('');
-  const {isLogin, userData, deliveryAddress} = useSelector(
+  const {isLogin, userData, allOrders} = useSelector(
     (state: RootState) => state.userReducer,
   );
+  const dispatch = useDispatch();
 
   function getOrders() {
-    axios
-      .get(BaseUrl + `/customer/getAllOrders/${userData._id}`)
-      .then(res => {
-        // console.log(res.data);
-        setOrders(res.data.orders);
-      })
-      .catch(err => console.log(err));
+    dispatch(fetchOrders({id: userData._id}));
   }
 
   useFocusEffect(
@@ -53,10 +48,12 @@ const MyOrders = () => {
     }, [socket]),
   );
 
+  console.log(allOrders);
+
   return (
     <View>
       <FlatList
-        data={orders}
+        data={allOrders}
         renderItem={({item, index}) => (
           <View
             className=" p-2 m-2  rounded-2xl bg-slate-50"

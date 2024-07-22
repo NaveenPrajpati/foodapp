@@ -48,6 +48,12 @@ const cartSlice = createSlice({
       if (!state.dishes) {
         state.dishes = [];
       }
+      state.dishes.map(item => {
+        if (item.kichen != action.payload.product.kitchen) {
+          state.dishes = [];
+          state.dishes.push(action.payload);
+        }
+      });
       state.dishes.push(action.payload);
     },
     removeDish(state, action: PayloadAction<number>) {

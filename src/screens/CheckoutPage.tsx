@@ -75,7 +75,8 @@ export default function CheckoutPage({route}) {
         option: item.option,
       })),
       shippingAddress: userData.address[addressIndex],
-      orderNotes: orderNote, // Fixed typo: "orederNote" -> "orderNote"
+      orderNotes: orderNote,
+      kitchen: dishes[0].product.kitchen,
     };
 
     const formData = new FormData();
