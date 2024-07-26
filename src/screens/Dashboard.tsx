@@ -20,6 +20,7 @@ import {
   useIsFocused,
   useNavigation,
 } from '@react-navigation/native';
+import {v4 as uuidv4} from 'uuid';
 import axios from 'axios';
 import {BaseUrl, socket} from '../services/endPoints';
 import {useDispatch, useSelector} from 'react-redux';
@@ -41,6 +42,7 @@ const Dashboard = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [isOpen, setIsOpen] = useState(false);
   const [openingTime, setOpeningTime] = useState(new Date());
+  const [selectedKitchen, setSelectedKitchen] = useState(0);
   const toggleSwitch = () => setIsEnabled(previousState => !previousState);
 
   const dispatch = useDispatch();
@@ -62,21 +64,35 @@ const Dashboard = () => {
         console.log('Connected to WebSocket server');
       });
 
-      socket.on('storeStatus', data => {
-        console.log(data);
-        setIsOpen(data.status);
-        setOpeningTime(data.time);
+      socket.emit('joinRoom', userData._id);
+
+      socket.on('newDishAdded', data => {
+        console.log(`${data.dishName} Added by ${data.kitchenname}`);
+        onDisplayNotification({
+          title: data.dishName,
+          body: `Added by ${data.kitchenname}`,
+        });
       });
 
-      // Join the room for this customer
-    }
+      socket.on('notification', notification => {
+        console.log(notification);
+        onDisplayNotification({
+          title: notification.title,
+          body: notification.body,
+        });
+      });
 
-    // Optional: fetch initial store status from your backend if needed
+      socket.on('updatedOrderStatus', data => {
+        onDisplayNotification({
+          title: 'Order Status',
+          body: `Change to ${data.status}`,
+        });
+      });
+    }
 
     return () => {
       if (isFocused) {
         socket.off('connect');
-        socket.off('storeStatusUpdated');
       }
     }; // Cleanup on unmount
   }, [isFocused, socket]);
@@ -159,7 +175,10 @@ const Dashboard = () => {
           showsHorizontalScrollIndicator={false}
           className="mt-1 p-2 gap-x-12">
           {allKitchens?.map((item, index) => (
-            <View key={index} className=" items-center">
+            <Pressable
+              onPress={() => setSelectedKitchen(index)}
+              key={index}
+              className=" items-center">
               <View
                 className=" p-1 bg-white rounded-full"
                 style={styles.imageContainer}>
@@ -171,7 +190,7 @@ const Dashboard = () => {
               <Text className="font-semibold mt-3 text-black">
                 {item?.kitchenname}
               </Text>
-            </View>
+            </Pressable>
           ))}
         </ScrollView>
       </View>
@@ -189,7 +208,7 @@ const Dashboard = () => {
           horizontal
           showsHorizontalScrollIndicator={false}
           className=" py-2">
-          {allKitchens[0]?.menuItems
+          {allKitchens[selectedKitchen]?.menuItems
             ?.filter(it => it.tags.includes('featured'))
             ?.map((item, index) => (
               <TouchableOpacity
@@ -220,7 +239,7 @@ const Dashboard = () => {
       <Text className="text-black text-lg font-semibold mt-5">MyDishes</Text>
 
       <View className=" flex-row flex-wrap">
-        {allKitchens[0]?.menuItems
+        {allKitchens[selectedKitchen]?.menuItems
           ?.filter(it => it.name.startsWith(searchQuery))
           .map((item, index) => (
             <TouchableOpacity
@@ -244,26 +263,6 @@ const Dashboard = () => {
           ))}
       </View>
 
-      {/* <FlatList
-        data={allDishes}
-        numColumns={2}
-        contentContainerStyle={{}}
-        columnWrapperStyle={{justifyContent: 'space-between'}}
-        renderItem={({item, index}) => (
-          <Pressable
-            onPress={() => {
-              setSelectedItem(item);
-              setShowDish(true);
-            }}
-            className=" relative m-1 shadow-lg  shadow-black rounded-md  bg-yellow-400 w-40">
-            <Image
-              source={{uri: item.imagePath[0]}}
-              className=" h-36  rounded-lg mr-1"
-            />
-            <Text className="text-black font-semibold ml-1">{item.name}</Text>
-          </Pressable>
-        )}
-      /> */}
       {showDish && (
         <SelectDishModal
           showDish={showDish}

@@ -115,7 +115,11 @@ export default function CheckoutPage({route}) {
       // console.log(res.data);
       showToast('success', 'Success', 'Your order placed');
       dispatch(emptyCart());
-      socket.emit('orderPlaced', {user: userData.name, price: price});
+      socket.emit('orderPlaced', {
+        user: userData.name,
+        price: price,
+        kitchen: dishes[0].product.kitchen,
+      });
       navigation.navigate('MyOrders', {replace: true});
     } catch (err) {
       console.error('Error placing order:', err); // More descriptive error handling

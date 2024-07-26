@@ -10,6 +10,7 @@ import {persistor, RootState} from '../redux/store';
 import {emptyCart} from '../redux/slices/cartSlice';
 import {useColorScheme} from 'nativewind';
 import ButtonMy from './elements/ButtonMy';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function CustomDrawer(props: any) {
   const dispatch = useDispatch();
@@ -51,7 +52,7 @@ export default function CustomDrawer(props: any) {
             onPress={async () => {
               dispatch(logout());
               dispatch(emptyCart());
-              await persistor.purge();
+              await AsyncStorage.clear();
               props.navigation.navigate('Login');
             }}
           />

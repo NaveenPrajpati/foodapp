@@ -14,10 +14,11 @@ interface FormValueTypes {
   password: string;
 }
 
-export default function Login(): FC<{}> {
-  const {isLogin, status} = useSelector(
+export default function Login() {
+  const {isLogin, status, userData} = useSelector(
     (state: RootState) => state.userReducer,
   );
+
   const navigation = useNavigation();
   const dispatch = useDispatch();
 

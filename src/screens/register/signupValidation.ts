@@ -5,10 +5,10 @@ export const SignupSchema = Yup.object().shape({
   phone: Yup.string()
     .length(10, 'Phone number should be 10 digits')
     .required('Phone is required'),
-  password: Yup.string()
-    .min(8, 'Password must be at least 8 characters')
-    .matches(/[a-zA-Z]/, 'Password must contain at least one letter')
-    .matches(/\d/, 'Password must contain at least one number')
-    .required('Password is required'),
+  // password: Yup.string()
+  //   .min(8, 'Password must be at least 8 characters')
+  //   .matches(/[a-zA-Z]/, 'Password must contain at least one letter')
+  //   .matches(/\d/, 'Password must contain at least one number')
+  //   .required('Password is required'),
   address: Yup.string().required('Address is required'),
 });

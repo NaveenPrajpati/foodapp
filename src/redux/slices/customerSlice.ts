@@ -71,8 +71,6 @@ const customerSlice = createSlice({
       })
       .addCase(fetchOrders.fulfilled, (state, action) => {
         state.status = 'succeeded';
-        console.log(action.payload);
-        showToast('info', action.payload.message);
         state.allOrders = action.payload.orders;
       })
       .addCase(fetchOrders.rejected, (state, action) => {

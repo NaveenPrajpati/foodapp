@@ -33,30 +33,7 @@ export const requestCameraPermission = async () => {
   }
 };
 
-// export const showToast = (message: string) => {
-//   ToastAndroid.show(message, ToastAndroid.SHORT);
-// };
-
-export const showToastWithGravity = (message: string) => {
-  ToastAndroid.showWithGravity(
-    message,
-    ToastAndroid.SHORT,
-    ToastAndroid.CENTER,
-  );
-};
-
-export const showToastWithGravityAndOffset = (message: string) => {
-  ToastAndroid.showWithGravityAndOffset(
-    message,
-    ToastAndroid.LONG,
-    ToastAndroid.BOTTOM,
-    25,
-    50,
-  );
-};
-
 type ToastType = 'success' | 'error' | 'info'; // Define allowed types
-
 export const showToast = (type: ToastType, text1: string, text2?: string) => {
   Toast.show({
     type,
@@ -68,7 +45,13 @@ export const showToast = (type: ToastType, text1: string, text2?: string) => {
     // Additional props for customization (e.g., icon, style, etc.)
   });
 };
-export async function onDisplayNotification(payload: {status: any}) {
+
+type notificationPropType = {
+  title: string;
+  body: string;
+};
+
+export async function onDisplayNotification(payload: notificationPropType) {
   // Request permissions (required for iOS)
   const settings = await notifee.requestPermission();
 
@@ -93,8 +76,8 @@ export async function onDisplayNotification(payload: {status: any}) {
 
   await notifee.displayNotification({
     id: '123',
-    title: 'your order Status',
-    body: payload.status || 'order place successfully',
+    title: payload.title || 'your order Status',
+    body: payload.body || 'order place successfully',
     android: {
       channelId,
       color: '#6495ed',

@@ -27,6 +27,7 @@ import ForgetPassword from './screens/login/ForgetPassword';
 import MyPager from './screens/onBoarding/MyPager';
 import {setOnBoardingStatus} from './redux/slices/customerSlice';
 import SplashScreen from 'react-native-splash-screen';
+import ChatScreen from './screens/ChatScreen';
 
 const Tab = createBottomTabNavigator();
 const Drawer = createDrawerNavigator();
@@ -94,7 +95,6 @@ function TabNavigator() {
         component={MyOrders}
         options={{
           headerShown: true,
-          tabBarBadge: 1,
           tabBarIcon: ({focused}) => (
             <View
               className={`h-12 w-12 ${
@@ -189,6 +189,11 @@ function Routes() {
           options={{headerShown: true, headerTitle: 'Make Payment'}}
           name="CheckoutPage"
           component={CheckoutPage}
+        />
+        <Stack.Screen
+          options={{headerShown: true, headerTitle: 'Chat'}}
+          name="ChatScreen"
+          component={ChatScreen}
         />
       </Stack.Navigator>
     </NavigationContainer>
