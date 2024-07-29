@@ -15,6 +15,7 @@ interface propType {
   inputMode?: string;
   iconName?: string;
   ref?: ForwardedRef<InputTagRef>;
+  error?: string;
 }
 
 export default function InputTag({
@@ -25,6 +26,7 @@ export default function InputTag({
   inputMode,
   iconName,
   ref,
+  error,
   ...atrs
 }: propType) {
   return (
@@ -49,6 +51,7 @@ export default function InputTag({
           onChangeText={onChangeText}
         />
       </View>
+      {error && <Text className="text-red-500 text-left">{error}</Text>}
     </View>
   );
 }

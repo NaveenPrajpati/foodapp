@@ -21,9 +21,13 @@ import {formatDate, onDisplayNotification} from '../utils/utilityFunctions';
 import {RootState} from '../redux/store';
 import StarRating from 'react-native-star-rating-widget';
 import {fetchOrders} from '../services/operations/dishOperations';
+import InputTag from '../components/elements/InputTag';
+import ButtonMy from '../components/elements/ButtonMy';
 
 const MyOrders = () => {
-  const [rating, setRating] = useState(3);
+  const [rating, setRating] = useState(0);
+  const [review, setReview] = useState('');
+
   const navigation = useNavigation();
   const [expandDetails, setExpandDetails] = useState('');
   const {isLogin, userData, allOrders} = useSelector(
@@ -37,26 +41,18 @@ const MyOrders = () => {
     dispatch(fetchOrders({id: userData._id}));
   }
 
-  function updateRating(orderId) {
-    axios
-      .patch(updataOrderApi(orderId), {rating: rating})
-      .then(res => {
-        setExpandDetails('');
-        getOrders();
-      })
-      .catch(err => {
-        console.log(err);
-      });
+  function updateRatingReview(orderId) {
+    if (rating != 0)
+      axios
+        .patch(updataOrderApi(orderId), {rating, review})
+        .then(res => {
+          setExpandDetails('');
+          getOrders();
+        })
+        .catch(err => {
+          console.log(err);
+        });
   }
-
-  const debouncedUpdateRating = orderId => {
-    if (debounceTimeout.current) {
-      clearTimeout(debounceTimeout.current);
-    }
-    debounceTimeout.current = setTimeout(() => {
-      updateRating(orderId);
-    }, 2000);
-  };
 
   useFocusEffect(
     useCallback(() => {
@@ -144,18 +140,25 @@ const MyOrders = () => {
               </View>
 
               {item.status == 'delivered' && item.rating == 0 && (
-                <View className="flex-row justify-end">
-                  <StarRating
-                    rating={rating}
-                    onChange={newRating => {
-                      setRating(newRating);
-                      debouncedUpdateRating(item._id);
-                    }}
-                    maxStars={5}
-                    starSize={20}
-                    starStyle={{backgroundColor: '', marginHorizontal: 2}}
-                    style={{backgroundColor: ''}}
+                <View className="">
+                  <InputTag
+                    placeholder="write review"
+                    onChangeText={e => setReview(e)}
                   />
+                  <View className=" flex-row items-center justify-between space-x-2">
+                    <StarRating
+                      rating={rating}
+                      onChange={setRating}
+                      maxStars={5}
+                      starSize={20}
+                      starStyle={{backgroundColor: '', marginHorizontal: 2}}
+                      style={{backgroundColor: ''}}
+                    />
+                    <ButtonMy
+                      onPress={() => updateRatingReview(item._id)}
+                      textButton="submit"
+                    />
+                  </View>
                 </View>
               )}
             </View>

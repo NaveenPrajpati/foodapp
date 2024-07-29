@@ -74,7 +74,7 @@ export default function CheckoutPage({route}) {
         quantity: item.quantity,
         option: item.option,
       })),
-      shippingAddress: userData.address[addressIndex],
+      shippingAddress: addressIndex,
       orderNotes: orderNote,
       kitchen: dishes[0].product.kitchen,
     };
@@ -145,7 +145,7 @@ export default function CheckoutPage({route}) {
                 setAddressIndex(index);
               }}
             />
-            <Text className="text-gray-600 font-semibold">{item}</Text>
+            <Text className="text-gray-600 font-semibold">{item.address}</Text>
           </View>
         ))}
       </View>

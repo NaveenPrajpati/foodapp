@@ -1,5 +1,8 @@
 import {createSlice} from '@reduxjs/toolkit';
-import {loginUser} from '../../services/operations/authOperations';
+import {
+  loginUser,
+  registerUser,
+} from '../../services/operations/authOperations';
 import {editUser} from '../../services/operations/userOperation';
 import {showToast} from '../../utils/utilityFunctions';
 import {fetchOrders} from '../../services/operations/dishOperations';
@@ -40,13 +43,27 @@ const customerSlice = createSlice({
   },
   extraReducers(builder) {
     builder
+      .addCase(registerUser.pending, state => {
+        state.status = 'loading';
+      })
+      .addCase(registerUser.fulfilled, (state, action) => {
+        state.status = 'succeeded';
+        showToast('success', action.payload.message);
+        state.userData = action.payload.customer;
+        state.token = action.payload.customer.token;
+        state.isLogin = true;
+      })
+      .addCase(registerUser.rejected, (state, action) => {
+        // state.status = 'failed';
+        state.error = action.payload;
+      })
       .addCase(loginUser.pending, state => {
         state.status = 'loading';
       })
       .addCase(loginUser.fulfilled, (state, action) => {
         state.status = 'succeeded';
         state.userData = action.payload.customer;
-        state.token = action.payload.token;
+        state.token = action.payload.customer.token;
         state.isLogin = true;
       })
       .addCase(loginUser.rejected, (state, action) => {

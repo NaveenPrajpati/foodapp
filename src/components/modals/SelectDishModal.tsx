@@ -71,7 +71,7 @@ export default function SelectDishModal({
     setQuantity(1);
     cb();
   }
-  // console.log(JSON.stringify(item, null, 2));
+  console.log(JSON.stringify(item, null, 2));
   return (
     <Modal
       animationType="slide"
@@ -112,7 +112,7 @@ export default function SelectDishModal({
 
             <Text className="text-black text-sm  ">{item?.description}</Text>
 
-            {item.haveMultipleOptions && (
+            {true && (
               <View>
                 <Text className="text-black text-lg font-medium">
                   Available options

@@ -19,6 +19,7 @@ import customerSlice from './slices/customerSlice';
 const persistConfig = {
   key: 'root',
   storage: AsyncStorage,
+  blacklist: ['cartReducer', 'navbarReducer', 'dashboard'],
 };
 
 const rootReducer = combineReducers({

@@ -10,5 +10,5 @@ export const SignupSchema = Yup.object().shape({
   //   .matches(/[a-zA-Z]/, 'Password must contain at least one letter')
   //   .matches(/\d/, 'Password must contain at least one number')
   //   .required('Password is required'),
-  address: Yup.string().required('Address is required'),
+  // address: Yup.string().required('Address is required'),
 });

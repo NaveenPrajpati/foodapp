@@ -29,9 +29,9 @@ export default function Login() {
     }
   }, [isLogin, navigation]);
 
-  const handleLogin = async () => {
+  const handleLogin = async values => {
     Keyboard.dismiss();
-    dispatch(loginUser({phone, password}));
+    dispatch(loginUser({phone: values.phone, password: values.password}));
   };
 
   return (
@@ -39,10 +39,7 @@ export default function Login() {
       <Formik
         initialValues={{phone: '', password: ''}}
         // validationSchema={LoginSchema}
-        onSubmit={values => {
-          Keyboard.dismiss();
-          dispatch(loginUser({phone: values.phone, password: values.password}));
-        }}>
+        onSubmit={handleLogin}>
         {({
           handleChange,
           handleBlur,

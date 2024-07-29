@@ -11,7 +11,6 @@ import {createDrawerNavigator} from '@react-navigation/drawer';
 import MyEarnings from './screens/MyEarnings';
 import VectorIcon from './components/VectorIcon';
 
-import OrdersList from './screens/OrdersList';
 import Signup from './screens/register/Signup';
 import Login from './screens/login/Login';
 import Dashboard from './screens/Dashboard';
@@ -28,6 +27,7 @@ import MyPager from './screens/onBoarding/MyPager';
 import {setOnBoardingStatus} from './redux/slices/customerSlice';
 import SplashScreen from 'react-native-splash-screen';
 import ChatScreen from './screens/ChatScreen';
+import MapPicker from './components/MapPicker';
 
 const Tab = createBottomTabNavigator();
 const Drawer = createDrawerNavigator();
@@ -53,7 +53,7 @@ function TabNavigator() {
           borderColor: 'black',
         },
       })}>
-      {/* <Tab.Screen
+      <Tab.Screen
         name="MyEarnings"
         component={MyEarnings}
         options={{
@@ -70,7 +70,7 @@ function TabNavigator() {
             </View>
           ),
         }}
-      /> */}
+      />
       <Tab.Screen
         name="Dashboard"
         component={Dashboard}
@@ -122,6 +122,7 @@ function RootStack() {
             <VectorIcon
               iconName="arrow-left"
               size={20}
+              color="black"
               onPress={() => navigation.goBack()}
             />
           </View>
@@ -138,7 +139,7 @@ function RootStack() {
         component={TabNavigator}
       />
       <Drawer.Screen name="AddressList" component={AddressList} />
-      <Drawer.Screen name="OrdersList" component={OrdersList} />
+      <Drawer.Screen name="MapPicker" component={MapPicker} />
     </Drawer.Navigator>
   );
 }

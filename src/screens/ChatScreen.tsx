@@ -12,6 +12,7 @@ import {
 import {socket} from '../services/endPoints';
 import {useSelector} from 'react-redux';
 import {RootState} from '../redux/store';
+import ButtonMy from '../components/elements/ButtonMy';
 
 const ChatScreen = ({route}) => {
   const {userData} = useSelector((state: RootState) => state.userReducer);
@@ -52,12 +53,12 @@ const ChatScreen = ({route}) => {
           // }
         >
           {messages.map((message, index) => (
-            <View key={index} className="mb-2 ">
+            <View key={index} className="mb-2 w-fit">
               <Text
-                className={` p-2 rounded-lg text-black ${
+                className={` p-2 rounded-lg w-fit text-black font-medium ${
                   message.startsWith('customer')
-                    ? 'text-right bg-yellow-200'
-                    : ' text-left bg-blue-200'
+                    ? 'text-right text-black'
+                    : ' text-left text-blue-600'
                 } `}>
                 {message.startsWith('customer')
                   ? message.substring(9)
@@ -66,14 +67,15 @@ const ChatScreen = ({route}) => {
             </View>
           ))}
         </ScrollView>
-        <View className="flex-row items-center p-4 border-t">
+        <View className="flex-row items-center p-2 border-t bg-slate-200">
           <TextInput
-            className="flex-1 border rounded-lg p-2 mr-2 text-black"
+            className="flex-1 border  rounded-lg p-2 mr-2 text-white bg-black font-medium text-lg"
             placeholder="Type a message"
             value={message}
             onChangeText={setMessage}
           />
-          <Button title="Send" onPress={sendMessage} />
+          <ButtonMy textButton="Send" onPress={sendMessage} />
+          {/* <Button title="Send" onPress={sendMessage} /> */}
         </View>
       </View>
     </KeyboardAvoidingView>

@@ -49,9 +49,6 @@ const Dashboard = () => {
   const {allDishes, status, error, loading, addDishStatus, allKitchens} =
     useSelector((state: RootState) => state.dashboard);
 
-  const {dishes, totalPrice, customer} = useSelector(
-    (state: RootState) => state.cartReducer,
-  );
   const {isLogin, userData, deliveryAddress} = useSelector(
     (state: RootState) => state.userReducer,
   );
@@ -113,6 +110,15 @@ const Dashboard = () => {
   if (status === 'failed') {
     return <Text>Error: {error}</Text>;
   }
+  // if (allKitchens.length === 0) {
+  //   return (
+  //     <View className=" flex-1 justify-center items-center">
+  //       <Text className=" text-black text-lg font-semibold">
+  //         No kitchen available{' '}
+  //       </Text>
+  //     </View>
+  //   );
+  // }
 
   // console.log(JSON.stringify(allKitchens, null, 2));
 
