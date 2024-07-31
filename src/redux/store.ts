@@ -15,11 +15,12 @@ import navbarSlice from './slices/navbarSlice';
 import dashboardSlice from './slices/dashboardSlice';
 import cartSlice from './slices/cartSlice';
 import customerSlice from './slices/customerSlice';
+import orderSlice from './slices/orderSlice';
 
 const persistConfig = {
   key: 'root',
   storage: AsyncStorage,
-  blacklist: ['cartReducer', 'navbarReducer', 'dashboard'],
+  blacklist: ['cartReducer', 'navbarReducer', 'dashboard', 'orders'],
 };
 
 const rootReducer = combineReducers({
@@ -27,6 +28,7 @@ const rootReducer = combineReducers({
   navbarReducer: navbarSlice,
   cartReducer: cartSlice,
   userReducer: customerSlice,
+  orders: orderSlice,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

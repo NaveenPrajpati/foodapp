@@ -1,5 +1,11 @@
-import {View, Text, TextInput, StyleSheet} from 'react-native';
-import React, {useRef, useState} from 'react';
+import {
+  View,
+  Text,
+  TextInput,
+  StyleSheet,
+  TouchableOpacity,
+} from 'react-native';
+import React, {useEffect, useRef, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {RootState} from '../redux/store';
 import ButtonMy from '../components/elements/ButtonMy';
@@ -38,6 +44,7 @@ const AddressList = ({route}) => {
       },
     };
 
+    // console.log(data);
     if (showInput) {
       dispatch(editUser({userId: userData._id, data: {addAddress: data}}));
       setShowInput(false);
@@ -97,58 +104,73 @@ const AddressList = ({route}) => {
             values,
             touched,
             errors,
-          }) => (
-            <View>
-              <InputTag
-                onChangeText={handleChange('address')}
-                placeholder={'Add New Address'}
-                onBlur={handleBlur('address')}
-                value={values.address}
-              />
-              {touched.address && errors.address && (
-                <Text className=" text-red-600">{errors.address}</Text>
-              )}
-              <InputTag
-                onChangeText={handleChange('city')}
-                placeholder={'City'}
-                onBlur={handleBlur('city')}
-                value={values.city}
-              />
-              {touched.city && errors.city && (
-                <Text className=" text-red-600">{errors.city}</Text>
-              )}
-              <InputTag
-                onChangeText={handleChange('state')}
-                placeholder={'State'}
-                onBlur={handleBlur('state')}
-                value={values.state}
-              />
-              {touched.state && errors.state && (
-                <Text className=" text-red-600">{errors.state}</Text>
-              )}
-              <InputTag
-                onChangeText={handleChange('zip')}
-                placeholder={'Pincode'}
-                onBlur={handleBlur('zip')}
-                value={values.zip}
-              />
-              {touched.zip && errors.zip && (
-                <Text className=" text-red-600">{errors.zip}</Text>
-              )}
+            setFieldValue,
+          }) => {
+            useEffect(() => {
+              if (address) {
+                setFieldValue(
+                  'address',
+                  address?.address?.suburb || address?.address?.hamlet || '',
+                );
+                setFieldValue('city', address?.address?.city || '');
+                setFieldValue('state', address?.address?.state || '');
+                setFieldValue('zip', address?.address?.postcode || '');
+              }
+            }, [address]);
+            return (
+              <View>
+                <InputTag
+                  onChangeText={handleChange('address')}
+                  placeholder={'Add New Address'}
+                  onBlur={handleBlur('address')}
+                  value={values.address}
+                />
+                {touched.address && errors.address && (
+                  <Text className=" text-red-600">{errors.address}</Text>
+                )}
+                <InputTag
+                  onChangeText={handleChange('city')}
+                  placeholder={'City'}
+                  onBlur={handleBlur('city')}
+                  value={values.city}
+                />
+                {touched.city && errors.city && (
+                  <Text className=" text-red-600">{errors.city}</Text>
+                )}
+                <InputTag
+                  onChangeText={handleChange('state')}
+                  placeholder={'State'}
+                  onBlur={handleBlur('state')}
+                  value={values.state}
+                />
+                {touched.state && errors.state && (
+                  <Text className=" text-red-600">{errors.state}</Text>
+                )}
+                <InputTag
+                  onChangeText={handleChange('zip')}
+                  placeholder={'Pincode'}
+                  onBlur={handleBlur('zip')}
+                  value={values.zip}
+                />
+                {touched.zip && errors.zip && (
+                  <Text className=" text-red-600">{errors.zip}</Text>
+                )}
 
-              <ButtonMy
-                textButton={`pick from map`}
-                onPress={() => {
-                  requestLocationPermission();
-                  navigation.navigate('MapPicker');
-                }}
-              />
-              <ButtonMy
-                textButton={`${'Add Address'}`}
-                onPress={handleSubmit}
-              />
-            </View>
-          )}
+                <TouchableOpacity
+                  onPress={async () => {
+                    await requestLocationPermission();
+                    navigation.navigate('MapPicker');
+                  }}
+                  className="bg-black p-2 rounded-full w-fit">
+                  <VectorIcon iconName="location" iconPack="Entypo" size={20} />
+                </TouchableOpacity>
+                <ButtonMy
+                  textButton={`${'Add Address'}`}
+                  onPress={handleSubmit}
+                />
+              </View>
+            );
+          }}
         </Formik>
       )}
 

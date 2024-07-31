@@ -1,19 +1,12 @@
-import React, {useState, useEffect} from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  Dimensions,
-  Button,
-  TextInput,
-  Pressable,
-} from 'react-native';
+import React, {useState, useEffect, useCallback} from 'react';
+import {View, Text, StyleSheet, TextInput, Pressable} from 'react-native';
 import MapView, {Marker} from 'react-native-maps';
 import Geolocation from 'react-native-geolocation-service';
 import axios from 'axios';
 import {useNavigation} from '@react-navigation/native';
 import ButtonMy from './elements/ButtonMy';
 import VectorIcon from './VectorIcon';
+import {debounce, set} from 'lodash';
 
 const MapPicker = () => {
   const navigation = useNavigation();
@@ -23,6 +16,7 @@ const MapPicker = () => {
   const [boxCrod, setBoxCord] = useState([]);
 
   useEffect(() => {
+    console.log('effect');
     Geolocation.getCurrentPosition(
       position => {
         const {latitude, longitude} = position.coords;
@@ -42,7 +36,6 @@ const MapPicker = () => {
 
   async function geocode() {
     //geocoding convert address into longitude and latitude
-
     const accessToken = 'pk.bf40de91978dff0aa9233833c69e28f2';
     try {
       const response = await axios.get(
@@ -76,9 +69,17 @@ const MapPicker = () => {
     }
   };
 
+  const debouncedFetchAddress = useCallback(
+    debounce((latitude, longitude) => {
+      fetchAddress(latitude, longitude);
+    }, 1000),
+    [],
+  );
+
   const handleRegionChangeComplete = region => {
     setRegion(region);
-    fetchAddress(region.latitude, region.longitude);
+    // fetchAddress(region.latitude, region.longitude);
+    debouncedFetchAddress(region.latitude, region.longitude);
   };
 
   return (
@@ -88,13 +89,13 @@ const MapPicker = () => {
           style={styles.map}
           region={region}
           // initialRegion={region}
-          showsMyLocationButton={true}
+          showsUserLocation={true}
           onRegionChangeComplete={handleRegionChangeComplete}
         />
       )}
-      <View className="  w-full flex-row items-center  space-x-2 justify-center absolute top-5">
+      <View className="  w-full flex-row items-center gap-2 justify-start absolute top-2">
         <TextInput
-          className=" border rounded-md w-9/12  text-black"
+          className=" border rounded-md w-7/12  text-black px-2"
           onChangeText={setSearchInput}
           placeholder="Search Here"
           placeholderTextColor={'black'}

@@ -11,6 +11,7 @@ import {emptyCart} from '../redux/slices/cartSlice';
 import {useColorScheme} from 'nativewind';
 import ButtonMy from './elements/ButtonMy';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {CommonActions} from '@react-navigation/native';
 
 export default function CustomDrawer(props: any) {
   const dispatch = useDispatch();
@@ -53,7 +54,12 @@ export default function CustomDrawer(props: any) {
               dispatch(logout());
               dispatch(emptyCart());
               await AsyncStorage.clear();
-              props.navigation.navigate('Login');
+              props.navigation.dispatch(
+                CommonActions.reset({
+                  index: 0,
+                  routes: [{name: 'Login'}],
+                }),
+              );
             }}
           />
         </View>

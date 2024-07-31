@@ -15,7 +15,6 @@ const initialState = {
   error: null,
   isDarkMode: false,
   hasSeenOnboarding: false,
-  allOrders: [],
 };
 
 const customerSlice = createSlice({
@@ -75,22 +74,10 @@ const customerSlice = createSlice({
       })
       .addCase(editUser.fulfilled, (state, action) => {
         state.status = 'succeeded';
-        state.userData = action.payload.data;
+        state.userData = {...state.userData, ...action.payload.data};
         showToast('success', action.payload.message);
       })
       .addCase(editUser.rejected, (state, action) => {
-        state.status = 'failed';
-        state.error = action.payload;
-        showToast('success', action.payload.error);
-      })
-      .addCase(fetchOrders.pending, state => {
-        state.status = 'loading';
-      })
-      .addCase(fetchOrders.fulfilled, (state, action) => {
-        state.status = 'succeeded';
-        state.allOrders = action.payload.orders;
-      })
-      .addCase(fetchOrders.rejected, (state, action) => {
         state.status = 'failed';
         state.error = action.payload;
         showToast('success', action.payload.error);

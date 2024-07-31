@@ -53,7 +53,7 @@ function TabNavigator() {
           borderColor: 'black',
         },
       })}>
-      <Tab.Screen
+      {/* <Tab.Screen
         name="MyEarnings"
         component={MyEarnings}
         options={{
@@ -70,7 +70,7 @@ function TabNavigator() {
             </View>
           ),
         }}
-      />
+      /> */}
       <Tab.Screen
         name="Dashboard"
         component={Dashboard}

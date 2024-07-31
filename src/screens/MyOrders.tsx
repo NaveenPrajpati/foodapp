@@ -2,6 +2,7 @@ import {
   FlatList,
   Image,
   LayoutAnimation,
+  Pressable,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -23,6 +24,7 @@ import StarRating from 'react-native-star-rating-widget';
 import {fetchOrders} from '../services/operations/dishOperations';
 import InputTag from '../components/elements/InputTag';
 import ButtonMy from '../components/elements/ButtonMy';
+import MapView from 'react-native-maps';
 
 const MyOrders = () => {
   const [rating, setRating] = useState(0);
@@ -30,9 +32,12 @@ const MyOrders = () => {
 
   const navigation = useNavigation();
   const [expandDetails, setExpandDetails] = useState('');
-  const {isLogin, userData, allOrders} = useSelector(
+  const [trackVisible, setTrackVisible] = useState(false);
+  const {isLogin, userData} = useSelector(
     (state: RootState) => state.userReducer,
   );
+
+  const {allOrders} = useSelector((state: RootState) => state.orders);
   const dispatch = useDispatch();
   const debounceTimeout = useRef(null);
 
@@ -168,7 +173,10 @@ const MyOrders = () => {
                 {item.status != 'delivered' && (
                   <TouchableOpacity
                     onPress={() => {
-                      navigation.navigate('ChatScreen', {room: item.kitchen});
+                      navigation.navigate('ChatScreen', {
+                        room: item.kitchen,
+                        item,
+                      });
                     }}
                     className=" flex-row items-center justify-end space-x-1">
                     <VectorIcon
@@ -204,6 +212,39 @@ const MyOrders = () => {
                 </View>
               </>
             )}
+
+            {item.status == 'shipped' ||
+              (true && (
+                <View className="  items-end">
+                  <Pressable
+                    onPress={() => {
+                      // setTrackVisible(pre => !pre)
+                      navigation.navigate('MapPicker');
+                    }}
+                    className=" flex-row items-center space-x-1">
+                    <VectorIcon
+                      iconName="location-arrow"
+                      size={20}
+                      color="black"
+                    />
+                    <Text className=" text-black font-semibold">Track</Text>
+                  </Pressable>
+                </View>
+              ))}
+
+            {trackVisible && (
+              <View className=" h-[200px] w-full bg-purple-200">
+                <MapView
+                  style={styles.map}
+                  initialRegion={{
+                    latitude: 37.78825,
+                    longitude: -122.4324,
+                    latitudeDelta: 0.0922,
+                    longitudeDelta: 0.0421,
+                  }}
+                />
+              </View>
+            )}
           </View>
         )}
       />
@@ -213,4 +254,8 @@ const MyOrders = () => {
 
 export default MyOrders;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  map: {
+    ...StyleSheet.absoluteFillObject,
+  },
+});

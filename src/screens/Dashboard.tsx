@@ -56,6 +56,7 @@ const Dashboard = () => {
   const isFocused = useIsFocused();
 
   useEffect(() => {
+    dispatch(fetchKitchens({}));
     if (isFocused) {
       socket.on('connect', () => {
         console.log('Connected to WebSocket server');
@@ -120,7 +121,8 @@ const Dashboard = () => {
   //   );
   // }
 
-  // console.log(JSON.stringify(allKitchens, null, 2));
+  // console.log(isLogin, userData);
+  // console.log('ll-', JSON.stringify(allKitchens, null, 2));
 
   return (
     <Container>
@@ -128,9 +130,12 @@ const Dashboard = () => {
       <View className="  flex-row justify-between items-center">
         <Text
           className={`${
-            isEnabled ? ' text-green-500' : ' text-black'
+            allKitchens[selectedKitchen]?.status == 'open'
+              ? ' text-green-500'
+              : ' text-black'
           } text-lg font-bold`}>
-          Kitch Is {isOpen ? 'Open' : 'Closed'}
+          {allKitchens[selectedKitchen]?.kitchenname} Is{' '}
+          {allKitchens[selectedKitchen]?.status}
         </Text>
         {!isOpen && (
           <Text className="text-black">Open at: {formatDate(openingTime)}</Text>
@@ -164,7 +169,14 @@ const Dashboard = () => {
             // dispatch(setSearchParam(''));
           }}
           className="rounded-full">
-          <Icon3 name="menu-fold" size={20} color="black"></Icon3>
+          <VectorIcon
+            iconName="close"
+            color="gray"
+            size={20}
+            onPress={() => {
+              setSearchQuery('');
+            }}
+          />
         </TouchableOpacity>
       </View>
 
@@ -184,9 +196,11 @@ const Dashboard = () => {
             <Pressable
               onPress={() => setSelectedKitchen(index)}
               key={index}
-              className=" items-center">
+              className=" items-center ">
               <View
-                className=" p-1 bg-white rounded-full"
+                className={` p-1 bg-white rounded-full ${
+                  selectedKitchen == index ? 'border' : ''
+                } border-green-400 border-dashed`}
                 style={styles.imageContainer}>
                 <Image
                   source={{uri: item?.kitchenImg}}
@@ -202,71 +216,88 @@ const Dashboard = () => {
       </View>
 
       {/* feature dish card  */}
-      <View className="  mt-5">
-        <View className="flex-row justify-between items-center">
-          <Text className="text-black text-lg font-semibold">Feature Dish</Text>
-          <TouchableOpacity>
-            <Text className=" text-blue-400 font-semibold">See All</Text>
-          </TouchableOpacity>
+      <View
+        pointerEvents={`${
+          allKitchens[selectedKitchen]?.status == 'close' ? 'none' : 'auto'
+        }`}
+        className={`w-[100%] rounded-lg ${
+          allKitchens[selectedKitchen]?.status == 'close'
+            ? ' opacity-10 bg-gray-100'
+            : ' '
+        }`}>
+        <View className="mt-5">
+          <View className="flex-row justify-between items-center">
+            <Text className="text-black text-lg font-semibold">
+              Feature Dish
+            </Text>
+            <TouchableOpacity>
+              <Text className=" text-blue-400 font-semibold">See All</Text>
+            </TouchableOpacity>
+          </View>
+
+          <ScrollView
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            className=" py-2">
+            {allKitchens[selectedKitchen]?.menuItems
+              ?.filter(it => it.tags.includes('featured'))
+              ?.map((item, index) => (
+                <TouchableOpacity
+                  key={index}
+                  style={{elevation: 1}}
+                  onPress={() => {
+                    setSelectedItem(item);
+                    setShowDish(true);
+                  }}
+                  className="  items-center p-2  rounded-xl bg-white mx-2">
+                  <Image
+                    source={{uri: item.imagePath[0]}}
+                    className=" rounded-2xl h-32 w-52"
+                  />
+                  <View className=" flex-row gap-x-20">
+                    <Text className="text-slate-400 text-xs">{item.name}</Text>
+                    <Text className="text-slate-400 text-xs">Veg</Text>
+                  </View>
+                  <View className="flex-row justify-between gap-x-3  border-t  border-t-slate-200">
+                    <Text className="text-slate-600 text-xs">
+                      {item.makingTime} min
+                    </Text>
+                    <Text className="text-yellow-500 text-xs">
+                      Rating: {item.rating}
+                    </Text>
+                  </View>
+                </TouchableOpacity>
+              ))}
+          </ScrollView>
         </View>
 
-        <ScrollView
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          className=" py-2">
+        <Text className="text-black text-lg font-semibold mt-5">MyDishes</Text>
+
+        <View className=" flex-row flex-wrap ">
           {allKitchens[selectedKitchen]?.menuItems
-            ?.filter(it => it.tags.includes('featured'))
-            ?.map((item, index) => (
+            ?.filter(it => it.name.startsWith(searchQuery))
+            .map((item, index) => (
               <TouchableOpacity
+                disabled={allKitchens[selectedKitchen]?.status == 'close'}
+                onPress={() => {
+                  setSelectedItem(item);
+                  setShowDish(true);
+                }}
                 key={index}
-                style={{elevation: 1}}
-                className="  items-center p-2  rounded-xl bg-white mx-2">
+                className="shadow-md flex-grow shadow-slate-400 rounded-xl p-2 bg-white w-[45%] m-1">
                 <Image
                   source={{uri: item.imagePath[0]}}
-                  className=" rounded-2xl h-32 w-52"
+                  className="h-28 w-full rounded-xl"
                 />
-                <View className=" flex-row gap-x-20">
-                  <Text className="text-slate-400 text-xs">{item.name}</Text>
-                  <Text className="text-slate-400 text-xs">Veg</Text>
-                </View>
-                <View className="flex-row justify-between gap-x-3  border-t  border-t-slate-200">
-                  <Text className="text-slate-600 text-xs">
-                    {item.makingTime} min
-                  </Text>
-                  <Text className="text-yellow-500 text-xs">
-                    Rating: {item.rating}
+                <View className="flex-row justify-between">
+                  <Text className="text-black">{item.name}</Text>
+                  <Text className="text-black">
+                    ₹{item?.availableOptions[0]?.price}
                   </Text>
                 </View>
               </TouchableOpacity>
             ))}
-        </ScrollView>
-      </View>
-
-      <Text className="text-black text-lg font-semibold mt-5">MyDishes</Text>
-
-      <View className=" flex-row flex-wrap">
-        {allKitchens[selectedKitchen]?.menuItems
-          ?.filter(it => it.name.startsWith(searchQuery))
-          .map((item, index) => (
-            <TouchableOpacity
-              onPress={() => {
-                setSelectedItem(item);
-                setShowDish(true);
-              }}
-              key={index}
-              className="shadow-md flex-grow shadow-slate-400 rounded-xl p-2 bg-white w-[45%] m-1">
-              <Image
-                source={{uri: item.imagePath[0]}}
-                className="h-28 w-full rounded-xl"
-              />
-              <View className="flex-row justify-between">
-                <Text className="text-black">{item.name}</Text>
-                <Text className="text-black">
-                  ₹{item?.availableOptions[0]?.price}
-                </Text>
-              </View>
-            </TouchableOpacity>
-          ))}
+        </View>
       </View>
 
       {showDish && (

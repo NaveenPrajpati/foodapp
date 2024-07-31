@@ -9,25 +9,34 @@ import {
   KeyboardAvoidingView,
   Platform,
 } from 'react-native';
-import {socket} from '../services/endPoints';
+import {socket, updataOrderApi} from '../services/endPoints';
 import {useSelector} from 'react-redux';
 import {RootState} from '../redux/store';
 import ButtonMy from '../components/elements/ButtonMy';
+import axios from 'axios';
 
 const ChatScreen = ({route}) => {
   const {userData} = useSelector((state: RootState) => state.userReducer);
-  const {room} = route.params;
+  const {room, item} = route.params;
   // const [room, setRoom] = useState(userData._id);
   const [message, setMessage] = useState('');
-  const [messages, setMessages] = useState([]);
+  const [messages, setMessages] = useState(item?.chats);
   const scrollViewRef = useRef();
+
+  function updateMessages(msg) {
+    axios
+      .patch(updataOrderApi(item._id), {chats: msg})
+      .then(res => {})
+      .catch(err => {
+        console.log(err);
+      });
+  }
+
   useEffect(() => {
     socket.emit('joinRoom', userData._id);
-
     socket.on('receiveMessage', message => {
       setMessages(prevMessages => [...prevMessages, message]);
     });
-
     return () => {
       socket.off('receiveMessage');
     };
@@ -35,6 +44,8 @@ const ChatScreen = ({route}) => {
 
   const sendMessage = () => {
     if (message.trim()) {
+      const msg = [...messages, 'customer:' + message];
+      updateMessages(msg);
       setMessages(prevMessages => [...prevMessages, 'customer:' + message]);
       socket.emit('sendMessage', {room, message: 'customer:' + message});
       setMessage('');
