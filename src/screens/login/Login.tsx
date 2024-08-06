@@ -1,4 +1,11 @@
-import {View, Text, TouchableOpacity, ScrollView, Keyboard} from 'react-native';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  ScrollView,
+  Keyboard,
+  StatusBar,
+} from 'react-native';
 import React, {FC, useEffect, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import InputTag from '../../components/elements/InputTag';
@@ -36,9 +43,16 @@ export default function Login() {
 
   return (
     <ScrollView className="flex-1 bg-white">
+      <StatusBar barStyle={'light-content'} backgroundColor={'black'} />
+      <View className=" w-full rounded-b-[50px] bg-black p-10">
+        <Text className="text-[30px] text-white font-bold mb-1">Login</Text>
+        <Text className="text-white text-lg font-medium">
+          And Enjoy delicious food{' '}
+        </Text>
+      </View>
       <Formik
         initialValues={{phone: '', password: ''}}
-        // validationSchema={LoginSchema}
+        validationSchema={LoginSchema}
         onSubmit={handleLogin}>
         {({
           handleChange,
@@ -49,13 +63,6 @@ export default function Login() {
           errors,
         }) => (
           <View className=" rounded-xl  p-10  flex-1 bg-white items-center ">
-            <View>
-              <Text className="text-lg text-black font-bold mb-1">Login</Text>
-              <Text className="text-black">
-                Here you can login to your account{' '}
-              </Text>
-            </View>
-
             <InputTag
               inputMode="numeric"
               placeholder="Phone"
@@ -66,11 +73,6 @@ export default function Login() {
             {touched.phone && errors.phone && (
               <Text className=" text-red-600">{errors.phone}</Text>
             )}
-            <TouchableOpacity
-              onPress={() => navigation.navigate('ForgetPassword')}
-              className="justify-end mb-1 flex-row w-full">
-              <Text className="text-blue-600">forget password?</Text>
-            </TouchableOpacity>
 
             <InputTag
               placeholder="Password"
@@ -83,18 +85,25 @@ export default function Login() {
             {touched.password && errors.password && (
               <Text className=" text-red-600">{errors.password}</Text>
             )}
+
             <TouchableOpacity
-              onPress={() => navigation.navigate('Signup')}
-              className="justify-end mb-5 flex-row w-full">
-              <Text className="text-blue-600">not have account?</Text>
+              onPress={() => navigation.navigate('ForgetPassword')}
+              className="justify-end mb-1 flex-row w-full">
+              <Text className="text-blue-600">forget password?</Text>
             </TouchableOpacity>
 
             <TouchableOpacity
               onPress={handleSubmit as any}
-              className="bg-black mb-5 p-2 rounded-3xl w-[60%] ">
+              className="bg-black mt-5 p-2 rounded-3xl w-[60%] ">
               <Text className="text-white text-lg font-semibold text-center">
                 Login
               </Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              onPress={() => navigation.navigate('Signup')}
+              className="justify-start mt-5 flex-row w-full">
+              <Text className="text-blue-600">not have account?</Text>
             </TouchableOpacity>
           </View>
         )}

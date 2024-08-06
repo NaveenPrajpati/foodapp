@@ -28,10 +28,7 @@ const AddressList = ({route}) => {
   const [newAddress, setNewAddress] = useState('');
   const [pickFromMap, setPickFromMap] = useState(false);
   const dispatch = useDispatch();
-  const [location, setLocation] = useState(
-    {longitude: parseFloat(address?.lon), latitude: parseFloat(address?.lat)} ||
-      null,
-  );
+  const [location, setLocation] = useState(null);
 
   function handlePress(values) {
     const data = {
@@ -44,7 +41,8 @@ const AddressList = ({route}) => {
       },
     };
 
-    // console.log(data);
+    console.log(data);
+
     if (showInput) {
       dispatch(editUser({userId: userData._id, data: {addAddress: data}}));
       setShowInput(false);
@@ -90,7 +88,7 @@ const AddressList = ({route}) => {
       {showInput && (
         <Formik
           initialValues={{
-            address: address?.address?.suburb || '',
+            address: address?.address?.display_name || '',
             city: address?.address?.city || '',
             state: address?.address?.state || '',
             zip: address?.address?.postcode || '',
@@ -108,13 +106,14 @@ const AddressList = ({route}) => {
           }) => {
             useEffect(() => {
               if (address) {
-                setFieldValue(
-                  'address',
-                  address?.address?.suburb || address?.address?.hamlet || '',
-                );
+                setFieldValue('address', address?.display_name || '');
                 setFieldValue('city', address?.address?.city || '');
                 setFieldValue('state', address?.address?.state || '');
                 setFieldValue('zip', address?.address?.postcode || '');
+                setLocation({
+                  longitude: parseFloat(address?.lon),
+                  latitude: parseFloat(address?.lat),
+                });
               }
             }, [address]);
             return (

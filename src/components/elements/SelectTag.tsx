@@ -1,4 +1,4 @@
-import {StyleSheet, Text, View} from 'react-native';
+import {StyleProp, StyleSheet, Text, View, ViewStyle} from 'react-native';
 import React from 'react';
 import SelectDropdown from 'react-native-select-dropdown';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -13,35 +13,31 @@ type selectProp = {
   onSelect: ({selectedItem}: selectedProp) => void;
   data: string[];
   label?: string;
+  value?: string;
+  style?: StyleProp<ViewStyle>;
+  error?: string;
 };
 
-const SelectTag = ({onSelect, placeholder, data, label}: selectProp) => {
-  const emojisWithIcons = [
-    'happy',
-    'cool',
-    'lol',
-    'sad',
-    'cry',
-    'angry',
-    'confused',
-    'excited',
-    'kiss',
-    'devil',
-    'dead',
-    'wink',
-    'sick',
-    'frown',
-  ];
+const SelectTag = ({
+  onSelect,
+  placeholder,
+  data,
+  label,
+  value,
+  style,
+  error,
+}: selectProp) => {
   return (
     <View className="my-1">
       {label && <Text className="font-semibold text-gray-500">{label}</Text>}
       <SelectDropdown
+        defaultValue={value}
         data={data}
         onSelect={onSelect}
         renderButton={(selectedItem, isOpened) => {
           return (
-            <View style={styles.dropdownButtonStyle}>
-              <Text className=" text-lg font-semibold text-black capitalize">
+            <View style={[styles.dropdownButtonStyle, style]}>
+              <Text className=" text-lg font-semibold text-gray-700 capitalize">
                 {(selectedItem && selectedItem) || `${placeholder}`}
               </Text>
               <Icon
@@ -66,6 +62,7 @@ const SelectTag = ({onSelect, placeholder, data, label}: selectProp) => {
         showsVerticalScrollIndicator={false}
         dropdownStyle={styles.dropdownMenuStyle}
       />
+      {error && <Text className="text-red-500 text-right">{error}</Text>}
     </View>
   );
 };
@@ -76,7 +73,8 @@ const styles = StyleSheet.create({
   dropdownButtonStyle: {
     width: '100%',
     height: 45,
-    backgroundColor: '#FED7AA',
+    borderWidth: 1,
+    borderColor: 'red',
     borderRadius: 12,
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -90,6 +88,7 @@ const styles = StyleSheet.create({
   },
   dropdownButtonArrowStyle: {
     fontSize: 28,
+    color: 'red',
   },
   dropdownButtonIconStyle: {
     fontSize: 28,

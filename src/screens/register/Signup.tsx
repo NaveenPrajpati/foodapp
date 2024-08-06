@@ -9,6 +9,8 @@ import {
   ScrollView,
   Image,
   Keyboard,
+  StatusBar,
+  ActivityIndicator,
 } from 'react-native';
 import React, {useState} from 'react';
 import Geolocation from '@react-native-community/geolocation';
@@ -26,27 +28,27 @@ import {useDispatch} from 'react-redux';
 import {registerUser} from '../../services/operations/authOperations';
 
 export default function Signup({navigation}) {
+  const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
 
   const handleSignup = async values => {
-    await requestLocationPermission();
-    Keyboard.dismiss();
-    Geolocation.getCurrentPosition(info => console.log(info));
+    // await requestLocationPermission();
+    // Keyboard.dismiss();
+    // Geolocation.getCurrentPosition(info => console.log(info));
+    setLoading(true);
     const customerData = {
       name: values.username,
       phone: values.phone,
       email: values.email,
       password: values.password,
-      // address: values.address,
     };
 
-    // console.log(customerData);
-
-    const resultAction = dispatch(registerUser(customerData));
+    const resultAction = await dispatch(registerUser(customerData));
+    setLoading(false);
 
     if (registerUser.fulfilled.match(resultAction)) {
       const user = resultAction.payload;
-      showToast('success', `Updated ${user.name}`);
+      showToast('success', `Account ${user.name}`);
       navigation.navigate('RootStack');
     } else {
       if (resultAction.payload) {
@@ -64,6 +66,13 @@ export default function Signup({navigation}) {
 
   return (
     <ScrollView className="flex-1 bg-white">
+      <StatusBar barStyle={'light-content'} backgroundColor={'black'} />
+      <View className=" w-full rounded-b-[50px] bg-black p-10">
+        <Text className="text-[30px] text-white font-bold mb-1">Register</Text>
+        <Text className="text-white text-lg font-medium">
+          And Enjoy delicious food{' '}
+        </Text>
+      </View>
       <Formik
         initialValues={{
           username: '',
@@ -83,13 +92,6 @@ export default function Signup({navigation}) {
           errors,
         }) => (
           <View className=" rounded-xl  p-10  flex-1 bg-white items-center ">
-            <View>
-              <Text className="text-lg font-bold mb-2 text-black">
-                Register Here
-              </Text>
-              <Text className="text-black">Here you can create account</Text>
-            </View>
-
             <InputTag
               placeholder="Name"
               onChangeText={handleChange('username')}
@@ -132,28 +134,23 @@ export default function Signup({navigation}) {
               <Text style={{color: 'red'}}>{errors.password}</Text>
             )}
 
-            {/* <InputTag
-              iconName="address-book"
-              placeholder="Address"
-              onChangeText={handleChange('address')}
-              onBlur={handleBlur('address')}
-              value={values.address}
-            />
-            {touched.address && errors.address && (
-              <Text style={{color: 'red'}}>{errors.address}</Text>
-            )} */}
-
             <TouchableOpacity
               onPress={handleSubmit as any}
+              disabled={loading}
               className="bg-black mt-5 p-2 rounded-3xl w-[60%] ">
-              <Text className="text-white text-lg font-semibold text-center">
-                Signup
-              </Text>
+              {loading ? (
+                <ActivityIndicator color={'white'} size={25} />
+              ) : (
+                <Text className="text-white text-lg font-semibold text-center">
+                  Signup
+                </Text>
+              )}
             </TouchableOpacity>
 
             <TouchableOpacity
+              disabled={loading}
               onPress={() => navigation.navigate('Login')}
-              className=" w-full">
+              className=" w-full mt-5">
               <Text className="text-blue-600 ">have account? Login</Text>
             </TouchableOpacity>
           </View>

@@ -12,7 +12,7 @@ const initialState = {
   token: '',
   deliveryAddress: '',
   status: '',
-  error: null,
+  error: '',
   isDarkMode: false,
   hasSeenOnboarding: false,
 };
@@ -54,7 +54,8 @@ const customerSlice = createSlice({
       })
       .addCase(registerUser.rejected, (state, action) => {
         // state.status = 'failed';
-        state.error = action.payload;
+        showToast('error', action.payload.error);
+        state.error = action.payload.error;
       })
       .addCase(loginUser.pending, state => {
         state.status = 'loading';
@@ -64,10 +65,11 @@ const customerSlice = createSlice({
         state.userData = action.payload.customer;
         state.token = action.payload.customer.token;
         state.isLogin = true;
+        showToast('success', action.payload.message);
       })
       .addCase(loginUser.rejected, (state, action) => {
-        // state.status = 'failed';
-        state.error = action.payload;
+        showToast('error', action.payload.error);
+        state.error = action.payload.error;
       })
       .addCase(editUser.pending, state => {
         state.status = 'loading';
@@ -80,7 +82,7 @@ const customerSlice = createSlice({
       .addCase(editUser.rejected, (state, action) => {
         state.status = 'failed';
         state.error = action.payload;
-        showToast('success', action.payload.error);
+        showToast('error', action.payload.error);
       });
   },
 });

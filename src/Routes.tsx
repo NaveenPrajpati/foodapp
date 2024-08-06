@@ -180,7 +180,11 @@ function Routes() {
           component={RootStack}
           options={{headerShown: false}}
         />
-        <Stack.Screen name="Signup" component={Signup} />
+        <Stack.Screen
+          name="Signup"
+          component={Signup}
+          options={{headerShown: false}}
+        />
         <Stack.Screen
           options={{headerShown: true, headerTitle: 'Your Cart'}}
           name="CartPage"

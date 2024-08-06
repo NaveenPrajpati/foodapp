@@ -12,10 +12,13 @@ import {useColorScheme} from 'nativewind';
 import ButtonMy from './elements/ButtonMy';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {CommonActions} from '@react-navigation/native';
+import VectorIcon from './VectorIcon';
 
 export default function CustomDrawer(props: any) {
   const dispatch = useDispatch();
-  const {isDarkMode} = useSelector((state: RootState) => state.userReducer);
+  const {isDarkMode, userData} = useSelector(
+    (state: RootState) => state.userReducer,
+  );
   const {colorScheme, toggleColorScheme} = useColorScheme();
   return (
     <DrawerContentScrollView
@@ -27,8 +30,13 @@ export default function CustomDrawer(props: any) {
       }}>
       <View className=" flex-1 justify-between">
         <View>
-          <View className="">
-            <Text className="text-black font-bold text-lg">My Kitchen</Text>
+          <View className="flex-row space-x-2 items-center p-2">
+            <View className="p-2 rounded-full shadow-sm shadow-gray-400">
+              <VectorIcon iconName="user" color="gray" size={14} />
+            </View>
+            <Text className="text-black font-bold text-lg">
+              {userData.name}
+            </Text>
           </View>
           <View className=" flex-row justify-between items-center p-2">
             <Text className=" text-black">

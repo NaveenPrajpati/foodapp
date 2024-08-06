@@ -25,11 +25,14 @@ import {fetchOrders} from '../services/operations/dishOperations';
 import InputTag from '../components/elements/InputTag';
 import ButtonMy from '../components/elements/ButtonMy';
 import MapView from 'react-native-maps';
+import SelectTag from '../components/elements/SelectTag';
+import CancelModal from '../components/modals/CancelModal';
+import {updateOrder} from '../services/operations/orderOperations';
 
 const MyOrders = () => {
   const [rating, setRating] = useState(0);
   const [review, setReview] = useState('');
-
+  const [showCancel, setShowCancel] = useState(false);
   const navigation = useNavigation();
   const [expandDetails, setExpandDetails] = useState('');
   const [trackVisible, setTrackVisible] = useState(false);
@@ -76,6 +79,8 @@ const MyOrders = () => {
     }, []),
   );
 
+  // console.log(JSON.stringify(allOrders, null, 2));
+
   return (
     <View>
       <FlatList
@@ -86,8 +91,17 @@ const MyOrders = () => {
             style={{elevation: 1}}>
             <View className=" ">
               <View className=" flex-row justify-between w-full items-center">
-                <Text className="text-black text-lg font-semibold">
-                  Price: ₹{item.totalPrice}
+                <Text
+                  className={`${
+                    item.status == 'delivered'
+                      ? 'text-green-400'
+                      : item.status == 'pending'
+                      ? 'text-red-400'
+                      : item.status == 'preparing'
+                      ? 'text-yellow-400'
+                      : 'text-black'
+                  } font-semibold text-lg`}>
+                  {item.status} ({item.kitchen.kitchenname})
                 </Text>
                 <Text className="text-black font-semibold">
                   {formatDate(item.orderDate)}
@@ -101,17 +115,8 @@ const MyOrders = () => {
                   </Text>
 
                   <View className=" flex-row items-center space-x-2 ">
-                    <Text
-                      className={`${
-                        item.status == 'delivered'
-                          ? 'text-green-400'
-                          : item.status == 'pending'
-                          ? 'text-red-400'
-                          : item.status == 'preparing'
-                          ? 'text-yellow-400'
-                          : 'text-black'
-                      } font-semibold `}>
-                      {item.status}
+                    <Text className=" text-sm text-black">
+                      Price: ₹{item.totalPrice}
                     </Text>
                     {item.rating != 0 && (
                       <View className=" flex-row items-center space-x-1">
@@ -170,7 +175,7 @@ const MyOrders = () => {
 
             {expandDetails == index.toString() && (
               <>
-                {item.status != 'delivered' && (
+                {item.status != 'delivered' && item.status != 'cancelled' && (
                   <TouchableOpacity
                     onPress={() => {
                       navigation.navigate('ChatScreen', {
@@ -213,37 +218,55 @@ const MyOrders = () => {
               </>
             )}
 
-            {item.status == 'shipped' ||
-              (true && (
-                <View className="  items-end">
-                  <Pressable
-                    onPress={() => {
-                      // setTrackVisible(pre => !pre)
-                      navigation.navigate('MapPicker');
-                    }}
-                    className=" flex-row items-center space-x-1">
-                    <VectorIcon
-                      iconName="location-arrow"
-                      size={20}
-                      color="black"
-                    />
-                    <Text className=" text-black font-semibold">Track</Text>
-                  </Pressable>
-                </View>
-              ))}
-
-            {trackVisible && (
-              <View className=" h-[200px] w-full bg-purple-200">
-                <MapView
-                  style={styles.map}
-                  initialRegion={{
-                    latitude: 37.78825,
-                    longitude: -122.4324,
-                    latitudeDelta: 0.0922,
-                    longitudeDelta: 0.0421,
+            <View className=" flex-row space-x-2 justify-end items-end">
+              {item.status == 'shipped' && (
+                <Pressable
+                  onPress={() => {
+                    navigation.navigate('MapPicker', {
+                      tracking: true,
+                      pickup: item.kitchen.address.location.coordinates,
+                      deliveryBoy:
+                        item.deliveryDetails.deliveryMan.currentLocation
+                          .coordinates,
+                      destination:
+                        item.customer.address[item.shippingAddress].location
+                          .coordinates,
+                    });
                   }}
-                />
-              </View>
+                  className=" flex-row items-center space-x-1 p-1">
+                  <VectorIcon
+                    iconName="location-arrow"
+                    size={20}
+                    color="black"
+                  />
+                  <Text className=" text-black font-semibold">Track</Text>
+                </Pressable>
+              )}
+
+              {item.status != 'cancelled' && (
+                <TouchableOpacity
+                  onPress={() => setShowCancel(true)}
+                  className=" p-1">
+                  <Text className=" text-red-500 font-semibold">Cancel</Text>
+                </TouchableOpacity>
+              )}
+            </View>
+
+            {showCancel && (
+              <CancelModal
+                onChangeText={e => setReview(e)}
+                modalVisible={showCancel}
+                setModalVisible={setShowCancel}
+                onPress={() => {
+                  dispatch(
+                    updateOrder({
+                      id: item._id,
+                      data: {review, status: 'cancelled', role: 'customer'},
+                    }),
+                  );
+                  setShowCancel(false);
+                }}
+              />
             )}
           </View>
         )}
