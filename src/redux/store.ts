@@ -16,6 +16,7 @@ import dashboardSlice from './slices/dashboardSlice';
 import cartSlice from './slices/cartSlice';
 import customerSlice from './slices/customerSlice';
 import orderSlice from './slices/orderSlice';
+import {useDispatch, useSelector} from 'react-redux';
 
 const persistConfig = {
   key: 'root',
@@ -48,3 +49,5 @@ export const persistor = persistStore(store);
 export type RootState = ReturnType<typeof store.getState>;
 // Inferred type: {posts: PostsState, comments: CommentsState, users: UsersState}
 export type AppDispatch = typeof store.dispatch;
+export const useAppDispatch = useDispatch.withTypes<AppDispatch>();
+export const useAppSelector = useSelector.withTypes<RootState>();

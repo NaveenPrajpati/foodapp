@@ -52,8 +52,6 @@ export default function Signup({navigation}) {
       navigation.navigate('RootStack');
     } else {
       if (resultAction.payload) {
-        // Since we passed in `MyKnownError` to `rejectValue` in `updateUser`, the type information will be available here.
-        // Note: this would also be a good place to do any handling that relies on the `rejectedWithValue` payload, such as setting field errors
         showToast(
           'error',
           `Update failed: ${resultAction.payload.errorMessage}`,
@@ -79,7 +77,6 @@ export default function Signup({navigation}) {
           email: '',
           phone: '',
           password: '',
-          address: '',
         }}
         validationSchema={SignupSchema}
         onSubmit={handleSignup}>
@@ -103,6 +100,8 @@ export default function Signup({navigation}) {
             )}
             <InputTag
               placeholder="Email"
+              iconPack="Entypo"
+              iconName="email"
               onChangeText={handleChange('email')}
               onBlur={handleBlur('email')}
               value={values.email}

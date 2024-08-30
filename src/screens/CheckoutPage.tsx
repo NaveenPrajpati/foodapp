@@ -29,6 +29,8 @@ import {paymentOption} from '../utils/constants';
 import InputTag from '../components/elements/InputTag';
 import VectorIcon from '../components/VectorIcon';
 import RNFS from 'react-native-fs';
+import PriceSummery from '../components/PriceSummery';
+import {placeOrder} from '../services/operations/orderOperations';
 
 export default function CheckoutPage({route}) {
   const {price} = route.params;
@@ -65,7 +67,11 @@ export default function CheckoutPage({route}) {
     setSelectedImg(imageFile);
   }
 
-  async function placeOrder() {
+  async function handleCheckout() {
+    if (userData.address?.length == 0) {
+      showToast('info', 'address not selected');
+      return;
+    }
     const data = {
       totalPrice: price,
       customer: userData._id,
@@ -95,8 +101,8 @@ export default function CheckoutPage({route}) {
         data.paymentMethod = 'paid';
         data.paymentId = dat.razorpay_payment_id;
       } catch (error) {
-        console.error(error);
-        showToast('error', error.description);
+        // console.error(JSON.stringify(error, null, 2));
+        showToast('error', error.error.reason);
         return; // Exit the function if Razorpay fails
       }
     } else {
@@ -108,19 +114,17 @@ export default function CheckoutPage({route}) {
     formData.append('orderData', JSON.stringify(data));
 
     try {
-      const res = await axios.post(BaseUrl + '/customer/placeOrder', formData, {
-        headers: {'Content-Type': 'multipart/form-data'}, // Set correct content type
-      });
-
-      // console.log(res.data);
-      showToast('success', 'Success', 'Your order placed');
-      dispatch(emptyCart());
-      socket.emit('orderPlaced', {
-        user: userData.name,
-        price: price,
-        kitchen: dishes[0].product.kitchen,
-      });
-      navigation.navigate('MyOrders', {replace: true});
+      const response = await dispatch(placeOrder(formData));
+      if (placeOrder.fulfilled.match(response)) {
+        showToast('success', 'Success', 'Your order placed');
+        dispatch(emptyCart());
+        socket.emit('orderPlaced', {
+          user: userData.name + ' place new order',
+          price: price,
+          kitchen: dishes[0].product.kitchen,
+        });
+        navigation.navigate('MyOrders', {replace: true});
+      }
     } catch (err) {
       console.error('Error placing order:', err); // More descriptive error handling
       showToast('error', 'Error', 'Failed to place order'); // Notify the user of the error
@@ -129,8 +133,6 @@ export default function CheckoutPage({route}) {
 
   return (
     <ScrollView className=" flex-1 p-2">
-      {/* <Text className="text-black text-lg">CheckoutPage</Text> */}
-
       <View>
         <Text className="text-black text-lg font-semibold">Select address</Text>
         {userData?.address?.map((item, index) => (
@@ -216,7 +218,7 @@ export default function CheckoutPage({route}) {
       )}
       <ButtonMy
         textButton={`${paymentOption[checkBox].label}  ₹${price}`}
-        onPress={placeOrder}
+        onPress={handleCheckout}
       />
     </ScrollView>
   );

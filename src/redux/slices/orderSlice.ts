@@ -1,11 +1,15 @@
 import {createSlice} from '@reduxjs/toolkit';
 import {showToast} from '../../utils/utilityFunctions';
 import {fetchOrders} from '../../services/operations/dishOperations';
-import {updateOrder} from '../../services/operations/orderOperations';
+import {
+  placeOrder,
+  updateOrder,
+} from '../../services/operations/orderOperations';
 const initialState = {
   status: '',
   error: null,
   allOrders: [],
+  loadingOrder: false,
 };
 
 const orderSlice = createSlice({
@@ -42,6 +46,26 @@ const orderSlice = createSlice({
         state.status = 'failed';
         state.error = action.payload;
         showToast('error', action.payload.error);
+      })
+      .addCase(placeOrder.pending, state => {
+        state.status = 'loading';
+        state.loadingOrder = true;
+      })
+      .addCase(placeOrder.fulfilled, (state, action) => {
+        state.status = 'succeeded';
+        state.allOrders.forEach((it, index) => {
+          if (it?._id == action.payload.updatedOrder?._id) {
+            state.allOrders[index] = {...it, ...action.payload.updatedOrder};
+          }
+        });
+        showToast('success', action.payload.message);
+        state.loadingOrder = false;
+      })
+      .addCase(placeOrder.rejected, (state, action) => {
+        state.status = 'failed';
+        state.error = action.payload;
+        showToast('error', action.payload.error);
+        state.loadingOrder = false;
       });
   },
 });

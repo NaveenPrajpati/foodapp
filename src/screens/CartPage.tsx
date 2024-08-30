@@ -61,15 +61,7 @@ export default function CartPage() {
             </View>
 
             {/* price summary */}
-            <PriceSummery
-              totalPrice={totalPrice}
-              shippingCharge={shippingCharge}
-              onCheckOutPress={() => {
-                navigation.navigate('CheckoutPage', {
-                  price: totalPrice + shippingCharge,
-                });
-              }}
-            />
+            <PriceSummery />
           </View>
         </View>
       )}

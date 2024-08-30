@@ -251,7 +251,7 @@ const Dashboard = () => {
                   }}
                   className="  items-center p-2  rounded-xl bg-white mx-2">
                   <Image
-                    source={{uri: item.imagePath[0]}}
+                    source={{uri: item.imagePath}}
                     className=" rounded-2xl h-32 w-52"
                   />
                   <View className=" flex-row gap-x-20">
@@ -271,7 +271,9 @@ const Dashboard = () => {
           </ScrollView>
         </View>
 
-        <Text className="text-black text-lg font-semibold mt-5">MyDishes</Text>
+        <Text className="text-black text-lg font-semibold mt-5">
+          All Dishes
+        </Text>
 
         <View className=" flex-row flex-wrap ">
           {allKitchens[selectedKitchen]?.menuItems
@@ -286,7 +288,7 @@ const Dashboard = () => {
                 key={index}
                 className="shadow-md flex-grow shadow-slate-400 rounded-xl p-2 bg-white w-[45%] m-1">
                 <Image
-                  source={{uri: item.imagePath[0]}}
+                  source={{uri: item.imagePath}}
                   className="h-28 w-full rounded-xl"
                 />
                 <View className="flex-row justify-between">

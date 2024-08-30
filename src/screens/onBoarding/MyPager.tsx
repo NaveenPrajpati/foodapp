@@ -57,7 +57,7 @@ const MyPager = ({navigation}) => {
           <Animated.View
             style={animatedDefault}
             className=" absolute text-lg items-center w-full h-full justify-end bottom-16 ">
-            <Text className="text-red-500 font-bold bg-white py-2 px-8 text-2xl rounded-full opacity-50">
+            <Text className="text-red-500 font-bold bg-white py-2 px-8 text-2xl rounded-full opacity-70">
               Enjoy you favourite dishes
             </Text>
             <Animated.View

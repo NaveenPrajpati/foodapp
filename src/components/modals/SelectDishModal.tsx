@@ -80,7 +80,7 @@ export default function SelectDishModal({
       onRequestClose={cb}>
       <View className="bg-black px-1 pt-1 justify-between flex-1 ">
         <View className="rounded-b-3xl bg-white relative flex-1">
-          <Image source={{uri: item?.imagePath[0]}} className="w-full h-1/2" />
+          <Image source={{uri: item?.imagePath}} className="w-full h-1/2" />
           <View className="p-2">
             <View className="flex-row justify-between  mt-4 items-center">
               <Text className="text-black text-lg font-medium capitalize">

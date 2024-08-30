@@ -85,6 +85,13 @@ const MyOrders = () => {
     <View>
       <FlatList
         data={allOrders}
+        ListEmptyComponent={() => (
+          <View className=" justify-center items-center ">
+            <Text className="text-black mt-10 text-lg font-medium">
+              You have not order anything
+            </Text>
+          </View>
+        )}
         renderItem={({item, index}) => (
           <View
             className=" p-2 m-2  rounded-2xl bg-slate-50"
@@ -199,7 +206,7 @@ const MyOrders = () => {
                   {item.dishes.map((it, index) => (
                     <View key={index} className="flex-row gap-x-2 h-12 mt-1">
                       <Image
-                        source={{uri: it.dishId.imagePath[0]}}
+                        source={{uri: it.dishId.imagePath}}
                         className="w-12 h-full rounded-lg"
                       />
                       <View>

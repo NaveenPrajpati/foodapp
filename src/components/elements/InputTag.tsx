@@ -14,6 +14,7 @@ interface propType {
   label?: string;
   inputMode?: string;
   iconName?: string;
+  iconPack?: string;
   ref?: ForwardedRef<InputTagRef>;
   error?: string;
 }
@@ -24,6 +25,7 @@ export default function InputTag({
   onChangeText,
   label,
   inputMode,
+  iconPack,
   iconName,
   ref,
   error,
@@ -36,6 +38,7 @@ export default function InputTag({
         <View className="rounded-full justify-center items-center bg-white h-8 w-8">
           <VectorIcon
             iconName={iconName ? iconName : 'user'}
+            iconPack={iconPack ? iconPack : 'FontAwesome'}
             size={20}
             color="black"
           />

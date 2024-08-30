@@ -29,7 +29,7 @@ const CardPageCard = ({item, index}) => {
       className="flex-row gap-1 p-2 m-2 h-24 rounded-2xl bg-slate-50"
       style={{elevation: 1}}>
       <Image
-        source={{uri: item?.product?.imagePath[0]}}
+        source={{uri: item?.product?.imagePath}}
         className="w-20 h-full rounded-xl"></Image>
       <View className=" justify-between  flex-1 h-full ">
         <View className="flex-row justify-between item-center">

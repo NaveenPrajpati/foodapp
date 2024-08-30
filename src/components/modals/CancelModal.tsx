@@ -35,15 +35,23 @@ const CancelModal = ({
             </Text>
 
             <InputTag
+              iconName="sticky-note"
               placeholder="Reasong or review"
               onChangeText={onChangeText}
             />
 
-            <Pressable
-              style={[styles.button, styles.buttonClose]}
-              onPress={onPress}>
-              <Text className="text-white">Cancel</Text>
-            </Pressable>
+            <View className="flex-row space-x-2 mt-5">
+              <Pressable
+                style={[styles.button, {backgroundColor: 'black'}]}
+                onPress={() => setModalVisible(pre => !pre)}>
+                <Text className="text-white">Close</Text>
+              </Pressable>
+              <Pressable
+                style={[styles.button, styles.buttonClose]}
+                onPress={onPress}>
+                <Text className="text-white">Cancel Order</Text>
+              </Pressable>
+            </View>
           </View>
         </Pressable>
       </Modal>

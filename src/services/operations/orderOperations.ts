@@ -1,5 +1,10 @@
 import {createAsyncThunk} from '@reduxjs/toolkit';
-import {BaseUrl, GetAllOrdersApi, updataOrderApi} from '../endPoints';
+import {
+  BaseUrl,
+  GetAllOrdersApi,
+  PlaceOrderApi,
+  updataOrderApi,
+} from '../endPoints';
 import axios from 'axios';
 
 export const fetchOrders = createAsyncThunk(
@@ -24,6 +29,21 @@ export const updateOrder = createAsyncThunk(
   async (data, {rejectWithValue}) => {
     try {
       const response = await axios.patch(updataOrderApi(data.id), data.data);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  },
+);
+export const placeOrder = createAsyncThunk(
+  'orders/placeOrder',
+  async (data, {rejectWithValue}) => {
+    try {
+      const response = await axios.post(PlaceOrderApi, data, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response.data);

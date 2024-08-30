@@ -1,13 +1,25 @@
 import {View, Text, TextInput, TouchableOpacity} from 'react-native';
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import CartPriceCard from './CartPriceCard';
 import VectorIcon from './VectorIcon';
+import {useAppSelector} from '../redux/store';
+import {useNavigation} from '@react-navigation/native';
 
-export default function PriceSummery({
-  totalPrice,
-  shippingCharge,
-  onCheckOutPress,
-}) {
+export default function PriceSummery({}) {
+  const [shippingCharge, setShippingCharge] = useState(50);
+  const [totalPrice, setTotalPrice] = useState(0);
+  const {dishes} = useAppSelector(state => state.cartReducer);
+  const navigation = useNavigation();
+  useEffect(() => {
+    let total = 0;
+    for (let i = 0; i < dishes.length; i++) {
+      total =
+        total +
+        dishes[i].quantity *
+          dishes[i].product.availableOptions[dishes[i]?.option]?.price;
+    }
+    setTotalPrice(total);
+  }, [dishes]);
   return (
     <View className=" p-2 items-center  ">
       <View className="flex-row items-center justify-between p-2 rounded-3xl mb-5 w-full bg-slate-100">
@@ -30,7 +42,11 @@ export default function PriceSummery({
       </View>
 
       <TouchableOpacity
-        onPress={onCheckOutPress}
+        onPress={() => {
+          navigation.navigate('CheckoutPage', {
+            price: totalPrice + shippingCharge,
+          });
+        }}
         className="bg-black mt-5 p-2 rounded-3xl w-[60%] ">
         <Text className="text-slate-200 text-lg font-semibold text-center">
           Checkout

@@ -21,12 +21,10 @@ import {requestLocationPermission} from '../utils/utilityFunctions';
 const AddressList = ({route}) => {
   const address = route.params?.address;
   const navigation = useNavigation();
-  console.log(JSON.stringify(address, null, 2));
 
   const {userData} = useSelector((state: RootState) => state.userReducer);
   const [showInput, setShowInput] = useState(false);
-  const [newAddress, setNewAddress] = useState('');
-  const [pickFromMap, setPickFromMap] = useState(false);
+
   const dispatch = useDispatch();
   const [location, setLocation] = useState(null);
 
@@ -40,9 +38,6 @@ const AddressList = ({route}) => {
         coordinates: [location.longitude, location.latitude],
       },
     };
-
-    console.log(data);
-
     if (showInput) {
       dispatch(editUser({userId: userData._id, data: {addAddress: data}}));
       setShowInput(false);
@@ -63,6 +58,8 @@ const AddressList = ({route}) => {
     // You can now save this location or use it as needed
   };
 
+  console.log(showInput);
+
   return (
     <View className="bg-white p-2 flex-1">
       {userData?.address?.length != 0 && (
@@ -71,8 +68,10 @@ const AddressList = ({route}) => {
             <View
               key={index}
               style={{elevation: 2}}
-              className=" bg-blue-500 mt-2 p-2 flex-row justify-between">
-              <Text className="font-semibold text-white">{item.address}</Text>
+              className=" bg-blue-500 mt-2 p-2 flex-row">
+              <Text className="font-semibold text-white w-[90%]">
+                {item.address}
+              </Text>
               <VectorIcon
                 iconName="delete"
                 iconPack="MaterialIcons"
@@ -85,100 +84,106 @@ const AddressList = ({route}) => {
         </>
       )}
 
-      {showInput && (
-        <Formik
-          initialValues={{
-            address: address?.address?.display_name || '',
-            city: address?.address?.city || '',
-            state: address?.address?.state || '',
-            zip: address?.address?.postcode || '',
-          }}
-          // validationSchema={LoginSchema}
-          onSubmit={handlePress}>
-          {({
-            handleChange,
-            handleBlur,
-            handleSubmit,
-            values,
-            touched,
-            errors,
-            setFieldValue,
-          }) => {
-            useEffect(() => {
-              if (address) {
-                setFieldValue('address', address?.display_name || '');
-                setFieldValue('city', address?.address?.city || '');
-                setFieldValue('state', address?.address?.state || '');
-                setFieldValue('zip', address?.address?.postcode || '');
-                setLocation({
-                  longitude: parseFloat(address?.lon),
-                  latitude: parseFloat(address?.lat),
-                });
-              }
-            }, [address]);
-            return (
-              <View>
-                <InputTag
-                  onChangeText={handleChange('address')}
-                  placeholder={'Add New Address'}
-                  onBlur={handleBlur('address')}
-                  value={values.address}
-                />
-                {touched.address && errors.address && (
-                  <Text className=" text-red-600">{errors.address}</Text>
-                )}
-                <InputTag
-                  onChangeText={handleChange('city')}
-                  placeholder={'City'}
-                  onBlur={handleBlur('city')}
-                  value={values.city}
-                />
-                {touched.city && errors.city && (
-                  <Text className=" text-red-600">{errors.city}</Text>
-                )}
-                <InputTag
-                  onChangeText={handleChange('state')}
-                  placeholder={'State'}
-                  onBlur={handleBlur('state')}
-                  value={values.state}
-                />
-                {touched.state && errors.state && (
-                  <Text className=" text-red-600">{errors.state}</Text>
-                )}
-                <InputTag
-                  onChangeText={handleChange('zip')}
-                  placeholder={'Pincode'}
-                  onBlur={handleBlur('zip')}
-                  value={values.zip}
-                />
-                {touched.zip && errors.zip && (
-                  <Text className=" text-red-600">{errors.zip}</Text>
-                )}
+      <Formik
+        initialValues={{
+          address: address?.address?.display_name || '',
+          city: address?.address?.city || '',
+          state: address?.address?.state || '',
+          zip: address?.address?.postcode || '',
+        }}
+        // validationSchema={LoginSchema}
+        onSubmit={handlePress}>
+        {({
+          handleChange,
+          handleBlur,
+          handleSubmit,
+          values,
+          touched,
+          errors,
+          setFieldValue,
+        }) => {
+          useEffect(() => {
+            if (address) {
+              console.log('setting');
+              setFieldValue('address', address?.display_name || '');
+              setFieldValue('city', address?.address?.city || '');
+              setFieldValue('state', address?.address?.state || '');
+              setFieldValue('zip', address?.address?.postcode || '');
+              setLocation({
+                longitude: parseFloat(address?.lon),
+                latitude: parseFloat(address?.lat),
+              });
+              setShowInput(true);
+            }
+          }, [address]);
+          return (
+            <View>
+              {showInput && (
+                <>
+                  <InputTag
+                    onChangeText={handleChange('address')}
+                    placeholder={'Add New Address'}
+                    onBlur={handleBlur('address')}
+                    value={values.address}
+                  />
+                  {touched.address && errors.address && (
+                    <Text className=" text-red-600">{errors.address}</Text>
+                  )}
+                  <InputTag
+                    onChangeText={handleChange('city')}
+                    placeholder={'City'}
+                    onBlur={handleBlur('city')}
+                    value={values.city}
+                  />
+                  {touched.city && errors.city && (
+                    <Text className=" text-red-600">{errors.city}</Text>
+                  )}
+                  <InputTag
+                    onChangeText={handleChange('state')}
+                    placeholder={'State'}
+                    onBlur={handleBlur('state')}
+                    value={values.state}
+                  />
+                  {touched.state && errors.state && (
+                    <Text className=" text-red-600">{errors.state}</Text>
+                  )}
+                  <InputTag
+                    onChangeText={handleChange('zip')}
+                    placeholder={'Pincode'}
+                    onBlur={handleBlur('zip')}
+                    value={values.zip}
+                  />
+                  {touched.zip && errors.zip && (
+                    <Text className=" text-red-600">{errors.zip}</Text>
+                  )}
 
-                <TouchableOpacity
-                  onPress={async () => {
-                    await requestLocationPermission();
-                    navigation.navigate('MapPicker');
-                  }}
-                  className="bg-black p-2 rounded-full w-fit">
-                  <VectorIcon iconName="location" iconPack="Entypo" size={20} />
-                </TouchableOpacity>
-                <ButtonMy
-                  textButton={`${'Add Address'}`}
-                  onPress={handleSubmit}
-                />
-              </View>
-            );
-          }}
-        </Formik>
-      )}
+                  <ButtonMy
+                    textButton={`${'Add Address'}`}
+                    onPress={handleSubmit}
+                  />
+                </>
+              )}
+            </View>
+          );
+        }}
+      </Formik>
 
-      {!showInput && (
+      <TouchableOpacity
+        onPress={async () => {
+          await requestLocationPermission();
+          navigation.navigate('MapPicker', {});
+        }}
+        className="bg-black p-2 rounded-full flex-row justify-center items-center space-x-2 mt-4">
+        <VectorIcon iconName="location" iconPack="Entypo" size={18} />
+        <Text className=" text-white  font-medium">Pick Address</Text>
+      </TouchableOpacity>
+
+      {/* {!showInput && (
         <ButtonMy
           textButton={`${'Add Address'}`}
           onPress={() => setShowInput(true)}
         />
-      )}
+      )} */}
     </View>
   );
 };

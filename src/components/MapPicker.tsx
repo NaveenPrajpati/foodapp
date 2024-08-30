@@ -7,7 +7,7 @@ import {
   Pressable,
   Image,
 } from 'react-native';
-import MapView, {Marker, Polyline} from 'react-native-maps';
+import MapView, {Marker, Polyline, PROVIDER_GOOGLE} from 'react-native-maps';
 import Geolocation from 'react-native-geolocation-service';
 import axios from 'axios';
 import {useNavigation} from '@react-navigation/native';
@@ -19,7 +19,8 @@ import {decodePolyline} from '../utils/utilityFunctions';
 import {socket} from '../services/endPoints';
 
 const MapPicker = ({route}) => {
-  const {tracking = false, pickup, deliveryBoy, destination} = route.params;
+  const {tracking = false, pickup, deliveryBoy, destination} = route?.params;
+
   const navigation = useNavigation();
   const [delivery, setDelivery] = useState(deliveryBoy);
   const [region, setRegion] = useState(null);
@@ -124,9 +125,11 @@ const MapPicker = ({route}) => {
       {region && (
         <MapView
           style={styles.map}
-          region={region}
-          // initialRegion={region}
+          // region={region}
+          initialRegion={region}
           // showsUserLocation={true}
+          showsMyLocationButton={true}
+          provider={PROVIDER_GOOGLE}
           onRegionChangeComplete={handleRegionChangeComplete}>
           {tracking && (
             <>
